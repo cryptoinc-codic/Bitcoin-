@@ -16,6 +16,19 @@
         body.light-mode .card-bg, body.light-mode .copy-card, body.light-mode .futures-card, body.light-mode .modal-content, body.light-mode .google-signup-container { background-color: #ffffff; color: #1e2329; border-color: #e0e0e0; }
         body.light-mode .text-gray-400, body.light-mode .text-gray-500 { color: #6c757d; }
         body.light-mode .input-bg, body.light-mode .convert-input, body.light-mode .google-input { background-color: #f8f9fa; color: #1e2329; }
+        
+        /* Scrollable signup form for Android */
+        #signup-form {
+            max-height: 85vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .google-signup-container {
+            max-height: 80vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
         #loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: opacity 0.8s ease-out; background-color: var(--bg-dark); }
         .logo-diamond { width: 80px; height: 80px; margin-bottom: 20px; animation: rotateZ 2s cubic-bezier(0.45,0,0.55,1) forwards; }
         @keyframes rotateZ { 0% { transform: rotateY(0deg) scale(0.5); opacity: 0; } 50% { transform: rotateY(180deg) scale(1.1); opacity: 1; } 100% { transform: rotateY(360deg) scale(1); opacity: 1; } }
@@ -183,9 +196,6 @@
         .google-btn-icon { width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; background: white; border-radius: 50%; padding: 4px; }
         .google-btn-icon svg { width: 18px; height: 18px; }
         .chart-container { position: relative; width: 100%; height: 380px; background: #0B0E11; border-radius: 12px; overflow: hidden; }
-        .price-axis { position: absolute; right: 8px; top: 8px; bottom: 8px; display: flex; flex-direction: column; justify-content: space-between; text-align: right; font-size: 10px; color: #848e9c; font-family: monospace; z-index: 10; pointer-events: none; }
-        .time-axis { position: absolute; bottom: 8px; left: 60px; right: 40px; display: flex; justify-content: space-between; font-size: 9px; color: #848e9c; font-family: monospace; z-index: 10; pointer-events: none; }
-        canvas { display: block; width: 100%; height: 100%; }
     </style>
 </head>
 <body>
@@ -276,7 +286,7 @@
             </div>
             
             <div id="signup-form" class="hidden">
-                <div class="google-signup-container">
+                <div class="google-signup-container" style="background: #1e2329; border-radius: 24px; padding: 28px; width: 100%; max-width: 460px; margin: 0 auto; border: 1px solid rgba(252,213,53,0.2); max-height: 75vh; overflow-y: auto; -webkit-overflow-scrolling: touch;">
                     <div class="google-logo">
                         <div class="w-14 h-14 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48">
@@ -436,7 +446,6 @@
             </main>
             
             <main id="view-trade" class="view-section px-4">
-                <!-- Professional Trading Header with Buy/Sell -->
                 <div class="flex justify-between items-center mb-3">
                     <div class="flex gap-2">
                         <div class="bg-red-500/10 border border-red-500 rounded-lg px-4 py-2">
@@ -456,12 +465,10 @@
                 
                 <div class="text-gray-400 text-xs mb-3">Ethereum vs US Dollar</div>
                 
-                <!-- Professional Candlestick Chart -->
                 <div class="bg-[#0B0E11] rounded-xl p-2 mb-4 relative" style="height: 380px;">
                     <canvas id="professionalChart" style="width:100%; height:100%;"></canvas>
                 </div>
                 
-                <!-- Quick Stats -->
                 <div class="grid grid-cols-2 gap-3 mb-4">
                     <div class="bg-[#1e2329] p-3 rounded-lg">
                         <div class="text-gray-400 text-xs">24h Change</div>
@@ -481,20 +488,17 @@
                     </div>
                 </div>
                 
-                <!-- Current Price -->
                 <div class="bg-[#1e2329] p-4 rounded-xl mb-4">
                     <div class="text-3xl font-bold text-white" id="trade-current-price">$70,509.00</div>
                     <div class="text-sm" id="trade-price-change">+2.34%</div>
                 </div>
                 
-                <!-- Trading Tabs -->
                 <div class="flex gap-2 mb-4 border-b border-gray-800">
                     <div class="tab-button active" data-tab="buy" onclick="switchTradeTab('buy')">Buy</div>
                     <div class="tab-button" data-tab="sell" onclick="switchTradeTab('sell')">Sell</div>
                     <div class="tab-button" data-tab="limit" onclick="switchTradeTab('limit')">Limit</div>
                 </div>
                 
-                <!-- Trade Form -->
                 <div id="trade-order-form">
                     <div class="mb-3">
                         <label class="text-gray-400 text-sm">Amount (USDT)</label>
@@ -519,7 +523,6 @@
                     <button id="trade-action-btn" class="w-full py-3 rounded-xl font-bold text-white bg-green-500">Buy BTC</button>
                 </div>
                 
-                <!-- Order Book -->
                 <div class="mt-4">
                     <h3 class="text-white font-bold mb-2">Order Book</h3>
                     <div class="grid grid-cols-2 gap-2">
@@ -534,19 +537,16 @@
                     </div>
                 </div>
                 
-                <!-- Recent Trades -->
                 <div class="mt-4">
                     <h3 class="text-white font-bold mb-2">Recent Trades</h3>
                     <div id="recent-trades-list" class="space-y-1 max-h-40 overflow-y-auto"></div>
                 </div>
                 
-                <!-- Open Orders -->
                 <div class="mt-4">
                     <h3 class="text-white font-bold mb-2">Open Orders</h3>
                     <div id="open-orders-list" class="text-gray-400 text-sm">No open orders</div>
                 </div>
                 
-                <!-- Price Alerts -->
                 <div class="mt-4">
                     <h3 class="text-white font-bold mb-2">Price Alerts</h3>
                     <div class="flex gap-2">
@@ -556,7 +556,6 @@
                     <div id="active-alerts" class="mt-2 text-sm"></div>
                 </div>
                 
-                <!-- DCA -->
                 <div class="mt-4">
                     <h3 class="text-white font-bold mb-2">DCA (Auto-Invest)</h3>
                     <div class="grid grid-cols-2 gap-2">
@@ -571,7 +570,6 @@
                     <div id="dca-status" class="mt-2 text-sm text-gray-400"></div>
                 </div>
                 
-                <!-- Grid Trading Bot -->
                 <div class="mt-4">
                     <h3 class="text-white font-bold mb-2">Grid Trading Bot</h3>
                     <div class="grid-bot-config">
@@ -656,7 +654,6 @@
         let gridBotActive = false;
         let portfolioChart = null;
         let allocationChart = null;
-        let candlestickChart = null;
         let professionalChart = null;
         let portfolioData = [1000, 1050, 1020, 1080, 1120, 1180, 1250];
         
@@ -750,7 +747,6 @@
         function drawCandlestickChart(ctx, width, height, data) {
             ctx.clearRect(0, 0, width, height);
             
-            // Calculate price range
             let minPrice = Math.min(...data.map(d => d.low));
             let maxPrice = Math.max(...data.map(d => d.high));
             const padding = (maxPrice - minPrice) * 0.1;
@@ -761,12 +757,10 @@
             const candleWidth = (width - 60) / data.length * 0.7;
             const spacing = (width - 60) / data.length;
             
-            // Draw grid lines and price labels
             ctx.font = '10px monospace';
             ctx.fillStyle = '#848e9c';
             ctx.textAlign = 'right';
             
-            // Draw price levels (matching your image: 2164.97 down to 2082.89)
             const priceLevels = [2164.97, 2159.67, 2154.37, 2149.07, 2143.77, 2138.47, 2133.17, 2127.87, 2122.57, 2117.27, 2111.97, 2106.67, 2101.37, 2096.07, 2090.77, 2085.47, 2084.29, 2082.89];
             
             priceLevels.forEach(price => {
@@ -783,7 +777,6 @@
                 }
             });
             
-            // Draw candlesticks
             for (let i = 0; i < data.length; i++) {
                 const candle = data[i];
                 const x = 50 + i * spacing;
@@ -796,18 +789,15 @@
                 ctx.fillStyle = isGreen ? '#0ecb81' : '#f6465d';
                 ctx.strokeStyle = isGreen ? '#0ecb81' : '#f6465d';
                 
-                // Draw wick
                 ctx.beginPath();
                 ctx.moveTo(x + candleWidth/2, highY);
                 ctx.lineTo(x + candleWidth/2, lowY);
                 ctx.stroke();
                 
-                // Draw body
                 const bodyTop = Math.min(openY, closeY);
                 const bodyHeight = Math.abs(closeY - openY);
                 ctx.fillRect(x, bodyTop, candleWidth, Math.max(1, bodyHeight));
                 
-                // Draw time label for every 5 candles
                 if (i % 5 === 0 || i === data.length - 1) {
                     ctx.fillStyle = '#848e9c';
                     ctx.font = '9px monospace';
@@ -816,7 +806,6 @@
                 }
             }
             
-            // Draw time axis label at the end
             ctx.fillStyle = '#848e9c';
             ctx.font = '9px monospace';
             ctx.textAlign = 'right';
@@ -834,7 +823,6 @@
             drawCandlestickChart(ctx, width, height, chartData);
         }
         
-        // Update buy/sell prices
         function updateBuySellPrices() {
             const lastCandle = chartData[chartData.length - 1];
             const sellPrice = lastCandle.low;
