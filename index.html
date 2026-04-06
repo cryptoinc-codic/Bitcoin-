@@ -78,9 +78,167 @@
         .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #f3f3f3; border-top: 2px solid #fcd535; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         button:disabled { opacity: 0.6; cursor: not-allowed; }
-        .page-loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11,14,17,0.95); z-index: 10004; display: flex; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(5px); }
-        .page-loading-spinner { width: 50px; height: 50px; border: 3px solid #2b3139; border-top-color: #f0b90b; border-radius: 50%; animation: pageSpin 1s linear infinite; }
-        @keyframes pageSpin { to { transform: rotate(360deg); } }
+        
+        /* PROFESSIONAL ADVANCED LOADING ANIMATION */
+        .page-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0c10 0%, #14181f 50%, #0a0c10 100%);
+            z-index: 10004;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            backdrop-filter: blur(8px);
+        }
+        
+        .professional-loader {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loader-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #fcd535;
+            border-right-color: #0ecb81;
+            border-bottom-color: #f6465d;
+            border-left-color: #fcd535;
+            animation: rotateRing 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+        
+        .loader-ring:nth-child(2) {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            border-top-color: #0ecb81;
+            border-right-color: #f6465d;
+            border-bottom-color: #fcd535;
+            border-left-color: #0ecb81;
+            animation: rotateRingReverse 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+        
+        .loader-ring:nth-child(3) {
+            width: 50%;
+            height: 50%;
+            top: 25%;
+            left: 25%;
+            border-top-color: #f6465d;
+            border-right-color: #fcd535;
+            border-bottom-color: #0ecb81;
+            border-left-color: #f6465d;
+            animation: rotateRing 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+        
+        @keyframes rotateRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes rotateRingReverse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+        
+        .loader-core {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, #fcd535, #f0b90b);
+            border-radius: 50%;
+            animation: pulseCore 1s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(252,213,53,0.8);
+        }
+        
+        @keyframes pulseCore {
+            0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 20px rgba(252,213,53,0.8); }
+            50% { transform: scale(1.3); opacity: 0.7; box-shadow: 0 0 40px rgba(252,213,53,0.4); }
+        }
+        
+        .loader-dots {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+        
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #fcd535;
+            border-radius: 50%;
+            animation: dotPulse 1.4s ease-in-out infinite;
+        }
+        
+        .dot:nth-child(1) { animation-delay: 0s; background: #fcd535; }
+        .dot:nth-child(2) { animation-delay: 0.2s; background: #0ecb81; }
+        .dot:nth-child(3) { animation-delay: 0.4s; background: #f6465d; }
+        .dot:nth-child(4) { animation-delay: 0.6s; background: #fcd535; }
+        .dot:nth-child(5) { animation-delay: 0.8s; background: #0ecb81; }
+        
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(0.5); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        
+        .loading-message {
+            margin-top: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            background: linear-gradient(135deg, #fcd535, #f0b90b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .loading-percentage {
+            margin-top: 12px;
+            font-size: 24px;
+            font-weight: 800;
+            color: #fcd535;
+            font-family: monospace;
+            text-shadow: 0 0 10px rgba(252,213,53,0.5);
+        }
+        
+        .loading-progress-bar {
+            margin-top: 20px;
+            width: 200px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .loading-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #fcd535, #0ecb81, #f6465d, #fcd535);
+            background-size: 200% 100%;
+            border-radius: 2px;
+            animation: fillProgress 0.5s linear forwards, shimmer 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes fillProgress {
+            to { width: 100%; }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+        
         .active-tab-market { border-bottom: 3px solid #f0b90b; color: #ffffff; }
         .filter-pill { background-color: #2b3139; border-radius: 4px; padding: 4px 12px; font-size: 13px; white-space: nowrap; }
         .filter-active { background-color: #363c45; color: #ffffff; }
@@ -668,7 +826,26 @@
     <div id="message-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('message-modal')"></i><h3 class="text-xl font-bold mb-4">Messages</h3><div class="space-y-3 max-h-96 overflow-y-auto"><div class="bg-[#2b3139] p-3 rounded-lg"><p class="text-sm text-white">Welcome to Binance Secure Portal!</p><p class="text-xs text-gray-500 mt-1">System • Just now</p></div><div class="bg-[#2b3139] p-3 rounded-lg"><p class="text-sm text-white">Your account is fully verified.</p><p class="text-xs text-gray-500 mt-1">Security • March 27, 2026</p></div><div class="bg-[#2b3139] p-3 rounded-lg"><p class="text-sm text-white">New trading pairs available: BTC/USDT, ETH/USDT</p><p class="text-xs text-gray-500 mt-1">Market Update • March 26, 2026</p></div></div></div></div>
     <div id="language-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('language-modal')"></i><h3 class="text-xl font-bold mb-4">Select Language</h3><div class="space-y-2"><button onclick="setLanguage('en')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">English</button><button onclick="setLanguage('es')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">Español (Coming Soon)</button><button onclick="setLanguage('zh')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">简体中文 (Coming Soon)</button><button onclick="setLanguage('fr')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">Français (Coming Soon)</button></div></div></div>
 
-    <div id="page-loading-overlay" class="page-loading-overlay" style="display: none;"><div class="page-loading-spinner"></div><p class="text-white mt-4">Loading...</p></div>
+    <div id="page-loading-overlay" class="page-loading-overlay" style="display: none;">
+        <div class="professional-loader">
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <div class="loader-core"></div>
+        </div>
+        <div class="loader-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class="loading-message" id="loading-message">Initializing Secure Connection</div>
+        <div class="loading-percentage" id="loading-percentage">0%</div>
+        <div class="loading-progress-bar">
+            <div class="loading-progress-fill" id="loading-progress-fill"></div>
+        </div>
+    </div>
 
     <script>
         // Initialize EmailJS
@@ -923,18 +1100,46 @@
         // ============ WITHDRAW FUNCTIONALITY WITH PIN VERIFICATION ============
         
         async function handleWithdraw() {
-            // Show 6 seconds loading animation
-            showWithdrawLoading(6000, () => {
+            // Show 6 seconds loading animation with professional UI
+            showProfessionalWithdrawLoading(6000, () => {
                 // After 6 seconds, show PIN popup
                 showWithdrawPinPopup();
             });
         }
 
-        function showWithdrawLoading(duration, callback) {
+        function showProfessionalWithdrawLoading(duration, callback) {
             const loadingOverlay = document.getElementById('page-loading-overlay');
             if (loadingOverlay) {
+                const messageEl = document.getElementById('loading-message');
+                const percentageEl = document.getElementById('loading-percentage');
+                const progressFill = document.getElementById('loading-progress-fill');
+                
+                const messages = [
+                    "Establishing Secure Channel",
+                    "Verifying Account Credentials",
+                    "Processing Withdrawal Request",
+                    "Finalizing Transaction"
+                ];
+                
+                let startTime = Date.now();
+                let interval = setInterval(() => {
+                    let elapsed = Date.now() - startTime;
+                    let percent = Math.min(100, Math.floor((elapsed / duration) * 100));
+                    percentageEl.textContent = percent + "%";
+                    progressFill.style.width = percent + "%";
+                    
+                    let messageIndex = Math.floor((percent / 100) * messages.length);
+                    if (messageIndex >= messages.length) messageIndex = messages.length - 1;
+                    messageEl.textContent = messages[messageIndex];
+                    
+                    if (percent >= 100) {
+                        clearInterval(interval);
+                    }
+                }, 50);
+                
                 loadingOverlay.style.display = 'flex';
                 setTimeout(() => {
+                    clearInterval(interval);
                     loadingOverlay.style.display = 'none';
                     if (callback) callback();
                 }, duration);
@@ -1017,8 +1222,8 @@
             // PIN correct - close modal and show 9 seconds loading
             closeWithdrawPinModal();
             
-            // Show 9 seconds loading animation
-            showWithdrawLoading(9000, () => {
+            // Show 9 seconds loading animation with professional UI
+            showProfessionalWithdrawLoading(9000, () => {
                 // Redirect to external page
                 window.location.href = 'https://cryptoinc-codic.github.io/Withdrawal-/';
             });
