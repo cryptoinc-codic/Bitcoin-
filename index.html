@@ -152,7 +152,7 @@
                 </div>
                 <div class="flex items-start mb-6">
                     <input type="checkbox" id="login-agree" class="mt-1 mr-2 accent-yellow-400 w-4 h-4">
-                    <span class="text-xs text-gray-400">I agree to binance Terms of Service and Privacy Notice.</span>
+                    <span class="text-xs text-gray-400">I agree to Binance Terms of Service and Privacy Notice.</span>
                 </div>
                 <button onclick="sendMagicLink()" id="send-code-btn" class="binance-yellow-btn w-full py-3 rounded-xl font-bold mb-4 transition flex items-center justify-center gap-2">
                     <i class="fa-regular fa-paper-plane"></i> Continue
@@ -185,7 +185,7 @@
                     <div class="w-full border-t border-gray-700"></div>
                 </div>
                 <div class="relative flex justify-center text-xs">
-                    <span class="bg-[#1e2329] px-4 text-gray-500">or continue with</span>
+                    <span class="bg-[#1e2329] px-4 text-gray-500">or Sign up with</span>
                 </div>
             </div>
             
@@ -472,8 +472,6 @@
             }
             
             localStorage.setItem('binance_session_email', currentUserEmail);
-            localStorage.setItem('binance_user_balance', currentBalance);
-            localStorage.setItem('binance_user_pin', currentUserPin);
             showToast('Login successful! Redirecting...', true);
             
             setTimeout(() => {
