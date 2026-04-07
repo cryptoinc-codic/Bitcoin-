@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Binance - Futures Trading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --binance-yellow: #FCD535; --bg-dark: #0B0E11; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-dark); font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+        .card-bg { background-color: #1e2329; }
+        .futures-card { background: #1e2329; border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid #2b3139; }
+        .btn-long { background-color: #0ecb81; color: white; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; }
+        .btn-short { background-color: #f6465d; color: white; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; }
+        .leverage-slider { width: 100%; margin: 10px 0; }
+        .leverage-value { color: #f0b90b; font-weight: bold; }
+        .nav-item-active { color: #f0b90b !important; }
+        .toast-message { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #0ecb81; color: white; padding: 12px 20px; border-radius: 40px; font-size: 12px; font-weight: bold; z-index: 10001; opacity: 0; transition: opacity 0.3s; pointer-events: none; max-width: 280px; text-align: center; }
+        .profile-popup { position: fixed; top: 70px; right: 20px; background: #1e2329; border-radius: 16px; padding: 20px; width: 280px; z-index: 10003; border: 1px solid rgba(252,213,53,0.3); display: none; }
+        .profile-popup.active { display: block; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10002; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: #1e2329; border-radius: 24px; padding: 24px; width: 90%; max-width: 400px; border: 1px solid rgba(252,213,53,0.3); position: relative; }
+        .modal-close { position: absolute; top: 16px; right: 16px; cursor: pointer; color: #848e9c; }
+        .funds-modal-input { background: #2b2f36; border: 1px solid #3b424d; border-radius: 12px; padding: 14px; color: white; width: 100%; margin-bottom: 16px; }
+        .whale-alert { background: rgba(246,70,93,0.1); border-left: 3px solid #f6465d; padding: 10px; margin-bottom: 8px; border-radius: 8px; }
+        .news-item { padding: 12px; border-bottom: 1px solid #2b3139; cursor: pointer; }
+        .news-item:hover { background: #2b3139; }
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body>
+
+<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; color: white; overflow-y: auto; background-color: #0B0E11;">
+    <div class="max-w-md mx-auto min-h-screen relative">
+        <div class="px-4 pt-4">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="arrow-left" class="w-6 h-6 text-white cursor-pointer" onclick="window.location.href='dashboard.html'"></i>
+                    <h1 class="text-xl font-bold text-white">Futures</h1>
+                </div>
+                <div class="flex gap-3">
+                    <div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center border border-gray-600 cursor-pointer" onclick="toggleProfilePopup()">
+                        <i data-lucide="user" class="w-4 h-4 text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-4">
+            <div class="mb-4 bg-[#1e2329] p-4 rounded-xl">
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400 text-sm">Futures Account Balance</span>
+                    <span class="text-white font-bold text-xl" id="futures-balance">******</span>
+                </div>
+                <div class="flex justify-between mt-2 text-sm">
+                    <span class="text-gray-400">Available Margin</span>
+                    <span class="text-green-500" id="available-margin">******</span>
+                </div>
+            </div>
+            
+            <div class="flex gap-2 mb-4">
+                <button onclick="showSection('positions')" id="tab-positions" class="flex-1 py-2 rounded-lg bg-[#f0b90b] text-black font-bold">Positions</button>
+                <button onclick="showSection('copy-trading')" id="tab-copy" class="flex-1 py-2 rounded-lg bg-[#2b3139] text-gray-400 font-bold">Copy Trading</button>
+                <button onclick="showSection('signals')" id="tab-signals" class="flex-1 py-2 rounded-lg bg-[#2b3139] text-gray-400 font-bold">Signals</button>
+            </div>
+            
+            <div id="section-positions" class="section-content">
+                <div id="futures-list"></div>
+            </div>
+            
+            <div id="section-copy-trading" class="section-content" style="display: none;">
+                <div class="bg-[#1e2329] rounded-xl p-4 mb-4">
+                    <h3 class="text-white font-bold mb-3">Top Traders to Copy</h3>
+                    <div id="leaderboard-list" class="space-y-3"></div>
+                </div>
+                <div class="bg-[#1e2329] rounded-xl p-4">
+                    <h3 class="text-white font-bold mb-3">Social Feed</h3>
+                    <div id="social-feed" class="space-y-3 mb-3 max-h-64 overflow-y-auto"></div>
+                    <textarea id="post-message" placeholder="Share your trade idea..." class="w-full bg-[#2b3139] rounded-lg p-3 text-white mt-2 border border-gray-700" rows="2"></textarea>
+                    <button onclick="sharePost()" class="w-full bg-binance-yellow text-black py-2 rounded-lg font-bold mt-2">Post</button>
+                </div>
+            </div>
+            
+            <div id="section-signals" class="section-content" style="display: none;">
+                <div class="bg-[#1e2329] rounded-xl p-4 mb-4">
+                    <h3 class="text-white font-bold mb-3">📊 Economic Calendar</h3>
+                    <div id="economic-calendar" class="space-y-2"></div>
+                </div>
+                <div class="bg-[#1e2329] rounded-xl p-4 mb-4">
+                    <h3 class="text-white font-bold mb-3">📰 Crypto News</h3>
+                    <div id="news-feed" class="space-y-2 max-h-64 overflow-y-auto"></div>
+                </div>
+                <div class="bg-[#1e2329] rounded-xl p-4">
+                    <h3 class="text-white font-bold mb-3">🐋 Whale Alerts</h3>
+                    <div id="whale-alerts" class="space-y-2"></div>
+                </div>
+            </div>
+            
+            <div class="mt-4 mb-24 text-center text-gray-500 text-xs p-4">
+                ⚠️ Futures trading involves high risk. Trade responsibly.
+            </div>
+        </div>
+        
+        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto card-bg border-t border-gray-800/80 px-6 py-3 flex justify-between items-center z-50 backdrop-blur-md bg-opacity-95">
+            <div onclick="window.location.href='dashboard.html'" class="flex flex-col items-center gap-1.5 text-gray-500 cursor-pointer"><i data-lucide="home" class="w-5 h-5"></i><span class="text-[9px] font-black uppercase">Home</span></div>
+            <div onclick="window.location.href='markets.html'" class="flex flex-col items-center gap-1.5 text-gray-500 cursor-pointer"><i data-lucide="bar-chart-2" class="w-5 h-5"></i><span class="text-[9px] font-black uppercase">Markets</span></div>
+            <div onclick="window.location.href='trade.html'" class="flex flex-col items-center gap-1.5 text-gray-500 cursor-pointer"><i data-lucide="arrow-left-right" class="w-5 h-5"></i><span class="text-[9px] font-black uppercase">Trade</span></div>
+            <div onclick="window.location.href='futures.html'" class="flex flex-col items-center gap-1.5 cursor-pointer nav-item-active"><i data-lucide="zap" class="w-5 h-5"></i><span class="text-[9px] font-black uppercase">Futures</span></div>
+            <div onclick="window.location.href='wallets.html'" class="flex flex-col items-center gap-1.5 text-gray-500 cursor-pointer"><i data-lucide="wallet" class="w-5 h-5"></i><span class="text-[9px] font-black uppercase">Wallets</span></div>
+        </nav>
+    </div>
+</div>
+
+<div id="profile-popup" class="profile-popup">
+    <div class="profile-header"><span class="close-profile" onclick="closeProfilePopup()" style="float:right; cursor:pointer;">✕</span><div class="profile-email" id="profile-email"></div><div class="profile-id" id="profile-id"></div></div>
+    <button class="logout-btn" onclick="logoutUser()" style="width:100%; margin-top:16px; padding:10px; background:#f6465d; color:white; border:none; border-radius:8px; cursor:pointer;">Logout</button>
+</div>
+
+<div id="toast-message" class="toast-message"></div>
+
+<script>
+    let currentUserEmail = null;
+    let currentBalance = 10000;
+    let isBalanceHidden = true;
+    
+    const futuresContracts = [
+        { symbol: "BTCUSDT", name: "Bitcoin", price: 70500, change: 2.5, markPrice: 70450, funding: 0.01 },
+        { symbol: "ETHUSDT", name: "Ethereum", price: 3500, change: 1.8, markPrice: 3495, funding: 0.005 },
+        { symbol: "SOLUSDT", name: "Solana", price: 180, change: 3.2, markPrice: 179.5, funding: 0.008 }
+    ];
+    
+    let userPositions = {
+        BTCUSDT: { size: 0, entryPrice: 0, leverage: 10, side: null },
+        ETHUSDT: { size: 0, entryPrice: 0, leverage: 10, side: null },
+        SOLUSDT: { size: 0, entryPrice: 0, leverage: 10, side: null }
+    };
+    
+    const topTraders = [
+        { name: "CryptoKing", pnl: "+125,430", roi: "+45.2%", winRate: "89%", followers: "12.3K", avatar: "👑" },
+        { name: "MoonTrader", pnl: "+98,760", roi: "+32.1%", winRate: "85%", followers: "8.7K", avatar: "🌙" },
+        { name: "WhaleHunter", pnl: "+87,430", roi: "+28.4%", winRate: "92%", followers: "6.5K", avatar: "🐋" },
+        { name: "AlphaSignals", pnl: "+76,540", roi: "+35.7%", winRate: "78%", followers: "5.2K", avatar: "📊" },
+        { name: "BTCBoss", pnl: "+65,320", roi: "+22.3%", winRate: "95%", followers: "4.8K", avatar: "👤" }
+    ];
+    
+    let socialPosts = [
+        { user: "CryptoKing", message: "BTC looking strong! Targeting $75k this week 🚀", time: "2 hours ago", avatar: "👑" },
+        { user: "MoonTrader", message: "Just entered LONG on ETH at $3,450. Let's go!", time: "5 hours ago", avatar: "🌙" },
+        { user: "WhaleHunter", message: "Whale alert: 10k BTC moved to exchanges 👀", time: "1 day ago", avatar: "🐋" }
+    ];
+
+    function showToast(msg, isSuccess = true) {
+        const toast = document.getElementById('toast-message');
+        toast.textContent = msg;
+        toast.style.backgroundColor = isSuccess ? '#0ecb81' : '#f6465d';
+        toast.style.opacity = '1';
+        setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+    }
+
+    function formatBalance(amount) { return amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+    function updateBalanceDisplay() {
+        if (!isBalanceHidden) {
+            document.getElementById('futures-balance').innerText = `$${formatBalance(currentBalance)}`;
+            document.getElementById('available-margin').innerText = `$${formatBalance(currentBalance)}`;
+        } else {
+            document.getElementById('futures-balance').innerText = "******";
+            document.getElementById('available-margin').innerText = "******";
+        }
+    }
+
+    function toggleBalanceVisibility() {
+        isBalanceHidden = !isBalanceHidden;
+        updateBalanceDisplay();
+    }
+
+    function renderFuturesList() {
+        const container = document.getElementById('futures-list');
+        if(!container) return;
+        container.innerHTML = '';
+        futuresContracts.forEach(contract => {
+            const position = userPositions[contract.symbol];
+            const pnl = position.size !== 0 ? (position.side === 'long' ? (contract.price - position.entryPrice) * position.size * position.leverage : (position.entryPrice - contract.price) * position.size * position.leverage) : 0;
+            const pnlClass = pnl >= 0 ? 'text-green-500' : 'text-red-500';
+            container.innerHTML += `
+                <div class="futures-card">
+                    <div class="flex justify-between items-center mb-3">
+                        <div>
+                            <span class="font-bold text-white text-lg">${contract.symbol}</span>
+                            <span class="text-gray-400 text-xs ml-2">Perpetual</span>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-white font-bold">$${contract.price.toLocaleString()}</div>
+                            <div class="text-xs ${contract.change >= 0 ? 'text-green-500' : 'text-red-500'}">${contract.change >= 0 ? '+' : ''}${contract.change}%</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 mb-3 text-sm">
+                        <div><span class="text-gray-400">Mark Price:</span> <span class="text-white">$${contract.markPrice.toLocaleString()}</span></div>
+                        <div><span class="text-gray-400">Funding Rate:</span> <span class="text-white">${contract.funding}%</span></div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="flex justify-between text-xs text-gray-400 mb-1">
+                            <span>Leverage</span>
+                            <span class="leverage-value" id="lev-${contract.symbol}">${position.leverage}x</span>
+                        </div>
+                        <input type="range" min="1" max="100" value="${position.leverage}" class="leverage-slider" oninput="updateLeverage('${contract.symbol}', this.value)">
+                    </div>
+                    ${position.size !== 0 ? `
+                        <div class="mb-3 p-2 bg-[#2b3139] rounded-lg">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-400">Position Size:</span>
+                                <span class="text-white">${position.size} ${contract.symbol.replace('USDT', '')}</span>
+                            </div>
+                            <div class="flex justify-between text-sm mt-1">
+                                <span class="text-gray-400">Entry Price:</span>
+                                <span class="text-white">$${position.entryPrice.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between text-sm mt-1">
+                                <span class="text-gray-400">PNL (Unrealized):</span>
+                                <span class="${pnlClass}">$${pnl.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    ` : ''}
+                    <div class="flex gap-2 mt-2">
+                        <button onclick="openPosition('${contract.symbol}', 'long')" class="btn-long flex-1 text-center">Long</button>
+                        <button onclick="openPosition('${contract.symbol}', 'short')" class="btn-short flex-1 text-center">Short</button>
+                        ${position.size !== 0 ? `<button onclick="closePosition('${contract.symbol}')" class="bg-[#2b3139] text-white flex-1 py-2 rounded-lg font-bold text-sm">Close</button>` : ''}
+                    </div>
+                    <div class="flex gap-2 mt-2">
+                        <input type="number" id="sl-${contract.symbol}" placeholder="Stop Loss" class="bg-[#2b3139] rounded p-1 text-xs w-1/2">
+                        <input type="number" id="tp-${contract.symbol}" placeholder="Take Profit" class="bg-[#2b3139] rounded p-1 text-xs w-1/2">
+                        <button onclick="setSLTP('${contract.symbol}')" class="bg-binance-yellow text-black text-xs px-2 py-1 rounded" style="background:#fcd535;">Set</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function setSLTP(symbol) {
+        const sl = parseFloat(document.getElementById(`sl-${symbol}`)?.value);
+        const tp = parseFloat(document.getElementById(`tp-${symbol}`)?.value);
+        if (sl) showToast(`Stop Loss set at $${sl} for ${symbol}`, true);
+        if (tp) showToast(`Take Profit set at $${tp} for ${symbol}`, true);
+    }
+
+    function updateLeverage(symbol, value) { 
+        userPositions[symbol].leverage = parseInt(value); 
+        document.getElementById(`lev-${symbol}`).innerText = value + 'x'; 
+    }
+    
+    function openPosition(symbol, side) {
+        if (currentBalance <= 0) { showToast('Insufficient balance to open position', false); return; }
+        const contract = futuresContracts.find(c => c.symbol === symbol);
+        const position = userPositions[symbol];
+        const amount = prompt(`Enter position size (min 0.001) for ${symbol}:`, '0.01');
+        if (!amount || parseFloat(amount) <= 0) return;
+        const positionSize = parseFloat(amount);
+        const requiredMargin = (contract.price * positionSize) / position.leverage;
+        if (requiredMargin > currentBalance) { 
+            showToast(`Insufficient margin. Required: $${requiredMargin.toFixed(2)}`, false); 
+            return; 
+        }
+        position.size = positionSize;
+        position.entryPrice = contract.price;
+        position.side = side;
+        currentBalance -= requiredMargin;
+        localStorage.setItem('binance_user_balance', currentBalance);
+        updateBalanceDisplay();
+        showToast(`Opened ${side.toUpperCase()} position for ${positionSize} ${symbol} at $${contract.price} with ${position.leverage}x leverage`, true);
+        renderFuturesList();
+    }
+    
+    function closePosition(symbol) {
+        const position = userPositions[symbol];
+        if (position.size === 0) return;
+        const contract = futuresContracts.find(c => c.symbol === symbol);
+        const pnl = position.side === 'long' ? (contract.price - position.entryPrice) * position.size * position.leverage : (position.entryPrice - contract.price) * position.size * position.leverage;
+        currentBalance += (position.size * contract.price / position.leverage) + pnl;
+        localStorage.setItem('binance_user_balance', currentBalance);
+        updateBalanceDisplay();
+        showToast(`Closed ${position.side.toUpperCase()} position for ${symbol}. PNL: ${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}`, pnl >= 0);
+        position.size = 0; 
+        position.entryPrice = 0; 
+        position.side = null;
+        renderFuturesList();
+    }
+
+    function renderLeaderboard() {
+        const container = document.getElementById('leaderboard-list');
+        if (!container) return;
+        container.innerHTML = topTraders.map((t, i) => `
+            <div class="bg-[#2b3139] p-3 rounded-lg flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center text-xl">${t.avatar}</div>
+                    <div>
+                        <div class="font-bold text-white">${t.name}</div>
+                        <div class="text-xs text-gray-400">${t.followers} followers</div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-green-500 font-bold">${t.pnl}</div>
+                    <div class="text-xs text-gray-400">ROI ${t.roi}</div>
+                </div>
+                <button onclick="copyTrader('${t.name}')" class="bg-[#f0b90b] text-black px-3 py-1 rounded-lg text-xs font-bold">Copy</button>
+            </div>
+        `).join('');
+    }
+
+    function copyTrader(name) {
+        showToast(`Now copying ${name}'s trades!`, true);
+    }
+
+    function renderSocialFeed() {
+        const container = document.getElementById('social-feed');
+        if (!container) return;
+        container.innerHTML = socialPosts.map(post => `
+            <div class="bg-[#2b3139] p-3 rounded-lg">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center">${post.avatar}</div>
+                    <div>
+                        <div class="font-bold text-white text-sm">${post.user}</div>
+                        <div class="text-xs text-gray-500">${post.time}</div>
+                    </div>
+                </div>
+                <p class="text-white text-sm">${post.message}</p>
+            </div>
+        `).join('');
+    }
+
+    function sharePost() {
+        const message = document.getElementById('post-message')?.value;
+        if (!message) { showToast('Please enter a message', false); return; }
+        const newPost = {
+            user: currentUserEmail?.split('@')[0] || "Trader",
+            message: message,
+            time: "Just now",
+            avatar: "📈"
+        };
+        socialPosts.unshift(newPost);
+        renderSocialFeed();
+        document.getElementById('post-message').value = '';
+        showToast('Post shared!', true);
+    }
+
+    function renderEconomicCalendar() {
+        const container = document.getElementById('economic-calendar');
+        if (!container) return;
+        const events = [
+            { date: 'Mar 28', event: 'US GDP Q4 Final', impact: 'High', time: '08:30 AM' },
+            { date: 'Mar 29', event: 'Fed Chair Speech', impact: 'High', time: '10:00 AM' },
+            { date: 'Apr 1', event: 'US Non-Farm Payrolls', impact: 'High', time: '08:30 AM' },
+            { date: 'Apr 3', event: 'ECB Rate Decision', impact: 'Medium', time: '09:15 AM' }
+        ];
+        container.innerHTML = events.map(e => `
+            <div class="flex justify-between items-center p-2 bg-[#2b3139] rounded-lg">
+                <div>
+                    <div class="text-white text-sm font-medium">${e.event}</div>
+                    <div class="text-xs text-gray-500">${e.date} • ${e.time}</div>
+                </div>
+                <span class="text-xs px-2 py-1 rounded ${e.impact === 'High' ? 'bg-red-500/20 text-red-500' : 'bg-yellow-500/20 text-yellow-500'}">${e.impact}</span>
+            </div>
+        `).join('');
+    }
+
+    function renderNewsFeed() {
+        const container = document.getElementById('news-feed');
+        if (!container) return;
+        const news = [
+            { title: "Bitcoin Surges Past $70,000 as Institutional Demand Grows", time: "2h ago", source: "CoinDesk" },
+            { title: "Ethereum Upgrade 'Pectra' Completed Successfully", time: "5h ago", source: "The Block" },
+            { title: "Binance Launches New Trading Pairs for Altcoins", time: "1d ago", source: "Binance" },
+            { title: "SEC Approves New Crypto ETF Products", time: "2d ago", source: "Reuters" }
+        ];
+        container.innerHTML = news.map(n => `
+            <div class="news-item" onclick="showToast('${n.title}', true)">
+                <div class="text-white text-sm font-medium">${n.title}</div>
+                <div class="flex justify-between mt-1">
+                    <span class="text-xs text-gray-500">${n.source}</span>
+                    <span class="text-xs text-gray-500">${n.time}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderWhaleAlerts() {
+        const container = document.getElementById('whale-alerts');
+        if (!container) return;
+        const alerts = [
+            { amount: "1,234 BTC", from: "Unknown Wallet", to: "Binance", time: "5 min ago", value: "$86M" },
+            { amount: "5,000 ETH", from: "Coinbase", to: "Unknown", time: "15 min ago", value: "$17.5M" },
+            { amount: "10,000 SOL", from: "Unknown", to: "Bybit", time: "1h ago", value: "$1.8M" },
+            { amount: "2,500 BTC", from: "Binance", to: "Unknown", time: "2h ago", value: "$175M" }
+        ];
+        container.innerHTML = alerts.map(a => `
+            <div class="whale-alert">
+                <div class="flex justify-between items-center">
+                    <span class="text-red-500 font-bold">🐋 ${a.amount}</span>
+                    <span class="text-gray-400 text-xs">${a.time}</span>
+                </div>
+                <div class="text-xs text-gray-400 mt-1">From: ${a.from} → To: ${a.to}</div>
+                <div class="text-xs text-yellow-500 mt-1">Value: ${a.value}</div>
+            </div>
+        `).join('');
+    }
+
+    function showSection(section) {
+        document.getElementById('section-positions').style.display = 'none';
+        document.getElementById('section-copy-trading').style.display = 'none';
+        document.getElementById('section-signals').style.display = 'none';
+        
+        document.getElementById('tab-positions').className = 'flex-1 py-2 rounded-lg bg-[#2b3139] text-gray-400 font-bold';
+        document.getElementById('tab-copy').className = 'flex-1 py-2 rounded-lg bg-[#2b3139] text-gray-400 font-bold';
+        document.getElementById('tab-signals').className = 'flex-1 py-2 rounded-lg bg-[#2b3139] text-gray-400 font-bold';
+        
+        if (section === 'positions') {
+            document.getElementById('section-positions').style.display = 'block';
+            document.getElementById('tab-positions').className = 'flex-1 py-2 rounded-lg bg-[#f0b90b] text-black font-bold';
+        } else if (section === 'copy-trading') {
+            document.getElementById('section-copy-trading').style.display = 'block';
+            document.getElementById('tab-copy').className = 'flex-1 py-2 rounded-lg bg-[#f0b90b] text-black font-bold';
+            renderLeaderboard();
+            renderSocialFeed();
+        } else if (section === 'signals') {
+            document.getElementById('section-signals').style.display = 'block';
+            document.getElementById('tab-signals').className = 'flex-1 py-2 rounded-lg bg-[#f0b90b] text-black font-bold';
+            renderEconomicCalendar();
+            renderNewsFeed();
+            renderWhaleAlerts();
+        }
+    }
+
+    function toggleProfilePopup() {
+        const popup = document.getElementById('profile-popup');
+        if (popup.classList.contains('active')) popup.classList.remove('active');
+        else { 
+            document.getElementById('profile-email').innerText = currentUserEmail || 'User'; 
+            document.getElementById('profile-id').innerText = `Account ID: ${Math.floor(1000000000000000 + Math.random() * 9000000000000000)}`; 
+            popup.classList.add('active'); 
+        }
+    }
+
+    function closeProfilePopup() { document.getElementById('profile-popup').classList.remove('active'); }
+
+    function logoutUser() {
+        localStorage.removeItem('binance_session_email');
+        localStorage.removeItem('binance_user_balance');
+        window.location.href = 'index.html';
+    }
+
+    function checkSession() {
+        const savedEmail = localStorage.getItem('binance_session_email');
+        const savedBalance = localStorage.getItem('binance_user_balance');
+        if (savedEmail) {
+            currentUserEmail = savedEmail;
+            currentBalance = parseFloat(savedBalance) || 10000;
+            updateBalanceDisplay();
+        } else {
+            window.location.href = 'index.html';
+        }
+    }
+
+    function startPriceUpdates() {
+        setInterval(() => {
+            futuresContracts.forEach(contract => {
+                const changePercent = (Math.random() - 0.5) * 0.002;
+                contract.price = contract.price * (1 + changePercent);
+                contract.change = parseFloat((contract.change + (Math.random() - 0.5) * 0.3).toFixed(2));
+                contract.markPrice = contract.price * (0.999 + (Math.random() - 0.5) * 0.002);
+            });
+            renderFuturesList();
+        }, 5000);
+    }
+
+    window.addEventListener('load', () => {
+        checkSession();
+        lucide.createIcons();
+        renderFuturesList();
+        startPriceUpdates();
+        showSection('positions');
+    });
+</script>
+</body>
+</html>
