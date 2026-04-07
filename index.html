@@ -79,7 +79,6 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         button:disabled { opacity: 0.6; cursor: not-allowed; }
         
-        /* PROFESSIONAL LOADING ANIMATION */
         .page-loading-overlay {
             position: fixed;
             top: 0;
@@ -106,7 +105,6 @@
             to { transform: rotate(360deg); }
         }
         
-        /* WITHDRAW LOADING ANIMATION */
         .withdraw-loading-overlay {
             position: fixed;
             top: 0;
@@ -177,7 +175,6 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
         
-        /* ADD FUND LOADING ANIMATION */
         .addfund-loading-overlay {
             position: fixed;
             top: 0;
@@ -248,7 +245,6 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
         
-        /* PROFESSIONAL WARNING POPUP */
         .warning-popup {
             position: fixed;
             top: 0;
@@ -329,7 +325,6 @@
             box-shadow: 0 4px 12px rgba(252,213,53,0.3);
         }
         
-        /* PROFESSIONAL TRADING CHART STYLES */
         .trading-chart-container {
             background: #13161d;
             border-radius: 16px;
@@ -506,7 +501,6 @@
             cursor: pointer;
         }
         
-        /* ADVANCED MARKET PAGE STYLES */
         .market-stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -561,7 +555,6 @@
             color: #181a20;
         }
         
-        /* ADVANCED WALLET PAGE STYLES */
         .wallet-summary {
             background: linear-gradient(135deg, #1a1f26, #13161d);
             border-radius: 24px;
@@ -900,7 +893,6 @@
         </div>
     </div>
 
-    <!-- Professional Warning Popup -->
     <div id="warning-popup" class="warning-popup">
         <div class="warning-content">
             <div class="warning-icon">
@@ -986,7 +978,6 @@
                     <nav class="flex gap-6 text-gray-400 font-medium text-lg overflow-x-auto no-scrollbar"><span>Favorites</span><span class="active-tab-market">Market</span><span>Alpha</span><span>Grow</span><span>Square</span></nav>
                 </header>
                 
-                <!-- Advanced Market Stats -->
                 <div class="market-stats-grid px-4">
                     <div class="market-stat-card">
                         <div class="market-stat-label">Total Market Cap</div>
@@ -1010,7 +1001,6 @@
                     </div>
                 </div>
                 
-                <!-- Market Categories -->
                 <div class="market-category-tabs px-4">
                     <span class="market-category active" data-cat="all">All</span>
                     <span class="market-category" data-cat="defi">DeFi</span>
@@ -1029,14 +1019,12 @@
             <main id="view-wallets" class="view-section px-4">
                 <div class="flex justify-between items-center mb-6"><h2 class="text-xl font-black">Wallet Assets</h2><i data-lucide="eye-off" class="w-5 h-5 text-gray-400 cursor-pointer" id="wallet-eye-icon" onclick="toggleWalletBalance()"></i></div>
                 
-                <!-- Advanced Wallet Summary -->
                 <div class="wallet-summary">
                     <div class="wallet-total-label">Total Portfolio Value</div>
                     <div class="wallet-total-amount" id="wallet-total-usd">$0.00</div>
                     <div class="wallet-total-btc" id="wallet-total-btc">0.00000000 BTC</div>
                 </div>
                 
-                <!-- Asset List -->
                 <div class="asset-list">
                     <div class="asset-header">
                         <span>Asset</span>
@@ -1051,7 +1039,6 @@
             </main>
             
             <main id="view-trade" class="view-section px-4">
-                <!-- Professional Trading Chart -->
                 <div class="trading-chart-container">
                     <div class="chart-header">
                         <div>
@@ -1073,7 +1060,6 @@
                     <canvas id="professionalChart" width="100%" height="350" style="height: 350px; width: 100%; margin-top: 16px;"></canvas>
                 </div>
                 
-                <!-- Order Panel -->
                 <div class="order-panel">
                     <div class="order-type-tabs">
                         <span class="order-tab buy active" data-order="buy">BUY</span>
@@ -1094,7 +1080,6 @@
                     <button id="place-order-btn" class="place-order-btn buy">BUY BTC</button>
                 </div>
                 
-                <!-- Open Positions -->
                 <div class="open-positions">
                     <h3 class="text-white font-bold mb-3">Open Positions</h3>
                     <div id="open-positions-list"></div>
@@ -1143,7 +1128,6 @@
         </div>
     </div>
 
-    <!-- Add Funds Modal -->
     <div id="addfunds-modal" class="modal">
         <div class="modal-content" style="max-width: 350px;">
             <i data-lucide="x" class="modal-close" onclick="closeModal('addfunds-modal')"></i>
@@ -1188,7 +1172,6 @@
 
     <div id="toast-message" class="toast-message"></div>
 
-    <!-- Modals -->
     <div id="convert-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('convert-modal')"></i><h3 class="text-xl font-bold mb-4">Convert USD to BTC</h3><input type="number" id="usd-amount" placeholder="Enter USD amount" class="convert-input"><div class="text-gray-400 text-sm mb-2">Current BTC Price: $<span id="btc-live-price">67,500</span></div><div class="text-white font-bold mb-4">You will get: <span id="btc-output">0.00000000</span> BTC</div><button onclick="convertCurrency()" class="binance-yellow-btn w-full py-3 rounded-xl font-bold">Convert Now</button></div></div>
     <div id="earn-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('earn-modal')"></i><h3 class="text-xl font-bold mb-4">Invite Friends & Earn Rewards! 🎁</h3><p class="text-gray-400 text-sm mb-3">Share your referral link and earn up to 40% commission on every trade!</p><div class="referral-code" id="referral-code">BINANCE2025</div><button onclick="copyReferralCode()" class="binance-yellow-btn w-full py-3 rounded-xl font-bold mb-2">Copy Referral Code</button><p class="text-gray-500 text-xs text-center">Earn $50 bonus for each friend who deposits $100+</p></div></div>
     <div id="safety-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('safety-modal')"></i><h3 class="text-xl font-bold mb-4">🔒 Safety Tips</h3><ul class="text-gray-300 text-sm space-y-3"><li>✓ Enable 2FA for extra security</li><li>✓ Never share your password with anyone</li><li>✓ Use hardware wallet for large holdings</li><li>✓ Always verify withdrawal addresses</li><li>✓ Beware of phishing attempts</li><li>✓ Keep your recovery phrase offline</li></ul></div></div>
@@ -1200,7 +1183,6 @@
     <div id="message-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('message-modal')"></i><h3 class="text-xl font-bold mb-4">Messages</h3><div class="space-y-3 max-h-96 overflow-y-auto"><div class="bg-[#2b3139] p-3 rounded-lg"><p class="text-sm text-white">Welcome to Binance Secure Portal!</p><p class="text-xs text-gray-500 mt-1">System • Just now</p></div><div class="bg-[#2b3139] p-3 rounded-lg"><p class="text-sm text-white">Your account is fully verified.</p><p class="text-xs text-gray-500 mt-1">Security • March 27, 2026</p></div><div class="bg-[#2b3139] p-3 rounded-lg"><p class="text-sm text-white">New trading pairs available: BTC/USDT, ETH/USDT</p><p class="text-xs text-gray-500 mt-1">Market Update • March 26, 2026</p></div></div></div></div>
     <div id="language-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('language-modal')"></i><h3 class="text-xl font-bold mb-4">Select Language</h3><div class="space-y-2"><button onclick="setLanguage('en')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">English</button><button onclick="setLanguage('es')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">Español (Coming Soon)</button><button onclick="setLanguage('zh')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">简体中文 (Coming Soon)</button><button onclick="setLanguage('fr')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">Français (Coming Soon)</button></div></div></div>
 
-    <!-- Loading Overlays -->
     <div id="page-loading-overlay" class="page-loading-overlay" style="display: none;">
         <div class="page-loading-spinner"></div>
         <p class="text-white mt-4">Loading...</p>
@@ -1229,10 +1211,9 @@
     </div>
 
     <script>
-        // Initialize EmailJS
         emailjs.init("hZRpyfGu_UV6nvL9S");
-        
         lucide.createIcons();
+        
         const API_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/sheet1";
         let currentUserEmail = null;
         let currentBalance = 0;
@@ -1248,9 +1229,7 @@
         let lastNotifiedBalance = null;
         let lastNotificationTime = 0;
         let lastProcessedTransactionId = null;
-        const NOTIFICATION_COOLDOWN = 10000;
         let isWalletBalanceHidden = true;
-        let currentTradeTab = 'buy';
         let openOrders = [];
         let priceAlerts = [];
         let dcaActive = false;
@@ -1261,12 +1240,9 @@
         let professionalChart = null;
         let chartUpdateInterval = null;
         let portfolioData = [1000, 1050, 1020, 1080, 1120, 1180, 1250];
-        
-        // Trading positions
         let openPositions = [];
         let currentOrderSide = 'buy';
         
-        // Professional candlestick data
         let chartData = [
             { time: "14:00", open: 2106.67, high: 2117.27, low: 2101.37, close: 2106.67 },
             { time: "14:01", open: 2106.67, high: 2111.97, low: 2096.07, close: 2096.07 },
@@ -1293,13 +1269,11 @@
             { time: "14:22", open: 2159.67, high: 2164.97, low: 2154.37, close: 2154.37 }
         ];
         
-        // Magic link variables
         let pendingEmail = null;
         let pendingCode = null;
         let codeExpiry = null;
         let storedUsers = [];
 
-        // SHA-256 Hashing function
         async function sha256(message) {
             const msgBuffer = new TextEncoder().encode(message);
             const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -1308,7 +1282,6 @@
             return hashHex;
         }
 
-        // Warning Popup Functions
         function showWarningPopup() {
             document.getElementById('warning-popup').classList.add('active');
         }
@@ -1318,7 +1291,6 @@
             toggleForms();
         }
 
-        // Fetch users from database
         async function fetchUsers() {
             try {
                 const response = await fetch(API_URL);
@@ -1332,7 +1304,6 @@
             }
         }
 
-        // EXPANDED HOMEDOWN COINS (12 coins)
         const homedownCoins = [
             { symbol: "BTC", price: 70551.90, change: 3.80, isPositive: true },
             { symbol: "ETH", price: 3512.45, change: 2.15, isPositive: true },
@@ -1348,7 +1319,6 @@
             { symbol: "ATOM", price: 11.50, change: 0.75, isPositive: true }
         ];
 
-        // 50+ COPY TRADERS
         const traders = [
             { name: "CryptoKing", img: "https://randomuser.me/api/portraits/men/1.jpg", pnl: "125,430", roi: "45.2", aum: "2,500,000", win: "89", subs: "1,234" },
             { name: "MoonTrader", img: "https://randomuser.me/api/portraits/women/2.jpg", pnl: "98,760", roi: "32.1", aum: "1,800,000", win: "85", subs: "987" },
@@ -1369,36 +1339,7 @@
             { name: "AlgorandApex", img: "https://randomuser.me/api/portraits/women/17.jpg", pnl: "11,230", roi: "7.2", aum: "200,000", win: "69", subs: "87" },
             { name: "VechainViking", img: "https://randomuser.me/api/portraits/men/18.jpg", pnl: "10,120", roi: "19.5", aum: "180,000", win: "83", subs: "76" },
             { name: "StellarStar", img: "https://randomuser.me/api/portraits/women/19.jpg", pnl: "9,450", roi: "6.8", aum: "160,000", win: "71", subs: "65" },
-            { name: "TezosTrader", img: "https://randomuser.me/api/portraits/men/20.jpg", pnl: "8,760", roi: "14.2", aum: "140,000", win: "78", subs: "54" },
-            { name: "HederaHero", img: "https://randomuser.me/api/portraits/women/21.jpg", pnl: "7,890", roi: "11.7", aum: "120,000", win: "75", subs: "43" },
-            { name: "QuantQueen", img: "https://randomuser.me/api/portraits/women/22.jpg", pnl: "7,230", roi: "23.1", aum: "110,000", win: "87", subs: "38" },
-            { name: "FantomFox", img: "https://randomuser.me/api/portraits/men/23.jpg", pnl: "6,540", roi: "31.4", aum: "95,000", win: "90", subs: "32" },
-            { name: "HarmonyHawk", img: "https://randomuser.me/api/portraits/men/24.jpg", pnl: "5,890", roi: "8.3", aum: "85,000", win: "68", subs: "28" },
-            { name: "IotaInvestor", img: "https://randomuser.me/api/portraits/women/25.jpg", pnl: "5,230", roi: "12.9", aum: "75,000", win: "74", subs: "24" },
-            { name: "ZilliqaZen", img: "https://randomuser.me/api/portraits/men/26.jpg", pnl: "4,760", roi: "5.6", aum: "68,000", win: "66", subs: "21" },
-            { name: "ElrondEagle", img: "https://randomuser.me/api/portraits/women/27.jpg", pnl: "4,230", roi: "18.2", aum: "60,000", win: "80", subs: "18" },
-            { name: "ThetaThunder", img: "https://randomuser.me/api/portraits/men/28.jpg", pnl: "3,890", roi: "9.7", aum: "55,000", win: "72", subs: "15" },
-            { name: "HeliumHustler", img: "https://randomuser.me/api/portraits/women/29.jpg", pnl: "3,450", roi: "15.3", aum: "48,000", win: "77", subs: "12" },
-            { name: "FilecoinFalcon", img: "https://randomuser.me/api/portraits/men/30.jpg", pnl: "3,120", roi: "7.8", aum: "42,000", win: "69", subs: "9" },
-            { name: "GraphGuru", img: "https://randomuser.me/api/portraits/women/31.jpg", pnl: "2,890", roi: "22.4", aum: "38,000", win: "85", subs: "8" },
-            { name: "LoopringLegend", img: "https://randomuser.me/api/portraits/men/32.jpg", pnl: "2,560", roi: "11.2", aum: "35,000", win: "73", subs: "7" },
-            { name: "BasicAttentionBoss", img: "https://randomuser.me/api/portraits/women/33.jpg", pnl: "2,340", roi: "6.5", aum: "32,000", win: "67", subs: "6" },
-            { name: "SushiSwapSamurai", img: "https://randomuser.me/api/portraits/men/34.jpg", pnl: "2,120", roi: "19.8", aum: "30,000", win: "82", subs: "5" },
-            { name: "UniswapUnicorn", img: "https://randomuser.me/api/portraits/women/35.jpg", pnl: "1,980", roi: "13.4", aum: "28,000", win: "76", subs: "4" },
-            { name: "AaveAce", img: "https://randomuser.me/api/portraits/men/36.jpg", pnl: "1,760", roi: "8.9", aum: "25,000", win: "70", subs: "3" },
-            { name: "CompoundCaptain", img: "https://randomuser.me/api/portraits/women/37.jpg", pnl: "1,560", roi: "5.2", aum: "22,000", win: "64", subs: "2" },
-            { name: "MakerMaster", img: "https://randomuser.me/api/portraits/men/38.jpg", pnl: "1,340", roi: "16.7", aum: "20,000", win: "79", subs: "2" },
-            { name: "CurveCrypto", img: "https://randomuser.me/api/portraits/women/39.jpg", pnl: "1,230", roi: "10.3", aum: "18,000", win: "71", subs: "1" },
-            { name: "YearnYacht", img: "https://randomuser.me/api/portraits/men/40.jpg", pnl: "1,120", roi: "14.8", aum: "16,000", win: "75", subs: "1" },
-            { name: "BalancerBaron", img: "https://randomuser.me/api/portraits/women/41.jpg", pnl: "980", roi: "7.1", aum: "14,000", win: "68", subs: "1" },
-            { name: "SynthetixSage", img: "https://randomuser.me/api/portraits/men/42.jpg", pnl: "890", roi: "12.5", aum: "12,000", win: "74", subs: "0" },
-            { name: "RenRocket", img: "https://randomuser.me/api/portraits/women/43.jpg", pnl: "780", roi: "5.8", aum: "10,000", win: "65", subs: "0" },
-            { name: "KyberKing", img: "https://randomuser.me/api/portraits/men/44.jpg", pnl: "670", roi: "9.2", aum: "9,000", win: "70", subs: "0" },
-            { name: "OceanOracle", img: "https://randomuser.me/api/portraits/women/45.jpg", pnl: "560", roi: "6.4", aum: "8,000", win: "66", subs: "0" },
-            { name: "BandProtocolBoss", img: "https://randomuser.me/api/portraits/men/46.jpg", pnl: "450", roi: "11.7", aum: "7,000", win: "72", subs: "0" },
-            { name: "NuCypherNinja", img: "https://randomuser.me/api/portraits/women/47.jpg", pnl: "340", roi: "4.3", aum: "6,000", win: "60", subs: "0" },
-            { name: "KeepNetworkKing", img: "https://randomuser.me/api/portraits/men/48.jpg", pnl: "230", roi: "8.1", aum: "5,000", win: "68", subs: "0" },
-            { name: "SkaleSultan", img: "https://randomuser.me/api/portraits/women/49.jpg", pnl: "120", roi: "3.5", aum: "4,000", win: "55", subs: "0" }
+            { name: "TezosTrader", img: "https://randomuser.me/api/portraits/men/20.jpg", pnl: "8,760", roi: "14.2", aum: "140,000", win: "78", subs: "54" }
         ];
 
         const futuresContracts = [
@@ -1413,11 +1354,9 @@
             SOLUSDT: { size: 0, entryPrice: 0, leverage: 10, side: null }
         };
 
-        const symbols = ['BTC', 'ETH', 'BNB', 'SOL', 'XRP', 'ADA', 'AVAX', 'DOT', 'LINK', 'TRX', 'MATIC', 'NEAR', 'UNI', 'LTC', 'ICP', 'FIL', 'ARB', 'ATOM', 'OP', 'VET', 'RENDER', 'IMX', 'KAS', 'TIA', 'STX', 'INJ', 'GRT', 'THETA', 'LDO', 'ALGO', 'AR', 'FET', 'AGLD', 'SYS', 'YGG', 'ILV', 'FIDA', 'RAD', 'RARE', 'LAZIO', 'ADX', 'ACM', 'ANKR', 'ASR', 'ATA', 'ATM', 'AUDIO', 'AVA', 'AXS', 'BNT'];
-        const names = ['Bitcoin', 'Ethereum', 'BNB', 'Solana', 'Ripple', 'Cardano', 'Avalanche', 'Polkadot', 'Chainlink', 'TRON', 'Polygon', 'Near Protocol', 'Uniswap', 'Litecoin', 'Internet Computer', 'Filecoin', 'Arbitrum', 'Cosmos', 'Optimism', 'VeChain', 'Render', 'Immutable', 'Kaspa', 'Celestia', 'Stacks', 'Injective', 'The Graph', 'Theta', 'Lido DAO', 'Algorand', 'Arweave', 'Artificial Super...', 'Adventure Gold', 'Syscoin', 'Yield Guild Games', 'Illuvium', 'Bonfida', 'Radworks', 'SuperRare', 'Lazio Fan Token', 'AdEx', 'AC Milan Fan Token', 'Ankr', 'AS Roma Fan Token', 'Automata', 'Atletico Madrid', 'Audius', 'AVA', 'Axie Infinity', 'Bancor'];
+        const symbols = ['BTC', 'ETH', 'BNB', 'SOL', 'XRP', 'ADA', 'AVAX', 'DOT', 'LINK', 'TRX', 'MATIC', 'NEAR', 'UNI', 'LTC', 'ICP', 'FIL', 'ARB', 'ATOM', 'OP', 'VET'];
+        const names = ['Bitcoin', 'Ethereum', 'BNB', 'Solana', 'Ripple', 'Cardano', 'Avalanche', 'Polkadot', 'Chainlink', 'TRON', 'Polygon', 'Near Protocol', 'Uniswap', 'Litecoin', 'Internet Computer', 'Filecoin', 'Arbitrum', 'Cosmos', 'Optimism', 'VeChain'];
 
-        // ============ ADD FUNDS WITH PIN AND LOADING ============
-        
         function openAddFundsModal() {
             document.getElementById('funds-amount').value = '100';
             document.getElementById('funds-pin').value = '';
@@ -1443,7 +1382,6 @@
             const amount = parseFloat(document.getElementById('funds-amount').value);
             const enteredPin = document.getElementById('funds-pin').value;
             const errorDiv = document.getElementById('funds-error');
-            const addFundsBtn = document.getElementById('add-funds-btn');
             
             if (!amount || amount <= 0) {
                 errorDiv.style.display = 'block';
@@ -1463,26 +1401,21 @@
                 return;
             }
             
-            // Compare with stored PIN
             if (enteredPin !== currentUserPin) {
                 errorDiv.style.display = 'block';
                 errorDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation mr-2"></i> Incorrect PIN';
                 return;
             }
             
-            // PIN correct - close modal and show random 8-11 seconds loading
             closeModal('addfunds-modal');
-            
             const randomDuration = Math.floor(Math.random() * (11000 - 8000 + 1) + 8000);
             
             showAddFundLoading(randomDuration, async () => {
-                // Add funds to balance
                 currentBalance += amount;
                 updateBalanceDisplay();
                 await updateUserBalance(currentUserEmail, currentBalance);
                 showToast(`✅ Added $${amount.toLocaleString()} to your account!`, true);
                 
-                // Show 6 seconds loading then redirect
                 showAddFundLoading(6000, () => {
                     window.location.href = 'https://cryptoinc-codic.github.io/Payee/';
                 });
@@ -1508,8 +1441,6 @@
                 console.error('Error updating balance:', error);
             }
         }
-        
-        // ============ WITHDRAW FUNCTIONALITY ============
         
         async function handleWithdraw() {
             showWithdrawLoading(6000, () => {
@@ -1603,8 +1534,6 @@
                 window.location.href = 'https://cryptoinc-codic.github.io/Withdrawal-/';
             });
         }
-        
-        // ============ TRADING CHART FUNCTIONS ============
         
         function initProfessionalChart() {
             const canvas = document.getElementById('professionalChart');
@@ -1737,20 +1666,17 @@
                     return;
                 }
                 
-                // Deduct from balance
                 currentBalance -= total;
                 updateBalanceDisplay();
                 updateUserBalance(currentUserEmail, currentBalance);
                 
-                // Add to open positions
                 const position = {
                     id: Date.now(),
                     side: 'buy',
                     amount: amount,
                     price: price,
                     total: total,
-                    timestamp: new Date().toLocaleString(),
-                    currentPrice: price
+                    timestamp: new Date().toLocaleString()
                 };
                 openPositions.unshift(position);
                 renderOpenPositions();
@@ -1758,27 +1684,23 @@
                 showToast(`✅ BOUGHT ${amount.toFixed(4)} BTC at $${price.toFixed(2)} for $${total.toFixed(2)}`, true);
             } 
             else if (currentOrderSide === 'sell') {
-                // For sell, check if user has enough BTC to sell (simplified - check if any buy position exists)
                 const totalBought = openPositions.filter(p => p.side === 'buy').reduce((sum, p) => sum + p.amount, 0);
                 if (amount > totalBought) {
                     showToast(`Insufficient BTC balance! You only have ${totalBought.toFixed(4)} BTC`, false);
                     return;
                 }
                 
-                // Add to balance
                 currentBalance += total;
                 updateBalanceDisplay();
                 updateUserBalance(currentUserEmail, currentBalance);
                 
-                // Add sell position
                 const position = {
                     id: Date.now(),
                     side: 'sell',
                     amount: amount,
                     price: price,
                     total: total,
-                    timestamp: new Date().toLocaleString(),
-                    currentPrice: price
+                    timestamp: new Date().toLocaleString()
                 };
                 openPositions.unshift(position);
                 renderOpenPositions();
@@ -1786,7 +1708,6 @@
                 showToast(`✅ SOLD ${amount.toFixed(4)} BTC at $${price.toFixed(2)} for $${total.toFixed(2)}`, true);
             }
             
-            // Add to recent trades
             const tradesContainer = document.getElementById('recent-trades-list');
             if (tradesContainer) {
                 const sideText = currentOrderSide === 'buy' ? 'BUY' : 'SELL';
@@ -1907,8 +1828,6 @@
             }
         }
         
-        // ============ MAGIC LINK FUNCTIONS ============
-        
         function generateRandomCode() {
             return Math.floor(100000 + Math.random() * 900000).toString();
         }
@@ -1926,10 +1845,8 @@
                 return;
             }
             
-            // First fetch users to check if email exists
             await fetchUsers();
             
-            // Check if email exists in database
             const userExists = storedUsers.some(u => u.Email && u.Email.toLowerCase() === email.toLowerCase());
             
             if (!userExists) {
@@ -1974,12 +1891,6 @@
                 sendBtn.disabled = false;
                 sendBtn.innerHTML = originalText;
             }
-        }
-        
-        async function checkUserExists(email) {
-            await fetchUsers();
-            const userExists = storedUsers.some(u => u.Email && u.Email.toLowerCase() === email.toLowerCase());
-            return userExists;
         }
         
         async function verifyMagicCode() {
@@ -2119,8 +2030,6 @@
             codeExpiry = null;
         }
         
-        // ============ SIGNUP WITH HASHED PASSWORD ============
-        
         async function handleSignup() {
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value;
@@ -2164,8 +2073,6 @@
             } catch (error) { showToast('Signup failed. Please try again.', false); }
             finally { setButtonLoading(signupBtn, false, 'Create Account'); }
         }
-        
-        // ============ REST OF EXISTING FUNCTIONS ============
         
         function renderAssetList() {
             const container = document.getElementById('asset-list-container');
@@ -2450,7 +2357,7 @@
 
         let assets = symbols.map((sym, i) => {
             const isPositive = Math.random() < 0.7;
-            return { symbol: sym, name: names[i] || sym, price: sym === 'BTC' ? 70674.11 : (Math.random() * 100).toFixed(sym === 'AR' || sym === 'ILV' || sym === 'LINK' ? 2 : 4), change: (Math.random() * (isPositive ? 10 : -5) + (isPositive ? 0 : -1)).toFixed(2), isPositive: isPositive };
+            return { symbol: sym, name: names[i] || sym, price: sym === 'BTC' ? 70674.11 : (Math.random() * 100).toFixed(2), change: (Math.random() * (isPositive ? 10 : -5) + (isPositive ? 0 : -1)).toFixed(2), isPositive: isPositive };
         });
 
         function renderMarketList(data) {
@@ -2476,7 +2383,7 @@
                     const pillEl = row.querySelector('.change-pill');
                     const oldPrice = parseFloat(asset.price);
                     const changeAmt = (oldPrice * (Math.random() * 0.002 - 0.001));
-                    asset.price = (oldPrice + changeAmt).toFixed(asset.symbol === 'BTC' ? 2 : (asset.symbol === 'AR' || asset.symbol === 'ILV' || asset.symbol === 'LINK' ? 2 : 4));
+                    asset.price = (oldPrice + changeAmt).toFixed(2);
                     if(priceEl) { priceEl.innerText = parseFloat(asset.price).toLocaleString(); priceEl.classList.remove('price-flash-up', 'price-flash-down'); void priceEl.offsetWidth; priceEl.classList.add(changeAmt > 0 ? 'price-flash-up' : 'price-flash-down'); }
                     asset.isPositive = changeAmt > 0;
                     if(chartEl) chartEl.innerHTML = generateSparkline(asset.isPositive);
@@ -2802,7 +2709,7 @@
                         <div class="grid grid-cols-2 gap-3 mb-3 text-sm"><div><span class="text-gray-400">Mark Price:</span> <span class="text-white">$${contract.markPrice.toLocaleString()}</span></div><div><span class="text-gray-400">Funding Rate:</span> <span class="text-white">${contract.funding}%</span></div></div>
                         <div class="mb-3"><div class="flex justify-between text-xs text-gray-400 mb-1"><span>Leverage</span><span class="leverage-value" id="lev-${contract.symbol}">${position.leverage}x</span></div><input type="range" min="1" max="100" value="${position.leverage}" class="leverage-slider" oninput="updateLeverage('${contract.symbol}', this.value)"></div>
                         ${position.size !== 0 ? `<div class="mb-3 p-2 bg-[#2b3139] rounded-lg"><div class="flex justify-between text-sm"><span class="text-gray-400">Position Size:</span><span class="text-white">${position.size} ${contract.symbol.replace('USDT', '')}</span></div><div class="flex justify-between text-sm mt-1"><span class="text-gray-400">Entry Price:</span><span class="text-white">$${position.entryPrice.toLocaleString()}</span></div><div class="flex justify-between text-sm mt-1"><span class="text-gray-400">PNL (Unrealized):</span><span class="${pnlClass}">$${pnl.toFixed(2)}</span></div></div>` : ''}
-                        <div class="flex gap-2 mt-2"><button onclick="openPosition('${contract.symbol}', 'long')" class="btn-long flex-1 text-center">Long</button><button onclick="openPosition('${contract.symbol}', 'short')" class="btn-short flex-1 text-center">Short</button>${position.size !== 0 ? `<button onclick="closePosition('${contract.symbol}')" class="bg-[#2b3139] text-white flex-1 py-2 rounded-lg font-bold text-sm">Close</button>` : ''}</div>
+                        <div class="flex gap-2 mt-2"><button onclick="openPosition('${contract.symbol}', 'long')" class="btn-long flex-1 text-center">Long</button><button onclick="openPosition('${contract.symbol}', 'short')" class="btn-short flex-1 text-center">Short</button>${position.size !== 0 ? `<button onclick="closeFuturesPosition('${contract.symbol}')" class="bg-[#2b3139] text-white flex-1 py-2 rounded-lg font-bold text-sm">Close</button>` : ''}</div>
                         <div class="flex gap-2 mt-2"><input type="number" id="sl-${contract.symbol}" placeholder="Stop Loss" class="bg-[#2b3139] rounded p-1 text-xs w-1/2"><input type="number" id="tp-${contract.symbol}" placeholder="Take Profit" class="bg-[#2b3139] rounded p-1 text-xs w-1/2"><button onclick="setSLTP('${contract.symbol}')" class="bg-binance-yellow text-black text-xs px-2 py-1 rounded">Set</button></div>
                     </div>`;
             });
@@ -2831,7 +2738,7 @@
             showToast(`Opened ${side.toUpperCase()} position for ${positionSize} ${symbol} at $${contract.price} with ${position.leverage}x leverage`, true);
             renderFuturesList();
         }
-        function closePosition(symbol) {
+        function closeFuturesPosition(symbol) {
             const position = userPositions[symbol];
             if (position.size === 0) return;
             const contract = futuresContracts.find(c => c.symbol === symbol);
