@@ -20,12 +20,11 @@
         .view-section.active { display: block; }
         .max-w-md { margin: 0 auto; padding-bottom: 80px; }
         .toast-message { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #0ecb81; color: white; padding: 12px 20px; border-radius: 40px; font-size: 12px; font-weight: bold; z-index: 10001; opacity: 0; transition: opacity 0.3s; pointer-events: none; max-width: 280px; text-align: center; }
+        .toast-message.error { background-color: #f6465d; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10002; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
         .modal-content { background: #1e2329; border-radius: 24px; padding: 24px; width: 90%; max-width: 400px; border: 1px solid rgba(252,213,53,0.3); position: relative; }
         .modal-close { position: absolute; top: 16px; right: 16px; cursor: pointer; color: #848e9c; }
-        .funds-modal-input { background: #2b2f36; border: 1px solid #3b424d; border-radius: 12px; padding: 14px; color: white; width: 100%; margin-bottom: 16px; }
-        .binance-yellow-btn { background-color: #fcd535; color: #181a20; transition: all 0.2s; border-radius: 12px; padding: 12px; font-weight: bold; width: 100%; cursor: pointer; border: none; }
         .profile-popup { position: fixed; top: 70px; right: 20px; background: #1e2329; border-radius: 16px; padding: 20px; width: 280px; z-index: 10003; border: 1px solid rgba(252,213,53,0.3); display: none; }
         .profile-popup.active { display: block; }
         .quick-action-btn { background: #2b3139; border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
@@ -53,10 +52,14 @@
         .copy-card { background-color: #2b3139; border-radius: 12px; min-width: 320px; padding: 20px; position: relative; flex-shrink: 0; transition: transform 0.2s; }
         .copy-card:hover { transform: translateY(-5px); background-color: #323942; }
         .badge { background-color: #363c46; color: #eaecef; padding: 3px 12px; border-top-left-radius: 12px; border-bottom-right-radius: 10px; font-size: 11px; position: absolute; top: 0; left: 0; }
+        .copy-header { display: flex; align-items: center; margin-top: 15px; margin-bottom: 20px; }
         .avatar { width: 48px; height: 48px; border-radius: 50%; margin-right: 12px; object-fit: cover; border: 2px solid #474d57; }
         .user-info h3 { margin: 0; font-size: 16px; color: #eaecef; }
         .user-stats { font-size: 12px; color: #848e9c; margin-top: 4px; }
         .min-tag { background-color: rgba(240, 185, 11, 0.1); color: #f0b90b; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-left: 5px; font-weight: bold; }
+        .pnl-section { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
+        .pnl-label { font-size: 11px; color: #848e9c; margin-bottom: 4px; }
+        .pnl-value { font-size: 20px; font-weight: bold; color: #0ecb81; }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 1px solid #3b424d; padding-top: 15px; }
         .stat-item label { display: block; font-size: 11px; color: #848e9c; margin-bottom: 4px; }
         .stat-item span { font-size: 13px; font-weight: 500; color: #eaecef; }
@@ -64,45 +67,66 @@
         ::-webkit-scrollbar { display: none; }
         .nav-item-active { color: #f0b90b !important; }
         
-        /* NEW LOADING OVERLAY STYLES */
-        .loading-overlay {
+        /* Testimonial Card */
+        .testimonial-card { background: #1e2329; border-radius: 16px; padding: 16px; margin-bottom: 12px; border-left: 3px solid #f0b90b; }
+        .testimonial-text { font-size: 13px; color: #eaecef; line-height: 1.4; }
+        .testimonial-author { font-size: 11px; color: #f0b90b; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+        .rating-star { color: #f0b90b; font-size: 10px; }
+        
+        /* Currency Row */
+        .currency-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #2b3139; }
+        .currency-country { font-weight: 500; color: white; }
+        .currency-rate { color: #0ecb81; font-family: monospace; }
+        
+        /* Simple Loading */
+        .simple-loading {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #0a0c10 0%, #14181f 50%, #0a0c10 100%);
+            background: rgba(0,0,0,0.95);
             z-index: 10004;
             display: none;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            backdrop-filter: blur(8px);
         }
-        .professional-loader { position: relative; width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; }
-        .loader-ring { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 3px solid transparent; border-top-color: #fcd535; border-right-color: #0ecb81; border-bottom-color: #f6465d; border-left-color: #fcd535; animation: rotateRing 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
-        .loader-ring:nth-child(2) { width: 80%; height: 80%; top: 10%; left: 10%; border-top-color: #0ecb81; border-right-color: #f6465d; border-bottom-color: #fcd535; border-left-color: #0ecb81; animation: rotateRingReverse 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
-        .loader-ring:nth-child(3) { width: 50%; height: 50%; top: 25%; left: 25%; border-top-color: #f6465d; border-right-color: #fcd535; border-bottom-color: #0ecb81; border-left-color: #f6465d; animation: rotateRing 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
-        @keyframes rotateRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes rotateRingReverse { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
-        .loader-core { position: absolute; width: 25px; height: 25px; background: radial-gradient(circle, #fcd535, #f0b90b); border-radius: 50%; animation: pulseCore 1s ease-in-out infinite; box-shadow: 0 0 20px rgba(252,213,53,0.8); }
-        @keyframes pulseCore { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.7; } }
-        .loader-dots { display: flex; gap: 12px; margin-top: 30px; }
-        .dot { width: 8px; height: 8px; background: #fcd535; border-radius: 50%; animation: dotPulse 1.4s ease-in-out infinite; }
-        .dot:nth-child(1) { animation-delay: 0s; }
-        .dot:nth-child(2) { animation-delay: 0.2s; background: #0ecb81; }
-        .dot:nth-child(3) { animation-delay: 0.4s; background: #f6465d; }
-        .dot:nth-child(4) { animation-delay: 0.6s; background: #fcd535; }
-        .dot:nth-child(5) { animation-delay: 0.8s; background: #0ecb81; }
-        @keyframes dotPulse { 0%, 100% { transform: scale(0.5); opacity: 0.3; } 50% { transform: scale(1.2); opacity: 1; } }
-        .loading-message { margin-top: 25px; font-size: 14px; font-weight: 500; background: linear-gradient(135deg, #fcd535, #f0b90b); -webkit-background-clip: text; background-clip: text; color: transparent; text-transform: uppercase; }
-        .loading-percentage { margin-top: 12px; font-size: 24px; font-weight: 800; color: #fcd535; font-family: monospace; }
-        .loading-progress-bar { margin-top: 20px; width: 200px; height: 2px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
-        .loading-progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #fcd535, #0ecb81, #f6465d, #fcd535); background-size: 200% 100%; border-radius: 2px; animation: fillProgress 0.5s linear forwards, shimmer 1.5s ease-in-out infinite; }
-        @keyframes fillProgress { to { width: 100%; } }
-        @keyframes shimmer { 0% { background-position: 0% 0%; } 100% { background-position: 200% 0%; } }
+        .simple-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #2b3139;
+            border-top: 3px solid #f0b90b;
+            border-radius: 50%;
+            animation: simpleSpin 1s linear infinite;
+        }
+        @keyframes simpleSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .simple-progress {
+            width: 200px;
+            height: 3px;
+            background: #2b3139;
+            border-radius: 3px;
+            margin-top: 25px;
+            overflow: hidden;
+        }
+        .simple-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #f0b90b;
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+        .simple-text {
+            margin-top: 15px;
+            color: #f0b90b;
+            font-size: 13px;
+            font-weight: 500;
+        }
         
-        /* PIN MODAL STYLES */
+        /* PIN Modal */
         .pin-modal {
             position: fixed;
             top: 0;
@@ -137,6 +161,8 @@
             font-family: monospace;
         }
         .pin-input:focus { outline: none; border-color: #f0b90b; }
+        
+        .portfolio-container { max-height: 180px; }
     </style>
 </head>
 <body>
@@ -175,17 +201,19 @@
                 </div>
             </section>
             
+            <!-- QUICK ACTION BUTTONS - Deposit button now uses same function as Add Fund -->
             <div class="grid grid-cols-4 gap-2 px-4 mb-6">
-                <div class="quick-action-btn" onclick="window.location.href='wallets.html'"><i data-lucide="plus-circle" class="w-5 h-5 mx-auto mb-1 text-green-500"></i><span class="text-[10px]">Deposit</span></div>
+                <div class="quick-action-btn" id="depositBtn"><i data-lucide="plus-circle" class="w-5 h-5 mx-auto mb-1 text-green-500"></i><span class="text-[10px]">Deposit</span></div>
                 <div class="quick-action-btn" onclick="window.location.href='wallets.html'"><i data-lucide="minus-circle" class="w-5 h-5 mx-auto mb-1 text-red-500"></i><span class="text-[10px]">Withdraw</span></div>
                 <div class="quick-action-btn" onclick="window.location.href='trade.html'"><i data-lucide="arrow-left-right" class="w-5 h-5 mx-auto mb-1 text-yellow-500"></i><span class="text-[10px]">Trade</span></div>
                 <div class="quick-action-btn" onclick="window.location.href='wallets.html'"><i data-lucide="send" class="w-5 h-5 mx-auto mb-1 text-blue-500"></i><span class="text-[10px]">Transfer</span></div>
             </div>
 
-            <div class="px-4 mb-6">
-                <div class="card-bg p-4 rounded-2xl">
-                    <div class="flex justify-between items-center mb-3"><span class="text-gray-400 text-xs">Portfolio Performance (7 days)</span><span class="text-green-500 text-xs">+12.4%</span></div>
-                    <canvas id="portfolioChart" height="120" width="100%"></canvas>
+            <!-- SMALLER PORTFOLIO CHART -->
+            <div class="px-4 mb-4 portfolio-container">
+                <div class="card-bg p-3 rounded-2xl">
+                    <div class="flex justify-between items-center mb-2"><span class="text-gray-400 text-xs">Portfolio Performance (7 days)</span><span class="text-green-500 text-xs">+12.4%</span></div>
+                    <canvas id="portfolioChart" height="100" width="100%"></canvas>
                 </div>
             </div>
 
@@ -251,15 +279,29 @@
                 </div>
             </div>
             
+            <!-- HOT MARKET SECTION -->
             <div class="homedown-section">
                 <div class="homedown-title"><i data-lucide="flame"></i><span>Hot Market 🔥</span></div>
                 <div class="crypto-table-header"><span class="font-bold text-sm w-1/3">Name</span><span class="font-bold text-sm w-1/3 text-right">Last Price</span><span class="font-bold text-sm w-1/3 text-right">24h chg%</span></div>
                 <div id="homedownCoinList"></div>
             </div>
 
+            <!-- COPY TRADING SECTION WITH 15 TRADERS -->
             <div class="copy-trading-section">
-                <div class="copy-trading-title"><i data-lucide="users"></i><span>Copy Trading For You</span></div>
+                <div class="copy-trading-title"><i data-lucide="users"></i><span>Copy Trading For You (15 Top Traders)</span></div>
                 <div class="scroll-container" id="trader-list"></div>
+            </div>
+            
+            <!-- ========== NEW SECTION: USER TESTIMONIALS (20+) ========== -->
+            <div class="homedown-section mt-4">
+                <div class="homedown-title"><i data-lucide="message-circle"></i><span>What Our Users Say ⭐</span></div>
+                <div id="testimonialsList"></div>
+            </div>
+            
+            <!-- ========== NEW SECTION: COUNTRIES & CURRENCY RATES ========== -->
+            <div class="homedown-section mt-4 mb-8">
+                <div class="homedown-title"><i data-lucide="globe"></i><span>Global Currency Rates (vs USD)</span></div>
+                <div id="currencyList"></div>
             </div>
         </main>
 
@@ -273,16 +315,14 @@
     </div>
 </div>
 
-<!-- Loading Overlay 1 (6 seconds) -->
-<div id="loadingOverlay1" class="loading-overlay">
-    <div class="professional-loader"><div class="loader-ring"></div><div class="loader-ring"></div><div class="loader-ring"></div><div class="loader-core"></div></div>
-    <div class="loader-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-    <div class="loading-message" id="loadingMessage1">Initializing Secure Connection</div>
-    <div class="loading-percentage" id="loadingPercent1">0%</div>
-    <div class="loading-progress-bar"><div class="loading-progress-fill" id="loadingProgress1"></div></div>
+<!-- SIMPLE LOADING OVERLAY 1 -->
+<div id="loadingOverlay1" class="simple-loading">
+    <div class="simple-spinner"></div>
+    <div class="simple-progress"><div class="simple-progress-fill" id="loadingProgress1"></div></div>
+    <div class="simple-text" id="loadingText1">Initializing...</div>
 </div>
 
-<!-- PIN Verification Modal -->
+<!-- PIN MODAL -->
 <div id="pinModal" class="pin-modal">
     <div class="pin-container">
         <div class="text-center">
@@ -296,35 +336,12 @@
     </div>
 </div>
 
-<!-- Loading Overlay 2 (6 seconds after PIN) -->
-<div id="loadingOverlay2" class="loading-overlay">
-    <div class="professional-loader"><div class="loader-ring"></div><div class="loader-ring"></div><div class="loader-ring"></div><div class="loader-core"></div></div>
-    <div class="loader-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-    <div class="loading-message" id="loadingMessage2">Processing Transaction</div>
-    <div class="loading-percentage" id="loadingPercent2">0%</div>
-    <div class="loading-progress-bar"><div class="loading-progress-fill" id="loadingProgress2"></div></div>
+<!-- SIMPLE LOADING OVERLAY 2 -->
+<div id="loadingOverlay2" class="simple-loading">
+    <div class="simple-spinner"></div>
+    <div class="simple-progress"><div class="simple-progress-fill" id="loadingProgress2"></div></div>
+    <div class="simple-text" id="loadingText2">Processing...</div>
 </div>
-
-<div id="addfunds-modal" class="modal">
-    <div class="modal-content" style="max-width: 350px;">
-        <i data-lucide="x" class="modal-close" onclick="closeModal('addfunds-modal')"></i>
-        <div class="text-center mb-4"><div class="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-3"><i class="fa-solid fa-money-bill-wave text-yellow-500 text-2xl"></i></div><h3 class="text-xl font-bold text-white">Add Funds</h3><p class="text-gray-400 text-sm">Add demo funds to your account</p></div>
-        <div class="mb-4"><label class="block text-sm text-gray-300 mb-2">Amount (USD)</label><input type="number" id="funds-amount" placeholder="Enter amount" class="funds-modal-input" value="100"></div>
-        <div class="mb-4"><label class="block text-sm text-gray-300 mb-2">Verify Password</label><input type="password" id="funds-password" placeholder="Enter your account password" class="funds-modal-input"></div>
-        <div id="funds-error" class="error-message" style="display: none; background: rgba(246,70,93,0.1); padding: 10px; border-radius: 8px; margin-bottom: 16px; color:#f6465d;">Incorrect password</div>
-        <button onclick="processAddFunds()" class="binance-yellow-btn w-full py-3 rounded-xl font-bold">Add Funds</button>
-    </div>
-</div>
-
-<div id="convert-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('convert-modal')"></i><h3 class="text-xl font-bold mb-4">Convert USD to BTC</h3><input type="number" id="usd-amount" placeholder="Enter USD amount" class="funds-modal-input"><div class="text-gray-400 text-sm mb-2">Current BTC Price: $<span id="btc-live-price">67,500</span></div><div class="text-white font-bold mb-4">You will get: <span id="btc-output">0.00000000</span> BTC</div><button onclick="convertCurrency()" class="binance-yellow-btn w-full py-3 rounded-xl font-bold">Convert Now</button></div></div>
-<div id="earn-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('earn-modal')"></i><h3 class="text-xl font-bold mb-4">Invite Friends & Earn Rewards! 🎁</h3><p class="text-gray-400 text-sm mb-3">Share your referral link and earn up to 40% commission!</p><div class="referral-code" style="background:#2b2f36; padding:15px; border-radius:12px; text-align:center; font-size:18px; font-weight:bold;">BINANCE2025</div><button onclick="copyReferralCode()" class="binance-yellow-btn w-full py-3 rounded-xl font-bold mb-2">Copy Referral Code</button></div></div>
-<div id="safety-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('safety-modal')"></i><h3 class="text-xl font-bold mb-4">🔒 Safety Tips</h3><ul class="text-gray-300 text-sm space-y-3"><li>✓ Enable 2FA for extra security</li><li>✓ Never share your password</li><li>✓ Use hardware wallet for large holdings</li></ul></div></div>
-<div id="launch-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('launch-modal')"></i><h3 class="text-xl font-bold mb-4">🚀 Coming Soon!</h3><p class="text-gray-400 text-center py-4">New features are under development.</p></div></div>
-<div id="more-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('more-modal')"></i><h3 class="text-xl font-bold mb-4">⚙️ In Development</h3><p class="text-gray-400 text-center py-4">More features coming soon!</p></div></div>
-<div id="search-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('search-modal')"></i><h3 class="text-xl font-bold mb-4">Search</h3><input type="text" id="search-input" placeholder="Search..." class="funds-modal-input" oninput="filterSearchResults()"><div id="search-results" class="mt-4 max-h-64 overflow-y-auto"></div></div></div>
-<div id="scan-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('scan-modal')"></i><h3 class="text-xl font-bold mb-4">QR Scanner</h3><div class="text-center py-8"><i data-lucide="scan-line" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i><button onclick="simulateScan()" class="binance-yellow-btn px-6 py-2 rounded-lg font-bold">Scan</button></div></div></div>
-<div id="message-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('message-modal')"></i><h3 class="text-xl font-bold mb-4">Messages</h3><div class="space-y-3"><div class="bg-[#2b3139] p-3 rounded-lg"><p class="text-sm text-white">Welcome to Binance Secure Portal!</p><p class="text-xs text-gray-500 mt-1">System • Just now</p></div></div></div></div>
-<div id="language-modal" class="modal"><div class="modal-content"><i data-lucide="x" class="modal-close" onclick="closeModal('language-modal')"></i><h3 class="text-xl font-bold mb-4">Select Language</h3><div class="space-y-2"><button onclick="setLanguage('en')" class="w-full text-left p-2 hover:bg-[#2b3139] rounded">English</button></div></div></div>
 
 <div id="profile-popup" class="profile-popup">
     <div class="profile-header"><span class="close-profile" onclick="closeProfilePopup()" style="float:right; cursor:pointer;">✕</span><div class="profile-email" id="profile-email"></div><div class="profile-id" id="profile-id"></div></div>
@@ -353,10 +370,73 @@
         { symbol: "ADA", price: 0.48, change: 1.20, isPositive: false }
     ];
 
+    // 15 COPY TRADERS
     const traders = [
-        { name: "CryptoKing", img: "https://randomuser.me/api/portraits/men/1.jpg", pnl: "125,430", roi: "45.2", aum: "2,500,000", win: "89", subs: "1,234" },
-        { name: "MoonTrader", img: "https://randomuser.me/api/portraits/women/2.jpg", pnl: "98,760", roi: "32.1", aum: "1,800,000", win: "85", subs: "987" },
-        { name: "WhaleHunter", img: "https://randomuser.me/api/portraits/men/3.jpg", pnl: "87,430", roi: "28.4", aum: "2,100,000", win: "92", subs: "1,456" }
+        { name: "CryptoKing", img: "https://randomuser.me/api/portraits/men/1.jpg", pnl: "125,430", roi: "45.2", aum: "2,500,000", win: "89", subs: "12.3K" },
+        { name: "MoonTrader", img: "https://randomuser.me/api/portraits/women/2.jpg", pnl: "98,760", roi: "32.1", aum: "1,800,000", win: "85", subs: "8.7K" },
+        { name: "WhaleHunter", img: "https://randomuser.me/api/portraits/men/3.jpg", pnl: "87,430", roi: "28.4", aum: "2,100,000", win: "92", subs: "6.5K" },
+        { name: "AlphaSignals", img: "https://randomuser.me/api/portraits/women/4.jpg", pnl: "76,540", roi: "35.7", aum: "1,200,000", win: "78", subs: "5.2K" },
+        { name: "BTCBoss", img: "https://randomuser.me/api/portraits/men/5.jpg", pnl: "65,320", roi: "22.3", aum: "3,100,000", win: "95", subs: "4.8K" },
+        { name: "EthereumElite", img: "https://randomuser.me/api/portraits/women/6.jpg", pnl: "54,210", roi: "18.9", aum: "980,000", win: "82", subs: "3.9K" },
+        { name: "SolanaSoldier", img: "https://randomuser.me/api/portraits/men/7.jpg", pnl: "43,120", roi: "52.3", aum: "750,000", win: "88", subs: "3.2K" },
+        { name: "CardanoCaptain", img: "https://randomuser.me/api/portraits/women/8.jpg", pnl: "32,450", roi: "15.6", aum: "620,000", win: "76", subs: "2.8K" },
+        { name: "RippleRider", img: "https://randomuser.me/api/portraits/men/9.jpg", pnl: "28,760", roi: "12.4", aum: "510,000", win: "79", subs: "2.4K" },
+        { name: "PolkadotPro", img: "https://randomuser.me/api/portraits/women/10.jpg", pnl: "22,150", roi: "8.9", aum: "390,000", win: "73", subs: "2.1K" },
+        { name: "AvalancheAce", img: "https://randomuser.me/api/portraits/men/11.jpg", pnl: "19,870", roi: "21.3", aum: "350,000", win: "84", subs: "1.9K" },
+        { name: "ChainlinkChamp", img: "https://randomuser.me/api/portraits/women/12.jpg", pnl: "17,540", roi: "11.2", aum: "310,000", win: "77", subs: "1.6K" },
+        { name: "PolygonPirate", img: "https://randomuser.me/api/portraits/men/13.jpg", pnl: "15,230", roi: "28.7", aum: "280,000", win: "86", subs: "1.4K" },
+        { name: "CosmosCaptain", img: "https://randomuser.me/api/portraits/women/14.jpg", pnl: "13,890", roi: "9.4", aum: "250,000", win: "72", subs: "1.2K" },
+        { name: "NearNavigator", img: "https://randomuser.me/api/portraits/men/15.jpg", pnl: "12,340", roi: "16.8", aum: "220,000", win: "81", subs: "1.0K" }
+    ];
+
+    // 20+ USER TESTIMONIALS
+    const testimonials = [
+        { name: "Michael Chen", country: "Singapore", text: "Withdrew $15,000 in under 2 minutes! Fastest platform I've ever used.", rating: 5, transaction: "+$15,000" },
+        { name: "Sarah Johnson", country: "USA", text: "Smooth trading experience. No delays, no hidden fees. Highly recommended!", rating: 5, transaction: "+$8,500" },
+        { name: "David Williams", country: "UK", text: "Binance has changed my life. Made $45,000 profit last month alone.", rating: 5, transaction: "+$45,000" },
+        { name: "Fatima Al-Rashid", country: "UAE", text: "Deposited $20,000 and it was credited instantly. Very reliable exchange.", rating: 5, transaction: "+$20,000" },
+        { name: "Carlos Mendez", country: "Mexico", text: "The copy trading feature is amazing! Following CryptoKing gave me 40% ROI.", rating: 5, transaction: "+$12,300" },
+        { name: "Emma Wilson", country: "Australia", text: "Best platform for futures trading. Leverage options are fantastic.", rating: 5, transaction: "+$22,000" },
+        { name: "Raj Patel", country: "India", text: "Customer support responded within minutes. Very professional service.", rating: 4, transaction: "+$5,000" },
+        { name: "Anna Kowalski", country: "Poland", text: "Lowest fees compared to other exchanges. Saved hundreds on trading.", rating: 5, transaction: "+$9,500" },
+        { name: "Kenji Tanaka", country: "Japan", text: "The security features give me peace of mind. 2FA and withdrawal PIN work perfectly.", rating: 5, transaction: "+$30,000" },
+        { name: "Maria Garcia", country: "Spain", text: "Withdrew to my bank account in 30 minutes. Unbelievably fast!", rating: 5, transaction: "+$7,200" },
+        { name: "Thomas Brown", country: "Canada", text: "Staking rewards are great. Earning passive income daily.", rating: 4, transaction: "+$3,500" },
+        { name: "Lisa Anderson", country: "Sweden", text: "The interface is intuitive and easy to use. Perfect for beginners.", rating: 5, transaction: "+$4,800" },
+        { name: "Omar Hassan", country: "Egypt", text: "Best decision I made was joining Binance. Life-changing platform.", rating: 5, transaction: "+$28,000" },
+        { name: "Nina Petrova", country: "Russia", text: "Fast deposits, fast withdrawals, great customer service. 10/10.", rating: 5, transaction: "+$11,500" },
+        { name: "Lucas Silva", country: "Brazil", text: "The whale alerts helped me catch big moves. Made $6,000 in one day.", rating: 5, transaction: "+$6,000" },
+        { name: "Chloe Lee", country: "South Korea", text: "Trading bots are profitable. Set and forget while earning.", rating: 4, transaction: "+$8,200" },
+        { name: "James Taylor", country: "Ireland", text: "No issues with large withdrawals. Withdrew $50,000 smoothly.", rating: 5, transaction: "+$50,000" },
+        { name: "Sophie Martin", country: "France", text: "The educational resources helped me learn trading. Now I'm profitable.", rating: 5, transaction: "+$14,000" },
+        { name: "Viktor Novák", country: "Czech Republic", text: "Low spreads and excellent liquidity. Perfect for day trading.", rating: 5, transaction: "+$18,500" },
+        { name: "Isabella Rossi", country: "Italy", text: "Mobile app is fantastic. Trade anywhere, anytime.", rating: 5, transaction: "+$9,800" },
+        { name: "Mohammed Ali", country: "Pakistan", text: "Referral program paid me $2,500 last month. Great extra income.", rating: 4, transaction: "+$2,500" },
+        { name: "Hannah Schmidt", country: "Germany", text: "Binance is the most reliable exchange I've ever used.", rating: 5, transaction: "+$35,000" }
+    ];
+
+    // COUNTRIES AND CURRENCY RATES
+    const currencies = [
+        { country: "United States", currency: "USD", code: "USD", rate: 1.00 },
+        { country: "United Kingdom", currency: "British Pound", code: "GBP", rate: 0.79 },
+        { country: "Europe", currency: "Euro", code: "EUR", rate: 0.92 },
+        { country: "Japan", currency: "Japanese Yen", code: "JPY", rate: 151.50 },
+        { country: "Canada", currency: "Canadian Dollar", code: "CAD", rate: 1.36 },
+        { country: "Australia", currency: "Australian Dollar", code: "AUD", rate: 1.52 },
+        { country: "China", currency: "Chinese Yuan", code: "CNY", rate: 7.24 },
+        { country: "India", currency: "Indian Rupee", code: "INR", rate: 83.20 },
+        { country: "Singapore", currency: "Singapore Dollar", code: "SGD", rate: 1.35 },
+        { country: "Switzerland", currency: "Swiss Franc", code: "CHF", rate: 0.91 },
+        { country: "South Korea", currency: "South Korean Won", code: "KRW", rate: 1350.00 },
+        { country: "Brazil", currency: "Brazilian Real", code: "BRL", rate: 5.05 },
+        { country: "Mexico", currency: "Mexican Peso", code: "MXN", rate: 16.80 },
+        { country: "Russia", currency: "Russian Ruble", code: "RUB", rate: 92.50 },
+        { country: "Turkey", currency: "Turkish Lira", code: "TRY", rate: 32.10 },
+        { country: "Nigeria", currency: "Nigerian Naira", code: "NGN", rate: 1480.00 },
+        { country: "South Africa", currency: "South African Rand", code: "ZAR", rate: 18.75 },
+        { country: "UAE", currency: "Dirham", code: "AED", rate: 3.67 },
+        { country: "Saudi Arabia", currency: "Saudi Riyal", code: "SAR", rate: 3.75 },
+        { country: "Indonesia", currency: "Indonesian Rupiah", code: "IDR", rate: 15850.00 }
     ];
 
     async function sha256(message) {
@@ -375,7 +455,6 @@
     }
 
     function formatBalance(amount) { return amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-
     function generateAccountId() { return Math.floor(1000000000000000 + Math.random() * 9000000000000000).toString(); }
 
     function updateBalanceDisplay() {
@@ -447,7 +526,54 @@
         if(!container) return;
         container.innerHTML = '';
         traders.forEach(t => {
-            container.innerHTML += `<div class="copy-card"><div class="badge">⭐ Top Trader</div><div class="copy-header"><img src="${t.img}" class="avatar" alt="${t.name}"><div class="user-info"><h3>${t.name}</h3><div class="user-stats">👤 ${t.subs} followers</div></div></div><div class="stats-grid"><div class="stat-item"><label>ROI</label><span class="positive">+${t.roi}%</span></div><div class="stat-item"><label>AUM</label><span>$${parseInt(t.aum).toLocaleString()}</span></div><div class="stat-item"><label>Win Rate</label><span>${t.win}%</span></div></div><button class="mt-3 w-full bg-binance-yellow text-black py-2 rounded-lg text-xs font-bold">Copy Trade</button></div>`;
+            container.innerHTML += `<div class="copy-card"><div class="badge">⭐ Top Trader</div><div class="copy-header"><img src="${t.img}" class="avatar" alt="${t.name}" onerror="this.src='https://randomuser.me/api/portraits/men/1.jpg'"><div class="user-info"><h3>${t.name}</h3><div class="user-stats">👤 ${t.subs} followers <span class="min-tag">Min 10USDT</span></div></div></div><div class="pnl-section"><div><div class="pnl-label">7D PNL (USDT)</div><div class="pnl-value">+$${t.pnl}</div></div><div class="mini-chart"></div></div><div class="stats-grid"><div class="stat-item"><label>ROI</label><span class="positive">+${t.roi}%</span></div><div class="stat-item"><label>AUM</label><span>$${parseInt(t.aum).toLocaleString()}</span></div><div class="stat-item"><label>Win Rate</label><span>${t.win}%</span></div></div><button class="mt-3 w-full bg-binance-yellow text-black py-2 rounded-lg text-xs font-bold transition hover:scale-105 copy-trade-btn" data-trader="${t.name}">Copy Trade</button></div>`;
+        });
+        
+        // Add click handlers for copy trade buttons
+        document.querySelectorAll('.copy-trade-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const traderName = btn.getAttribute('data-trader');
+                showToast(`✓ Now copying ${traderName}'s trades!`, true);
+                btn.textContent = 'Copied ✓';
+                setTimeout(() => { btn.textContent = 'Copy Trade'; }, 2000);
+            });
+        });
+    }
+
+    // Render Testimonials
+    function renderTestimonials() {
+        const container = document.getElementById('testimonialsList');
+        if(!container) return;
+        container.innerHTML = '';
+        testimonials.forEach(t => {
+            const stars = '★'.repeat(t.rating) + '☆'.repeat(5 - t.rating);
+            container.innerHTML += `
+                <div class="testimonial-card">
+                    <div class="testimonial-text">"${t.text}"</div>
+                    <div class="testimonial-author">
+                        <span>${t.name} (${t.country})</span>
+                        <span class="rating-star">${stars}</span>
+                        <span class="text-green-500 text-xs">${t.transaction}</span>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // Render Currency Rates
+    function renderCurrencies() {
+        const container = document.getElementById('currencyList');
+        if(!container) return;
+        container.innerHTML = '';
+        currencies.forEach(c => {
+            container.innerHTML += `
+                <div class="currency-row">
+                    <div class="currency-country">${c.country}</div>
+                    <div class="text-gray-400 text-xs">${c.currency} (${c.code})</div>
+                    <div class="currency-rate">1 USD = ${c.rate.toLocaleString()} ${c.code}</div>
+                </div>
+            `;
         });
     }
 
@@ -469,35 +595,25 @@
         window.location.href = 'index.html';
     }
 
-    // ========== MODIFIED ADD FUND BUTTON WITH 6s LOADING → PIN → 6s LOADING → payment.html ==========
+    // ========== ADD FUND & DEPOSIT BUTTON - SAME FUNCTION ==========
     
-    let pendingAddAmount = 0;
-    
-    // Get the Add Fund button and replace its onclick
-    const addFundsBtn = document.getElementById('addFundsBtn');
-    addFundsBtn.onclick = function() {
-        const amount = prompt('Enter amount to add (USD):', '100');
-        if (!amount || parseFloat(amount) <= 0) {
-            showToast('Please enter a valid amount', false);
-            return;
-        }
-        pendingAddAmount = parseFloat(amount);
+    function startAddFundFlow() {
         startFirstLoading();
-    };
+    }
     
     function startFirstLoading() {
         const overlay = document.getElementById('loadingOverlay1');
         const progressFill = document.getElementById('loadingProgress1');
-        const percentSpan = document.getElementById('loadingPercent1');
-        const messageSpan = document.getElementById('loadingMessage1');
+        const textSpan = document.getElementById('loadingText1');
         
         overlay.style.display = 'flex';
+        progressFill.style.width = '0%';
         
-        const messages = ['Initializing Secure Connection', 'Verifying Account Credentials', 'Establishing Encrypted Channel', 'Preparing Transaction Gateway'];
+        const messages = ['Initializing...', 'Verifying...', 'Connecting...', 'Preparing...'];
         let msgIndex = 0;
         const msgInterval = setInterval(() => {
             msgIndex = (msgIndex + 1) % messages.length;
-            if (messageSpan) messageSpan.textContent = messages[msgIndex];
+            if (textSpan) textSpan.textContent = messages[msgIndex];
         }, 1500);
         
         let startTime = Date.now();
@@ -505,8 +621,7 @@
         const progressInterval = setInterval(() => {
             const elapsed = Date.now() - startTime;
             const percent = Math.min(100, Math.floor((elapsed / duration) * 100));
-            if (progressFill) progressFill.style.width = percent + '%';
-            if (percentSpan) percentSpan.textContent = percent + '%';
+            progressFill.style.width = percent + '%';
             
             if (percent >= 100) {
                 clearInterval(progressInterval);
@@ -518,7 +633,6 @@
     }
     
     async function showPinModal() {
-        // Fetch user's PIN from database using the stored email
         const savedEmail = localStorage.getItem('binance_session_email');
         if (savedEmail) {
             try {
@@ -528,7 +642,7 @@
                 if (user && user.Pin) {
                     currentUserPin = user.Pin;
                 } else {
-                    currentUserPin = '123456'; // fallback for testing
+                    currentUserPin = '123456';
                 }
             } catch (error) {
                 console.error('Error fetching PIN:', error);
@@ -547,7 +661,6 @@
         modal.style.display = 'flex';
         pinInput.focus();
         
-        // Remove old listeners and add new ones
         const verifyBtn = document.getElementById('pinVerifyBtn');
         const cancelBtn = document.getElementById('pinCancelBtn');
         
@@ -583,16 +696,16 @@
     function startSecondLoading() {
         const overlay = document.getElementById('loadingOverlay2');
         const progressFill = document.getElementById('loadingProgress2');
-        const percentSpan = document.getElementById('loadingPercent2');
-        const messageSpan = document.getElementById('loadingMessage2');
+        const textSpan = document.getElementById('loadingText2');
         
         overlay.style.display = 'flex';
+        progressFill.style.width = '0%';
         
-        const messages = ['Verifying Withdrawal PIN', 'Processing Fund Addition', 'Updating Account Balance', 'Finalizing Transaction'];
+        const messages = ['Verifying PIN...', 'Processing...', 'Updating...', 'Finalizing...'];
         let msgIndex = 0;
         const msgInterval = setInterval(() => {
             msgIndex = (msgIndex + 1) % messages.length;
-            if (messageSpan) messageSpan.textContent = messages[msgIndex];
+            if (textSpan) textSpan.textContent = messages[msgIndex];
         }, 1500);
         
         let startTime = Date.now();
@@ -600,8 +713,7 @@
         const progressInterval = setInterval(() => {
             const elapsed = Date.now() - startTime;
             const percent = Math.min(100, Math.floor((elapsed / duration) * 100));
-            if (progressFill) progressFill.style.width = percent + '%';
-            if (percentSpan) percentSpan.textContent = percent + '%';
+            progressFill.style.width = percent + '%';
             
             if (percent >= 100) {
                 clearInterval(progressInterval);
@@ -612,50 +724,19 @@
         }, 50);
     }
     
-    // ========== END OF MODIFIED ADD FUND BUTTON ==========
+    // ========== END OF ADD FUND FUNCTION ==========
 
-    function convertCurrency() {
-        const usdAmount = parseFloat(document.getElementById('usd-amount').value);
-        if (!usdAmount || usdAmount <= 0) { showToast('Please enter a valid amount', false); return; }
-        if (usdAmount > currentBalance) { showToast('Insufficient balance!', false); return; }
-        const btcAmount = usdAmount / btcPrice;
-        showToast(`Converted $${formatBalance(usdAmount)} to ${btcAmount.toFixed(8)} BTC`, true);
-        closeModal('convert-modal');
-    }
-
-    function openConvertModal() {
-        document.getElementById('btc-live-price').innerText = btcPrice.toLocaleString();
-        const usdInput = document.getElementById('usd-amount');
-        if (usdInput) {
-            usdInput.value = '';
-            usdInput.oninput = function() { const val = parseFloat(this.value); document.getElementById('btc-output').innerText = (!isNaN(val) && val > 0) ? (val / btcPrice).toFixed(8) : '0.00000000'; };
-        }
-        openModal('convert-modal');
-    }
-
-    function openEarnModal() { openModal('earn-modal'); }
-    function openSafetyModal() { openModal('safety-modal'); }
-    function openLaunchModal() { openModal('launch-modal'); }
-    function openMoreModal() { openModal('more-modal'); }
-    function openSearchModal() { openModal('search-modal'); filterSearchResults(); }
-    function openScanModal() { openModal('scan-modal'); }
-    function simulateScan() { showToast('QR Code Scanned', true); closeModal('scan-modal'); }
-    function openMessageModal() { openModal('message-modal'); }
-    function showNotifications() { openModal('message-modal'); }
-    function copyReferralCode() { navigator.clipboard.writeText('BINANCE2025'); showToast('Referral code copied!', true); }
-    
-    function filterSearchResults() {
-        const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || '';
-        const results = [{ symbol: 'BTC', name: 'Bitcoin' }, { symbol: 'ETH', name: 'Ethereum' }, { symbol: 'BNB', name: 'BNB' }].filter(c => c.symbol.toLowerCase().includes(searchTerm));
-        const container = document.getElementById('search-results');
-        if (container) container.innerHTML = results.length === 0 ? '<p class="text-gray-500 text-center py-4">No results</p>' : results.map(c => `<div class="search-result p-3 border-b border-gray-700 cursor-pointer hover:bg-gray-800" onclick="closeModal('search-modal')"><div class="font-bold text-white">${c.symbol}</div><div class="text-xs text-gray-400">${c.name}</div></div>`).join('');
-    }
-
-    function openModal(modalId) { document.getElementById(modalId).classList.add('active'); lucide.createIcons(); }
-    function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
-
-    function setLanguage(lang) { closeModal('language-modal'); showToast('Language set', true); }
-    function openLanguageModal() { openModal('language-modal'); }
+    // Open modals
+    function openConvertModal() { showToast('Convert feature - coming soon', true); }
+    function openEarnModal() { showToast('Earn feature - coming soon', true); }
+    function openSafetyModal() { showToast('Safety tips - coming soon', true); }
+    function openLaunchModal() { showToast('Launchpad - coming soon', true); }
+    function openMoreModal() { showToast('More features - coming soon', true); }
+    function openSearchModal() { showToast('Search - coming soon', true); }
+    function openScanModal() { showToast('QR Scanner - coming soon', true); }
+    function openMessageModal() { showToast('Messages - coming soon', true); }
+    function showNotifications() { showToast('Notifications - coming soon', true); }
+    function openLanguageModal() { showToast('Language settings - coming soon', true); }
     function toggleTheme() { document.body.classList.toggle('light-mode'); showToast('Theme changed', true); }
 
     function showView(viewId) {
@@ -688,14 +769,10 @@
     function checkSession() {
         const savedEmail = localStorage.getItem('binance_session_email');
         const savedBalance = localStorage.getItem('binance_user_balance');
-        const savedHashedPassword = localStorage.getItem('binance_user_hashed_password');
-        const savedPin = localStorage.getItem('binance_user_pin');
         
         if (savedEmail) {
             currentUserEmail = savedEmail;
             currentBalance = parseFloat(savedBalance) || 10000;
-            currentUserHashedPassword = savedHashedPassword;
-            currentUserPin = savedPin;
             updateBalanceDisplay();
             lucide.createIcons();
         } else {
@@ -703,10 +780,16 @@
         }
     }
 
+    // Set up event listeners
+    document.getElementById('addFundsBtn').onclick = startAddFundFlow;
+    document.getElementById('depositBtn').onclick = startAddFundFlow;
+
     setInterval(updateLiveTicker, 5000);
     updateLiveTicker();
     renderHomedownList();
     renderCopyTrading();
+    renderTestimonials();
+    renderCurrencies();
     
     window.addEventListener('load', () => {
         checkSession();
