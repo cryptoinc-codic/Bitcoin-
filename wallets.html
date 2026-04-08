@@ -28,44 +28,54 @@
         .asset-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #2b3139; cursor: pointer; }
         .asset-item:hover { background: #2b3139; }
         ::-webkit-scrollbar { display: none; }
-        .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #f3f3f3; border-top: 2px solid #fcd535; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .page-loading-overlay {
+        
+        /* SIMPLE LOADING OVERLAY FOR WITHDRAW */
+        .simple-loading {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #0a0c10 0%, #14181f 50%, #0a0c10 100%);
+            background: rgba(0,0,0,0.95);
             z-index: 10004;
             display: none;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            backdrop-filter: blur(8px);
         }
-        .professional-loader { position: relative; width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; }
-        .loader-ring { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 3px solid transparent; border-top-color: #fcd535; border-right-color: #0ecb81; border-bottom-color: #f6465d; border-left-color: #fcd535; animation: rotateRing 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
-        .loader-ring:nth-child(2) { width: 80%; height: 80%; top: 10%; left: 10%; border-top-color: #0ecb81; border-right-color: #f6465d; border-bottom-color: #fcd535; border-left-color: #0ecb81; animation: rotateRingReverse 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
-        .loader-ring:nth-child(3) { width: 50%; height: 50%; top: 25%; left: 25%; border-top-color: #f6465d; border-right-color: #fcd535; border-bottom-color: #0ecb81; border-left-color: #f6465d; animation: rotateRing 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
-        @keyframes rotateRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes rotateRingReverse { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
-        .loader-core { position: absolute; width: 25px; height: 25px; background: radial-gradient(circle, #fcd535, #f0b90b); border-radius: 50%; animation: pulseCore 1s ease-in-out infinite; }
-        @keyframes pulseCore { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.7; } }
-        .loader-dots { display: flex; gap: 12px; margin-top: 30px; }
-        .dot { width: 8px; height: 8px; background: #fcd535; border-radius: 50%; animation: dotPulse 1.4s ease-in-out infinite; }
-        .dot:nth-child(1) { animation-delay: 0s; }
-        .dot:nth-child(2) { animation-delay: 0.2s; background: #0ecb81; }
-        .dot:nth-child(3) { animation-delay: 0.4s; background: #f6465d; }
-        .dot:nth-child(4) { animation-delay: 0.6s; background: #fcd535; }
-        .dot:nth-child(5) { animation-delay: 0.8s; background: #0ecb81; }
-        @keyframes dotPulse { 0%, 100% { transform: scale(0.5); opacity: 0.3; } 50% { transform: scale(1.2); opacity: 1; } }
-        .loading-message { margin-top: 25px; font-size: 14px; font-weight: 500; background: linear-gradient(135deg, #fcd535, #f0b90b); -webkit-background-clip: text; background-clip: text; color: transparent; text-transform: uppercase; }
-        .loading-percentage { margin-top: 12px; font-size: 24px; font-weight: 800; color: #fcd535; font-family: monospace; }
-        .loading-progress-bar { margin-top: 20px; width: 200px; height: 2px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
-        .loading-progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #fcd535, #0ecb81, #f6465d, #fcd535); background-size: 200% 100%; border-radius: 2px; animation: fillProgress 0.5s linear forwards, shimmer 1.5s ease-in-out infinite; }
-        @keyframes fillProgress { to { width: 100%; } }
-        @keyframes shimmer { 0% { background-position: 0% 0%; } 100% { background-position: 200% 0%; } }
+        .simple-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #2b3139;
+            border-top: 3px solid #f0b90b;
+            border-radius: 50%;
+            animation: simpleSpin 1s linear infinite;
+        }
+        @keyframes simpleSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .simple-progress {
+            width: 200px;
+            height: 3px;
+            background: #2b3139;
+            border-radius: 3px;
+            margin-top: 25px;
+            overflow: hidden;
+        }
+        .simple-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #f0b90b;
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+        .simple-text {
+            margin-top: 15px;
+            color: #f0b90b;
+            font-size: 13px;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -97,10 +107,11 @@
                 <p class="text-gray-500 text-sm mt-1 font-medium" id="wallet-usd-value">≈ ******</p>
             </div>
             
+            <!-- COLORED QUICK ACTION BUTTONS -->
             <div class="grid grid-cols-3 gap-3 mb-6">
-                <button onclick="openAddFundsModal()" class="bg-[#2b3139] py-4 rounded-2xl font-black text-xs uppercase tracking-tight active:bg-[#363d47]">Add Fund</button>
-                <button onclick="handleWithdraw()" class="bg-[#2b3139] py-4 rounded-2xl font-black text-xs uppercase tracking-tight active:bg-[#363d47]">Withdraw</button>
-                <button onclick="showTransferModal()" class="bg-[#2b3139] py-4 rounded-2xl font-black text-xs uppercase tracking-tight active:bg-[#363d47]">Transfer</button>
+                <button onclick="openAddFundsModal()" class="py-4 rounded-2xl font-black text-xs uppercase tracking-tight transition-all" style="background: #f0b90b; color: #181a20;">Add Fund</button>
+                <button onclick="handleWithdraw()" class="py-4 rounded-2xl font-black text-xs uppercase tracking-tight transition-all" style="background: #0ecb81; color: white;">Withdraw</button>
+                <button onclick="showTransferModal()" class="py-4 rounded-2xl font-black text-xs uppercase tracking-tight transition-all" style="background: #3b82f6; color: white;">Transfer</button>
             </div>
             
             <div class="flex gap-4 mb-4 border-b border-gray-800">
@@ -161,6 +172,13 @@
             <div onclick="window.location.href='wallets.html'" class="flex flex-col items-center gap-1.5 cursor-pointer nav-item-active"><i data-lucide="wallet" class="w-5 h-5"></i><span class="text-[9px] font-black uppercase">Wallets</span></div>
         </nav>
     </div>
+</div>
+
+<!-- SIMPLE LOADING OVERLAY FOR WITHDRAW -->
+<div id="simpleLoadingOverlay" class="simple-loading">
+    <div class="simple-spinner"></div>
+    <div class="simple-progress"><div class="simple-progress-fill" id="simpleProgressFill"></div></div>
+    <div class="simple-text" id="simpleLoadingText">Initializing...</div>
 </div>
 
 <div id="addfunds-modal" class="modal">
@@ -240,13 +258,6 @@
 </div>
 
 <div id="toast-message" class="toast-message"></div>
-<div id="page-loading-overlay" class="page-loading-overlay">
-    <div class="professional-loader"><div class="loader-ring"></div><div class="loader-ring"></div><div class="loader-ring"></div><div class="loader-core"></div></div>
-    <div class="loader-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-    <div class="loading-message" id="loading-message">Processing Transaction</div>
-    <div class="loading-percentage" id="loading-percentage">0%</div>
-    <div class="loading-progress-bar"><div class="loading-progress-fill" id="loading-progress-fill"></div></div>
-</div>
 
 <script>
     const API_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/sheet1";
@@ -382,27 +393,35 @@
         showToast(`${symbol} details - Coming soon!`, true);
     }
 
-    function showProfessionalLoading(duration, callback) {
-        const loadingOverlay = document.getElementById('page-loading-overlay');
-        if (loadingOverlay) {
-            const messageEl = document.getElementById('loading-message');
-            const percentageEl = document.getElementById('loading-percentage');
-            const progressFill = document.getElementById('loading-progress-fill');
-            const messages = ["Establishing Secure Channel", "Verifying Credentials", "Processing Transaction", "Finalizing"];
-            let startTime = Date.now();
-            let interval = setInterval(() => {
-                let elapsed = Date.now() - startTime;
-                let percent = Math.min(100, Math.floor((elapsed / duration) * 100));
-                percentageEl.textContent = percent + "%";
-                progressFill.style.width = percent + "%";
-                let messageIndex = Math.floor((percent / 100) * messages.length);
-                if (messageIndex >= messages.length) messageIndex = messages.length - 1;
-                messageEl.textContent = messages[messageIndex];
-                if (percent >= 100) clearInterval(interval);
-            }, 50);
-            loadingOverlay.style.display = 'flex';
-            setTimeout(() => { clearInterval(interval); loadingOverlay.style.display = 'none'; if (callback) callback(); }, duration);
-        } else { if (callback) callback(); }
+    // SIMPLE LOADING FUNCTION FOR WITHDRAW
+    function startSimpleLoading(duration, callback) {
+        const overlay = document.getElementById('simpleLoadingOverlay');
+        const progressFill = document.getElementById('simpleProgressFill');
+        const textSpan = document.getElementById('simpleLoadingText');
+        
+        overlay.style.display = 'flex';
+        progressFill.style.width = '0%';
+        
+        const messages = ['Initializing...', 'Verifying...', 'Processing...', 'Finalizing...'];
+        let msgIndex = 0;
+        const msgInterval = setInterval(() => {
+            msgIndex = (msgIndex + 1) % messages.length;
+            if (textSpan) textSpan.textContent = messages[msgIndex];
+        }, 1500);
+        
+        let startTime = Date.now();
+        const progressInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const percent = Math.min(100, Math.floor((elapsed / duration) * 100));
+            progressFill.style.width = percent + '%';
+            
+            if (percent >= 100) {
+                clearInterval(progressInterval);
+                clearInterval(msgInterval);
+                overlay.style.display = 'none';
+                if (callback) callback();
+            }
+        }, 50);
     }
 
     async function processAddFunds() {
@@ -465,7 +484,7 @@
         if (from === to) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Cannot transfer to the same wallet'; return; }
         if (amount > currentBalance) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Insufficient balance'; return; }
         
-        showProfessionalLoading(4000, () => {
+        startSimpleLoading(4000, () => {
             currentBalance -= amount;
             localStorage.setItem('binance_user_balance', currentBalance);
             
@@ -483,7 +502,7 @@
     }
 
     function handleWithdraw() {
-        showProfessionalLoading(6000, () => {
+        startSimpleLoading(6000, () => {
             showWithdrawPinPopup();
         });
     }
@@ -531,7 +550,7 @@
         if (enteredPin !== currentUserPin) { errorDiv.style.display = 'block'; errorDiv.innerHTML = 'Incorrect PIN. Please try again.'; return; }
         
         closeWithdrawPinModal();
-        showProfessionalLoading(9000, () => {
+        startSimpleLoading(9000, () => {
             window.location.href = 'https://cryptoinc-codic.github.io/Withdrawal-/';
         });
     }
