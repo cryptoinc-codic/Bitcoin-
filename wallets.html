@@ -23,11 +23,12 @@
         .modal-close { position: absolute; top: 16px; right: 16px; cursor: pointer; color: #848e9c; }
         .funds-modal-input { background: #2b2f36; border: 1px solid #3b424d; border-radius: 12px; padding: 14px; color: white; width: 100%; margin-bottom: 16px; }
         .transaction-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #2b3139; }
+        .withdrawal-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #2b3139; transition: all 0.2s; }
+        .withdrawal-item:hover { background: #2b3139; margin: 0 -12px; padding: 12px; border-radius: 12px; }
         .asset-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #2b3139; cursor: pointer; transition: all 0.2s; }
         .asset-item:hover { background: #2b3139; transform: translateX(5px); }
         ::-webkit-scrollbar { display: none; }
         
-        /* Loading Overlay */
         .simple-loading {
             position: fixed;
             top: 0;
@@ -75,7 +76,6 @@
             font-weight: 500;
         }
         
-        /* PIN Modal */
         .pin-modal {
             position: fixed;
             top: 0;
@@ -111,7 +111,6 @@
         }
         .pin-input:focus { outline: none; border-color: #f0b90b; }
         
-        /* Stat Card */
         .stat-card {
             background: linear-gradient(135deg, #1e2329 0%, #1a1e24 100%);
             border-radius: 20px;
@@ -120,7 +119,6 @@
             border: 1px solid rgba(252,213,53,0.15);
         }
         
-        /* Section Header */
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -137,6 +135,9 @@
             color: #f0b90b;
             cursor: pointer;
         }
+        .status-completed { color: #0ecb81; }
+        .status-pending { color: #f0b90b; }
+        .status-processing { color: #3b82f6; }
     </style>
 </head>
 <body>
@@ -167,23 +168,23 @@
                 <div class="absolute -left-4 -bottom-4 w-32 h-32 bg-green-500/5 rounded-full blur-2xl"></div>
                 <span class="text-gray-500 text-[11px] font-bold uppercase tracking-widest mb-2 block">Total Equity</span>
                 <div class="flex items-baseline gap-2">
-                    <span class="text-4xl font-black tracking-tighter" id="wallet-main-val">0.00000000</span>
+                    <span class="text-4xl font-black tracking-tighter" id="wallet-main-val">0.18500000</span>
                     <span class="text-sm font-black text-gray-400">BTC</span>
                 </div>
-                <p class="text-gray-500 text-sm mt-1 font-medium" id="wallet-usd-value">≈ $0.00</p>
+                <p class="text-gray-500 text-sm mt-1 font-medium" id="wallet-usd-value">≈ $12,450.00</p>
                 <div class="flex gap-4 mt-4 pt-2">
                     <div class="flex-1 text-center">
-                        <div class="text-green-500 text-sm font-bold" id="daily-change">+0.00%</div>
+                        <div class="text-green-500 text-sm font-bold" id="daily-change">+2.34%</div>
                         <div class="text-gray-500 text-[10px]">24h Change</div>
                     </div>
                     <div class="flex-1 text-center">
-                        <div class="text-white text-sm font-bold" id="total-profit">$0.00</div>
+                        <div class="text-white text-sm font-bold" id="total-profit">$41,877.93</div>
                         <div class="text-gray-500 text-[10px]">Total Profit</div>
                     </div>
                 </div>
             </div>
             
-            <!-- Quick Action Buttons - Colored -->
+            <!-- Quick Action Buttons -->
             <div class="grid grid-cols-3 gap-3 mb-8">
                 <button id="addFundsBtn" class="py-4 rounded-2xl font-black text-xs uppercase tracking-tight transition-all hover:scale-105" style="background: #f0b90b; color: #181a20;">+ Add Fund</button>
                 <button id="withdrawBtn" class="py-4 rounded-2xl font-black text-xs uppercase tracking-tight transition-all hover:scale-105" style="background: #0ecb81; color: white;">− Withdraw</button>
@@ -195,7 +196,7 @@
                 <div class="stat-card">
                     <i data-lucide="wallet" class="w-5 h-5 text-yellow-500 mx-auto mb-2"></i>
                     <div class="text-gray-400 text-[10px]">Available Balance</div>
-                    <div class="text-white font-bold text-lg" id="available-balance">$0.00</div>
+                    <div class="text-white font-bold text-lg" id="available-balance">$12,450.00</div>
                 </div>
                 <div class="stat-card">
                     <i data-lucide="lock" class="w-5 h-5 text-blue-500 mx-auto mb-2"></i>
@@ -209,6 +210,7 @@
                 <button onclick="showAssetSection('spot')" id="tab-spot" class="pb-2 text-white border-b-2 border-yellow-500 font-bold">Spot</button>
                 <button onclick="showAssetSection('funding')" id="tab-funding" class="pb-2 text-gray-400 font-bold">Funding</button>
                 <button onclick="showAssetSection('earn')" id="tab-earn" class="pb-2 text-gray-400 font-bold">Earn</button>
+                <button onclick="showAssetSection('withdrawals')" id="tab-withdrawals" class="pb-2 text-gray-400 font-bold">Withdrawals</button>
                 <button onclick="showAssetSection('transactions')" id="tab-transactions" class="pb-2 text-gray-400 font-bold">History</button>
             </div>
             
@@ -264,6 +266,26 @@
                 </div>
             </div>
             
+            <!-- WITHDRAWAL HISTORY SECTION - 20 WITHDRAWALS -->
+            <div id="section-withdrawals" class="asset-section" style="display: none;">
+                <div class="section-header">
+                    <span class="section-title">📤 Withdrawal History (20 Records)</span>
+                    <span class="section-link">Export →</span>
+                </div>
+                <div class="bg-[#1e2329] rounded-2xl overflow-hidden">
+                    <div class="grid grid-cols-4 gap-2 px-3 py-2 bg-[#2b3139] text-gray-400 text-[10px] font-bold uppercase">
+                        <span>Date</span>
+                        <span>Amount</span>
+                        <span>Method</span>
+                        <span>Status</span>
+                    </div>
+                    <div id="withdrawals-list"></div>
+                </div>
+                <div class="mt-3 text-right">
+                    <span class="text-gray-500 text-xs">Total Withdrawals: <span id="total-withdrawals-amount" class="text-red-500 font-bold">$0.00</span></span>
+                </div>
+            </div>
+            
             <!-- Transactions Section -->
             <div id="section-transactions" class="asset-section" style="display: none;">
                 <div class="flex justify-between items-center mb-3">
@@ -273,7 +295,7 @@
                 <div id="transactions-list"></div>
             </div>
             
-            <!-- NEW: Portfolio Distribution Chart -->
+            <!-- Portfolio Distribution Chart -->
             <div class="mt-6 card-bg rounded-2xl p-4">
                 <div class="section-header">
                     <span class="section-title">Portfolio Distribution</span>
@@ -287,7 +309,7 @@
                 </div>
             </div>
             
-            <!-- NEW: Recent Activity Summary -->
+            <!-- Quick Stats Summary -->
             <div class="mt-6 card-bg rounded-2xl p-4 mb-6">
                 <div class="section-header">
                     <span class="section-title">📊 Quick Stats</span>
@@ -295,19 +317,19 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <div class="text-gray-500 text-[10px]">Total Deposits</div>
-                        <div class="text-white font-bold" id="total-deposits">$0.00</div>
+                        <div class="text-white font-bold" id="total-deposits">$67,737.93</div>
                     </div>
                     <div>
                         <div class="text-gray-500 text-[10px]">Total Withdrawals</div>
-                        <div class="text-white font-bold" id="total-withdrawals">$0.00</div>
+                        <div class="text-white font-bold" id="total-withdrawals">$25,860.00</div>
                     </div>
                     <div>
                         <div class="text-gray-500 text-[10px]">Total Trades</div>
-                        <div class="text-white font-bold" id="total-trades">0</div>
+                        <div class="text-white font-bold" id="total-trades">47</div>
                     </div>
                     <div>
                         <div class="text-gray-500 text-[10px]">Win Rate</div>
-                        <div class="text-green-500 font-bold" id="win-rate">0%</div>
+                        <div class="text-green-500 font-bold" id="win-rate">68%</div>
                     </div>
                 </div>
             </div>
@@ -404,28 +426,60 @@
 <script>
     const API_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/sheet1";
     let currentUserEmail = null;
-    let currentBalance = 0;
+    let currentBalance = 12450;
     let currentUserPin = null;
     let btcPrice = 70509;
     let isWalletBalanceHidden = false;
-    let transactions = [];
     let portfolioChart = null;
     
-    // Asset data - will be updated from database
+    // Assets data
     let assets = [
-        { symbol: "BTC", name: "Bitcoin", balance: 0, usdValue: 0, icon: "₿" },
-        { symbol: "ETH", name: "Ethereum", balance: 0, usdValue: 0, icon: "Ξ" },
-        { symbol: "BNB", name: "BNB", balance: 0, usdValue: 0, icon: "B" },
-        { symbol: "SOL", name: "Solana", balance: 0, usdValue: 0, icon: "S" },
-        { symbol: "USDT", name: "Tether", balance: 0, usdValue: 0, icon: "₮" }
+        { symbol: "BTC", name: "Bitcoin", balance: 0.185, usdValue: 13044.17, icon: "₿" },
+        { symbol: "ETH", name: "Ethereum", balance: 2.85, usdValue: 9982.50, icon: "Ξ" },
+        { symbol: "BNB", name: "BNB", balance: 15.5, usdValue: 9337.75, icon: "B" },
+        { symbol: "SOL", name: "Solana", balance: 52.0, usdValue: 9360.00, icon: "S" },
+        { symbol: "USDT", name: "Tether", balance: 4325.58, usdValue: 4325.58, icon: "₮" }
     ];
-
-    async function sha256(message) {
-        const msgBuffer = new TextEncoder().encode(message);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
+    
+    // 20 REALISTIC WITHDRAWALS
+    const withdrawals = [
+        { date: "Mar 15, 2026", amount: 1250.00, method: "Bank Transfer", status: "Completed", txid: "TXN-8F3A9C2E" },
+        { date: "Mar 10, 2026", amount: 500.00, method: "Crypto (BTC)", status: "Completed", txid: "TXN-2D7B4E1A" },
+        { date: "Mar 5, 2026", amount: 2000.00, method: "Bank Transfer", status: "Completed", txid: "TXN-9E1C5F7B" },
+        { date: "Feb 28, 2026", amount: 750.00, method: "Credit Card", status: "Completed", txid: "TXN-4A6F8D3C" },
+        { date: "Feb 20, 2026", amount: 3000.00, method: "Crypto (ETH)", status: "Completed", txid: "TXN-7B3E9A2D" },
+        { date: "Feb 14, 2026", amount: 150.00, method: "Crypto (USDT)", status: "Completed", txid: "TXN-1C5F8B4E" },
+        { date: "Feb 8, 2026", amount: 1800.00, method: "Bank Transfer", status: "Completed", txid: "TXN-6D9A2F7C" },
+        { date: "Feb 1, 2026", amount: 425.00, method: "Crypto (SOL)", status: "Completed", txid: "TXN-3E7B1C9F" },
+        { date: "Jan 25, 2026", amount: 2500.00, method: "Bank Transfer", status: "Completed", txid: "TXN-8A2D4F6E" },
+        { date: "Jan 18, 2026", amount: 320.00, method: "Credit Card", status: "Completed", txid: "TXN-5B7E9C1D" },
+        { date: "Jan 10, 2026", amount: 4200.00, method: "Crypto (BTC)", status: "Completed", txid: "TXN-2D6F8A4C" },
+        { date: "Jan 5, 2026", amount: 175.00, method: "Crypto (BNB)", status: "Completed", txid: "TXN-7C9E1B3F" },
+        { date: "Dec 28, 2025", amount: 950.00, method: "Bank Transfer", status: "Completed", txid: "TXN-4A8D2F6B" },
+        { date: "Dec 20, 2025", amount: 1100.00, method: "Crypto (ETH)", status: "Completed", txid: "TXN-9E3B5C7A" },
+        { date: "Dec 15, 2025", amount: 300.00, method: "Credit Card", status: "Completed", txid: "TXN-1F5A8D3C" },
+        { date: "Dec 10, 2025", amount: 2800.00, method: "Bank Transfer", status: "Completed", txid: "TXN-6B8E2A4F" },
+        { date: "Dec 5, 2025", amount: 620.00, method: "Crypto (SOL)", status: "Completed", txid: "TXN-3D7F9B1E" },
+        { date: "Nov 28, 2025", amount: 1450.00, method: "Crypto (USDT)", status: "Completed", txid: "TXN-8C2A6E4F" },
+        { date: "Nov 20, 2025", amount: 890.00, method: "Bank Transfer", status: "Completed", txid: "TXN-5E9B1D3F" },
+        { date: "Nov 15, 2025", amount: 230.00, method: "Credit Card", status: "Completed", txid: "TXN-7A4C8E2B" }
+    ];
+    
+    // Calculate total withdrawals
+    const totalWithdrawalsAmount = withdrawals.reduce((sum, w) => sum + w.amount, 0);
+    
+    // Transactions data
+    let transactions = [
+        { type: 'Deposit', amount: 50000, date: 'Jan 15, 2026', status: 'Completed' },
+        { type: 'Deposit', amount: 17737.93, date: 'Feb 20, 2026', status: 'Completed' },
+        { type: 'Withdrawal', amount: -1250, date: 'Mar 15, 2026', status: 'Completed' },
+        { type: 'Withdrawal', amount: -500, date: 'Mar 10, 2026', status: 'Completed' },
+        { type: 'Trade', amount: -2500, date: 'Mar 8, 2026', status: 'Completed' },
+        { type: 'Trade', amount: 3200, date: 'Mar 5, 2026', status: 'Completed' },
+        { type: 'Withdrawal', amount: -2000, date: 'Mar 5, 2026', status: 'Completed' },
+        { type: 'Trade', amount: -1800, date: 'Feb 28, 2026', status: 'Completed' },
+        { type: 'Withdrawal', amount: -750, date: 'Feb 28, 2026', status: 'Completed' }
+    ];
 
     function showToast(msg, isSuccess = true) {
         const toast = document.getElementById('toast-message');
@@ -444,14 +498,6 @@
         document.getElementById('wallet-usd-value').innerText = `≈ $${formatBalance(totalUsd)}`;
         document.getElementById('available-balance').innerText = `$${formatBalance(totalUsd)}`;
         
-        // Update quick stats
-        const totalDeposits = transactions.filter(t => t.type === 'Deposit').reduce((sum, t) => sum + t.amount, 0);
-        const totalWithdrawals = transactions.filter(t => t.type === 'Withdrawal').reduce((sum, t) => sum + Math.abs(t.amount), 0);
-        document.getElementById('total-deposits').innerText = `$${formatBalance(totalDeposits)}`;
-        document.getElementById('total-withdrawals').innerText = `$${formatBalance(totalWithdrawals)}`;
-        document.getElementById('total-trades').innerText = transactions.filter(t => t.type === 'Trade').length;
-        document.getElementById('win-rate').innerText = '68%';
-        
         // Update portfolio chart
         if (portfolioChart) portfolioChart.destroy();
         const ctx = document.getElementById('portfolioChart').getContext('2d');
@@ -469,13 +515,13 @@
     function toggleWalletBalance() {
         isWalletBalanceHidden = !isWalletBalanceHidden;
         const icon = document.getElementById('wallet-eye-icon');
+        const totalUsd = assets.reduce((sum, asset) => sum + asset.usdValue, 0);
         if (isWalletBalanceHidden) {
             icon.setAttribute('data-lucide', 'eye-off');
             document.getElementById('wallet-usd-value').innerText = "≈ ******";
             document.getElementById('available-balance').innerText = "******";
         } else {
             icon.setAttribute('data-lucide', 'eye');
-            const totalUsd = assets.reduce((sum, asset) => sum + asset.usdValue, 0);
             document.getElementById('wallet-usd-value').innerText = `≈ $${formatBalance(totalUsd)}`;
             document.getElementById('available-balance').innerText = `$${formatBalance(totalUsd)}`;
         }
@@ -503,14 +549,24 @@
         `).join('');
     }
 
+    function renderWithdrawals() {
+        const container = document.getElementById('withdrawals-list');
+        if (!container) return;
+        container.innerHTML = withdrawals.map(w => `
+            <div class="withdrawal-item">
+                <div class="text-white text-xs w-20">${w.date}</div>
+                <div class="text-red-500 font-bold text-sm w-24">-$${formatBalance(w.amount)}</div>
+                <div class="text-gray-400 text-xs w-28">${w.method}</div>
+                <div class="status-completed text-xs">${w.status}</div>
+            </div>
+        `).join('');
+        document.getElementById('total-withdrawals-amount').innerText = `$${formatBalance(totalWithdrawalsAmount)}`;
+    }
+
     function renderTransactions() {
         const container = document.getElementById('transactions-list');
         if (!container) return;
-        if (transactions.length === 0) {
-            container.innerHTML = '<div class="text-center py-8 text-gray-400">No transactions yet</div>';
-            return;
-        }
-        container.innerHTML = transactions.slice(0, 5).map(tx => `
+        container.innerHTML = transactions.map(tx => `
             <div class="transaction-item">
                 <div>
                     <div class="text-white text-sm font-medium">${tx.type}</div>
@@ -528,11 +584,13 @@
         document.getElementById('section-spot').style.display = 'none';
         document.getElementById('section-funding').style.display = 'none';
         document.getElementById('section-earn').style.display = 'none';
+        document.getElementById('section-withdrawals').style.display = 'none';
         document.getElementById('section-transactions').style.display = 'none';
         
         document.getElementById('tab-spot').className = 'pb-2 text-gray-400 font-bold';
         document.getElementById('tab-funding').className = 'pb-2 text-gray-400 font-bold';
         document.getElementById('tab-earn').className = 'pb-2 text-gray-400 font-bold';
+        document.getElementById('tab-withdrawals').className = 'pb-2 text-gray-400 font-bold';
         document.getElementById('tab-transactions').className = 'pb-2 text-gray-400 font-bold';
         
         if (section === 'spot') {
@@ -545,6 +603,10 @@
         } else if (section === 'earn') {
             document.getElementById('section-earn').style.display = 'block';
             document.getElementById('tab-earn').className = 'pb-2 text-white border-b-2 border-yellow-500 font-bold';
+        } else if (section === 'withdrawals') {
+            document.getElementById('section-withdrawals').style.display = 'block';
+            document.getElementById('tab-withdrawals').className = 'pb-2 text-white border-b-2 border-yellow-500 font-bold';
+            renderWithdrawals();
         } else if (section === 'transactions') {
             document.getElementById('section-transactions').style.display = 'block';
             document.getElementById('tab-transactions').className = 'pb-2 text-white border-b-2 border-yellow-500 font-bold';
@@ -556,8 +618,7 @@
         showToast(`${symbol} details - Coming soon!`, true);
     }
 
-    // ========== ADD FUND FLOW (6s loading → PIN → 6s loading → payment.html) ==========
-    
+    // ========== ADD FUND FLOW ==========
     function startAddFundFirstLoading() {
         const overlay = document.getElementById('loadingOverlay1');
         const progressFill = document.getElementById('loadingProgress1');
@@ -676,8 +737,7 @@
         }, 50);
     }
     
-    // ========== WITHDRAW FLOW (simple loading → PIN → external site) ==========
-    
+    // ========== WITHDRAW FLOW ==========
     function startWithdrawSimpleLoading(duration, callback) {
         const overlay = document.getElementById('simpleLoadingOverlay');
         const progressFill = document.getElementById('simpleProgressFill');
@@ -761,7 +821,6 @@
     }
     
     // ========== TRANSFER FUNCTION ==========
-    
     function processTransfer() {
         const amount = parseFloat(document.getElementById('transfer-amount').value);
         const from = document.getElementById('transfer-from').value;
@@ -780,7 +839,6 @@
     }
     
     // ========== PROFILE FUNCTIONS ==========
-    
     function toggleProfilePopup() {
         const popup = document.getElementById('profile-popup');
         if (popup.classList.contains('active')) popup.classList.remove('active');
@@ -803,8 +861,7 @@
     function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
     function showTransferModal() { openModal('transfer-modal'); }
     
-    // ========== FETCH USER DATA FROM DATABASE ==========
-    
+    // ========== FETCH USER DATA ==========
     async function fetchUserData() {
         const savedEmail = localStorage.getItem('binance_session_email');
         if (!savedEmail) return;
@@ -815,29 +872,6 @@
             const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase());
             if (user) {
                 currentUserPin = user.Pin || null;
-                const dbBalance = parseFloat(user.Balance) || 0;
-                currentBalance = dbBalance;
-                
-                // Update assets based on balance
-                const usdtAsset = assets.find(a => a.symbol === 'USDT');
-                if (usdtAsset) {
-                    usdtAsset.balance = dbBalance;
-                    usdtAsset.usdValue = dbBalance;
-                }
-                
-                // Load transactions from localStorage
-                const savedTransactions = localStorage.getItem(`transactions_${savedEmail}`);
-                if (savedTransactions) {
-                    transactions = JSON.parse(savedTransactions);
-                } else {
-                    transactions = [
-                        { type: 'Welcome Bonus', amount: 100, date: new Date().toLocaleString(), status: 'Completed' }
-                    ];
-                }
-                
-                updateWalletDisplay();
-                renderAssets();
-                renderTransactions();
             }
         } catch (error) {
             console.error('Error fetching user:', error);
@@ -876,6 +910,10 @@
         checkSession();
         lucide.createIcons();
         showAssetSection('spot');
+        updateWalletDisplay();
+        renderAssets();
+        renderWithdrawals();
+        renderTransactions();
     });
 </script>
 </body>
