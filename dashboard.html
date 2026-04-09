@@ -13,7 +13,7 @@
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-dark); font-family: 'Segoe UI', sans-serif; overflow: hidden; }
         body.light-mode { background-color: var(--bg-light); }
         body.light-mode .card-bg, body.light-mode .modal-content { background-color: #ffffff; color: #1e2329; border-color: #e0e0e0; }
-        body.light-mode .news-item, body.light-mode .faq-item, body.light-mode .currency-item { background-color: #f5f5f5; color: #1e2329; }
+        body.light-mode .news-item, body.light-mode .faq-item { background-color: #f5f5f5; }
         .card-bg { background-color: #1e2329; }
         .bg-binance-yellow { background-color: #f0b90b; }
         .success-green { color: #0ecb81; }
@@ -40,6 +40,7 @@
         .card-tags { background-image: linear-gradient(to bottom, rgba(30,35,41,0.85), rgba(30,35,41,0.98)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=500'); background-size: cover; }
         .sparkline { stroke-dasharray: 300; stroke-dashoffset: 300; animation: draw 2.5s forwards cubic-bezier(0.4,0,0.2,1); }
         @keyframes draw { to { stroke-dashoffset: 0; } }
+        .notification-badge { position: absolute; top: -5px; right: -5px; background: #f6465d; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; display: flex; align-items: center; justify-content: center; }
         .homedown-section { background: linear-gradient(135deg, #1a1f26 0%, #13161d 100%); border-radius: 24px; margin: 20px 16px 30px 16px; padding: 20px 20px 24px 20px; border: 1px solid rgba(252,213,53,0.2); }
         .homedown-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: #f0b90b; }
         .crypto-table-header { display: flex; justify-content: space-between; padding: 12px 8px; border-bottom: 1px solid #2b3139; margin-bottom: 8px; }
@@ -49,7 +50,7 @@
         .copy-trading-section { background: linear-gradient(135deg, #1a1f26 0%, #13161d 100%); border-radius: 24px; margin: 20px 16px 30px 16px; padding: 20px 0px 24px 0px; border: 1px solid rgba(252,213,53,0.2); overflow: hidden; }
         .copy-trading-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: #f0b90b; padding: 0 20px; }
         .scroll-container { display: flex; overflow-x: auto; gap: 16px; padding: 0 20px 20px 20px; scroll-behavior: smooth; }
-        .copy-card { background-color: #2b3139; border-radius: 12px; min-width: 280px; padding: 20px; position: relative; flex-shrink: 0; transition: transform 0.2s; }
+        .copy-card { background-color: #2b3139; border-radius: 12px; min-width: 320px; padding: 20px; position: relative; flex-shrink: 0; transition: transform 0.2s; }
         .copy-card:hover { transform: translateY(-5px); background-color: #323942; }
         .badge { background-color: #363c46; color: #eaecef; padding: 3px 12px; border-top-left-radius: 12px; border-bottom-right-radius: 10px; font-size: 11px; position: absolute; top: 0; left: 0; }
         .copy-header { display: flex; align-items: center; margin-top: 15px; margin-bottom: 20px; }
@@ -105,6 +106,8 @@
         .message-item:hover { background: #2b3139; }
         .language-option { padding: 12px; border-bottom: 1px solid #2b3139; cursor: pointer; display: flex; justify-content: space-between; }
         .language-option:hover { background: #2b3139; }
+        .language-option.coming-soon { opacity: 0.6; }
+        .language-option.coming-soon:hover { background: transparent; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -265,7 +268,7 @@
 <div id="profile-popup" class="profile-popup"><div class="profile-header"><span class="close-profile" onclick="closeProfilePopup()" style="float:right; cursor:pointer;">✕</span><div class="profile-email" id="profile-email"></div><div class="profile-id" id="profile-id"></div></div><button class="logout-btn" onclick="logoutUser()" style="width:100%; margin-top:16px; padding:10px; background:#f6465d; color:white; border:none; border-radius:8px; cursor:pointer;">Logout</button></div>
 <div id="toast-message" class="toast-message"></div>
 
-<!-- ==================== ALL MODALS (POPUPS) ==================== -->
+<!-- ==================== ALL MODALS ==================== -->
 
 <!-- NEWS MODAL -->
 <div id="newsModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal('newsModal')">&times;</span><h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-newspaper mr-2"></i>Latest News</h2><div id="newsList"></div></div></div>
@@ -277,13 +280,13 @@
 <div id="convertModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal('convertModal')">&times;</span><h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-arrow-right-arrow-left mr-2"></i>Convert Crypto</h2><input type="text" id="convertFrom" placeholder="Amount in USDT" class="convert-input"><select id="convertToSelect" class="convert-input"><option value="BTC">Bitcoin (BTC)</option><option value="ETH">Ethereum (ETH)</option><option value="BNB">Binance Coin (BNB)</option><option value="SOL">Solana (SOL)</option></select><button onclick="doConvert()" class="w-full bg-yellow-500 text-black py-3 rounded-xl font-bold">Convert</button><div id="convertResult" class="convert-result" style="display:none;"></div></div></div>
 
 <!-- SAFETY MODAL -->
-<div id="safetyModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal('safetyModal')">&times;</span><h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-shield-haltered mr-2"></i>Safety Center</h2><div class="bg-green-500/20 p-4 rounded-xl mb-4"><i class="fa-solid fa-check-circle text-green-500"></i><span class="text-white ml-2">Your account is secure</span></div><div class="space-y-3"><div class="bg-[#2b3139] p-3 rounded-xl"><i class="fa-solid fa-key text-yellow-500 mr-2"></i><span class="text-white">Enable 2FA - Recommended</span></div><div class="bg-[#2b3139] p-3 rounded-xl"><i class="fa-solid fa-lock text-yellow-500 mr-2"></i><span class="text-white">Withdrawal PIN Active</span></div><div class="bg-[#2b3139] p-3 rounded-xl"><i class="fa-solid fa-envelope text-yellow-500 mr-2"></i><span class="text-white">Email Notifications ON</span></div><div class="bg-[#2b3139] p-3 rounded-xl"><i class="fa-solid fa-mobile-alt text-yellow-500 mr-2"></i><span class="text-white">SMS Alerts Active</span></div></div><div class="mt-4 p-3 bg-red-500/10 rounded-xl"><p class="text-red-400 text-sm">⚠️ Never share your password or PIN with anyone. Binance will never call you asking for this information.</p></div></div></div>
+<div id="safetyModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal('safetyModal')">&times;</span><h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-shield-haltered mr-2"></i>Safety Center</h2><div class="bg-green-500/20 p-4 rounded-xl mb-4"><i class="fa-solid fa-check-circle text-green-500"></i><span class="text-white ml-2">Your account is secure</span></div><div class="space-y-3"><div class="bg-[#2b3139] p-3 rounded-xl"><i class="fa-solid fa-key text-yellow-500 mr-2"></i><span class="text-white">Enable 2FA - Recommended</span></div><div class="bg-[#2b3139] p-3 rounded-xl"><i class="fa-solid fa-lock text-yellow-500 mr-2"></i><span class="text-white">Withdrawal PIN Active</span></div><div class="bg-[#2b3139] p-3 rounded-xl"><i class="fa-solid fa-envelope text-yellow-500 mr-2"></i><span class="text-white">Email Notifications ON</span></div></div><div class="mt-4 p-3 bg-red-500/10 rounded-xl"><p class="text-red-400 text-sm">⚠️ Never share your password or PIN with anyone. Binance will never call you asking for this information.</p></div></div></div>
 
 <!-- LAUNCHPAD MODAL -->
 <div id="launchModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal('launchModal')">&times;</span><h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-rocket mr-2"></i>New Launches</h2><div id="launchList"></div></div></div>
 
 <!-- MORE MODAL -->
-<div id="moreModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal('moreModal')">&times;</span><h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-grid-2 mr-2"></i>More Features</h2><div class="grid grid-cols-2 gap-3"><div class="bg-[#2b3139] p-4 rounded-xl text-center cursor-pointer" onclick="showToast('Staking coming soon', true)"><i class="fa-solid fa-chart-line text-2xl text-yellow-500"></i><p class="text-white text-sm mt-2">Staking</p></div><div class="bg-[#2b3139] p-4 rounded-xl text-center cursor-pointer" onclick="showToast('NFT Marketplace coming soon', true)"><i class="fa-solid fa-palette text-2xl text-yellow-500"></i><p class="text-white text-sm mt-2">NFT</p></div><div class="bg-[#2b3139] p-4 rounded-xl text-center cursor-pointer" onclick="showToast('Margin Trading coming soon', true)"><i class="fa-solid fa-chart-simple text-2xl text-yellow-500"></i><p class="text-white text-sm mt-2">Margin</p></div><div class="bg-[#2b3139] p-4 rounded-xl text-center cursor-pointer" onclick="showToast('Loans coming soon', true)"><i class="fa-solid fa-hand-holding-usd text-2xl text-yellow-500"></i><p class="text-white text-sm mt-2">Loans</p></div></div></div></div>
+<div id="moreModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal('moreModal')">&times;</span><h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-grid-2 mr-2"></i>More Features</h2><div class="grid grid-cols-2 gap-3"><div class="bg-[#2b3139] p-4 rounded-xl text-center cursor-pointer" onclick="showToast('Staking - Coming Soon', true)"><i class="fa-solid fa-chart-line text-2xl text-yellow-500"></i><p class="text-white text-sm mt-2">Staking</p></div><div class="bg-[#2b3139] p-4 rounded-xl text-center cursor-pointer" onclick="showToast('NFT Marketplace - Coming Soon', true)"><i class="fa-solid fa-palette text-2xl text-yellow-500"></i><p class="text-white text-sm mt-2">NFT</p></div><div class="bg-[#2b3139] p-4 rounded-xl text-center cursor-pointer" onclick="showToast('Margin Trading - Coming Soon', true)"><i class="fa-solid fa-chart-simple text-2xl text-yellow-500"></i><p class="text-white text-sm mt-2">Margin</p></div><div class="bg-[#2b3139] p-4 rounded-xl text-center cursor-pointer" onclick="showToast('Loans - Coming Soon', true)"><i class="fa-solid fa-hand-holding-usd text-2xl text-yellow-500"></i><p class="text-white text-sm mt-2">Loans</p></div></div></div></div>
 
 <!-- SEARCH MODAL -->
 <div id="searchModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal('searchModal')">&times;</span><h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-search mr-2"></i>Search</h2><input type="text" id="searchInput" class="convert-input" placeholder="Search coins, features..."><div id="searchResults" class="mt-4"></div></div></div>
@@ -297,10 +300,10 @@
 <!-- NOTIFICATIONS MODAL -->
 <div id="notificationsModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal('notificationsModal')">&times;</span><h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-bell mr-2"></i>Notifications</h2><div id="notificationsList"></div></div></div>
 
-<!-- LANGUAGE MODAL -->
-<div id="languageModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal('languageModal')">&times;</span><h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-language mr-2"></i>Language</h2><div id="languageList"></div></div></div>
+<!-- LANGUAGE MODAL - Only English works, others say "Coming Soon" -->
+<div id="languageModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal('languageModal')">&times;</span><h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-language mr-2"></i>Select Language</h2><div id="languageList"></div><p class="text-xs text-gray-500 mt-4 text-center">More languages coming soon</p></div></div>
 
-<!-- PAYMENT MODAL (for Add Fund) -->
+<!-- PAYMENT MODAL -->
 <div id="paymentModal" class="modal"><div class="modal-content"><span class="modal-close" onclick="closeModal('paymentModal')">&times;</span><h2 class="text-xl font-bold text-white mb-4"><i class="fa-solid fa-credit-card mr-2"></i>Add Funds</h2><div class="payment-method" onclick="showToast('Bank Transfer selected', true)"><i class="fa-solid fa-building-columns text-2xl text-yellow-500"></i><div><p class="text-white font-bold">Bank Transfer</p><p class="text-gray-400 text-xs">1-3 business days</p></div></div><div class="payment-method" onclick="showToast('Credit Card selected', true)"><i class="fa-brands fa-cc-visa text-2xl text-yellow-500"></i><div><p class="text-white font-bold">Credit/Debit Card</p><p class="text-gray-400 text-xs">Instant</p></div></div><div class="payment-method" onclick="showToast('Crypto Transfer selected', true)"><i class="fa-brands fa-bitcoin text-2xl text-yellow-500"></i><div><p class="text-white font-bold">Crypto Transfer</p><p class="text-gray-400 text-xs">15-30 minutes</p></div></div><div class="payment-method" onclick="showToast('PayPal selected', true)"><i class="fa-brands fa-paypal text-2xl text-yellow-500"></i><div><p class="text-white font-bold">PayPal</p><p class="text-gray-400 text-xs">Instant</p></div></div></div></div>
 
 <script>
@@ -312,7 +315,7 @@
     let allocationChart = null;
     let isBalanceHidden = true;
 
-    // Data
+    // FULL ORIGINAL DATA - All 6 coins
     const homedownCoins = [
         { symbol: "BTC", price: 70551.90, change: 3.80, isPositive: true },
         { symbol: "ETH", price: 3512.45, change: 2.15, isPositive: true },
@@ -322,66 +325,132 @@
         { symbol: "ADA", price: 0.48, change: 1.20, isPositive: false }
     ];
 
+    // FULL ORIGINAL TRADERS - All 15
     const traders = [
         { name: "CryptoKing", img: "https://randomuser.me/api/portraits/men/1.jpg", pnl: "125,430", roi: "45.2", aum: "2,500,000", win: "89", subs: "12.3K" },
         { name: "MoonTrader", img: "https://randomuser.me/api/portraits/women/2.jpg", pnl: "98,760", roi: "32.1", aum: "1,800,000", win: "85", subs: "8.7K" },
         { name: "WhaleHunter", img: "https://randomuser.me/api/portraits/men/3.jpg", pnl: "87,430", roi: "28.4", aum: "2,100,000", win: "92", subs: "6.5K" },
-        { name: "AlphaSignals", img: "https://randomuser.me/api/portraits/women/4.jpg", pnl: "76,540", roi: "35.7", aum: "1,200,000", win: "78", subs: "5.2K" }
+        { name: "AlphaSignals", img: "https://randomuser.me/api/portraits/women/4.jpg", pnl: "76,540", roi: "35.7", aum: "1,200,000", win: "78", subs: "5.2K" },
+        { name: "BTCBoss", img: "https://randomuser.me/api/portraits/men/5.jpg", pnl: "65,320", roi: "22.3", aum: "3,100,000", win: "95", subs: "4.8K" },
+        { name: "EthereumElite", img: "https://randomuser.me/api/portraits/women/6.jpg", pnl: "54,210", roi: "18.9", aum: "980,000", win: "82", subs: "3.9K" },
+        { name: "SolanaSoldier", img: "https://randomuser.me/api/portraits/men/7.jpg", pnl: "43,120", roi: "52.3", aum: "750,000", win: "88", subs: "3.2K" },
+        { name: "CardanoCaptain", img: "https://randomuser.me/api/portraits/women/8.jpg", pnl: "32,450", roi: "15.6", aum: "620,000", win: "76", subs: "2.8K" },
+        { name: "RippleRider", img: "https://randomuser.me/api/portraits/men/9.jpg", pnl: "28,760", roi: "12.4", aum: "510,000", win: "79", subs: "2.4K" },
+        { name: "PolkadotPro", img: "https://randomuser.me/api/portraits/women/10.jpg", pnl: "22,150", roi: "8.9", aum: "390,000", win: "73", subs: "2.1K" },
+        { name: "AvalancheAce", img: "https://randomuser.me/api/portraits/men/11.jpg", pnl: "19,870", roi: "21.3", aum: "350,000", win: "84", subs: "1.9K" },
+        { name: "ChainlinkChamp", img: "https://randomuser.me/api/portraits/women/12.jpg", pnl: "17,540", roi: "11.2", aum: "310,000", win: "77", subs: "1.6K" },
+        { name: "PolygonPirate", img: "https://randomuser.me/api/portraits/men/13.jpg", pnl: "15,230", roi: "28.7", aum: "280,000", win: "86", subs: "1.4K" },
+        { name: "CosmosCaptain", img: "https://randomuser.me/api/portraits/women/14.jpg", pnl: "13,890", roi: "9.4", aum: "250,000", win: "72", subs: "1.2K" },
+        { name: "NearNavigator", img: "https://randomuser.me/api/portraits/men/15.jpg", pnl: "12,340", roi: "16.8", aum: "220,000", win: "81", subs: "1.0K" }
     ];
 
+    // FULL ORIGINAL TESTIMONIALS - All 22
     const testimonials = [
-        { name: "Michael Chen", country: "Singapore", text: "Withdrew $15,000 in under 2 minutes!", rating: 5, transaction: "+$15,000" },
-        { name: "Sarah Johnson", country: "USA", text: "Smooth trading experience. No delays!", rating: 5, transaction: "+$8,500" },
-        { name: "David Williams", country: "UK", text: "Binance has changed my life!", rating: 5, transaction: "+$45,000" }
+        { name: "Michael Chen", country: "Singapore", text: "Withdrew $15,000 in under 2 minutes! Fastest platform I've ever used.", rating: 5, transaction: "+$15,000" },
+        { name: "Sarah Johnson", country: "USA", text: "Smooth trading experience. No delays, no hidden fees. Highly recommended!", rating: 5, transaction: "+$8,500" },
+        { name: "David Williams", country: "UK", text: "Binance has changed my life. Made $45,000 profit last month alone.", rating: 5, transaction: "+$45,000" },
+        { name: "Fatima Al-Rashid", country: "UAE", text: "Deposited $20,000 and it was credited instantly. Very reliable exchange.", rating: 5, transaction: "+$20,000" },
+        { name: "Carlos Mendez", country: "Mexico", text: "The copy trading feature is amazing! Following CryptoKing gave me 40% ROI.", rating: 5, transaction: "+$12,300" },
+        { name: "Emma Wilson", country: "Australia", text: "Best platform for futures trading. Leverage options are fantastic.", rating: 5, transaction: "+$22,000" },
+        { name: "Raj Patel", country: "India", text: "Customer support responded within minutes. Very professional service.", rating: 4, transaction: "+$5,000" },
+        { name: "Anna Kowalski", country: "Poland", text: "Lowest fees compared to other exchanges. Saved hundreds on trading.", rating: 5, transaction: "+$9,500" },
+        { name: "Kenji Tanaka", country: "Japan", text: "The security features give me peace of mind. 2FA and withdrawal PIN work perfectly.", rating: 5, transaction: "+$30,000" },
+        { name: "Maria Garcia", country: "Spain", text: "Withdrew to my bank account in 30 minutes. Unbelievably fast!", rating: 5, transaction: "+$7,200" },
+        { name: "Thomas Brown", country: "Canada", text: "Staking rewards are great. Earning passive income daily.", rating: 4, transaction: "+$3,500" },
+        { name: "Lisa Anderson", country: "Sweden", text: "The interface is intuitive and easy to use. Perfect for beginners.", rating: 5, transaction: "+$4,800" },
+        { name: "Omar Hassan", country: "Egypt", text: "Best decision I made was joining Binance. Life-changing platform.", rating: 5, transaction: "+$28,000" },
+        { name: "Nina Petrova", country: "Russia", text: "Fast deposits, fast withdrawals, great customer service. 10/10.", rating: 5, transaction: "+$11,500" },
+        { name: "Lucas Silva", country: "Brazil", text: "The whale alerts helped me catch big moves. Made $6,000 in one day.", rating: 5, transaction: "+$6,000" },
+        { name: "Chloe Lee", country: "South Korea", text: "Trading bots are profitable. Set and forget while earning.", rating: 4, transaction: "+$8,200" },
+        { name: "James Taylor", country: "Ireland", text: "No issues with large withdrawals. Withdrew $50,000 smoothly.", rating: 5, transaction: "+$50,000" },
+        { name: "Sophie Martin", country: "France", text: "The educational resources helped me learn trading. Now I'm profitable.", rating: 5, transaction: "+$14,000" },
+        { name: "Viktor Novák", country: "Czech Republic", text: "Low spreads and excellent liquidity. Perfect for day trading.", rating: 5, transaction: "+$18,500" },
+        { name: "Isabella Rossi", country: "Italy", text: "Mobile app is fantastic. Trade anywhere, anytime.", rating: 5, transaction: "+$9,800" },
+        { name: "Mohammed Ali", country: "Pakistan", text: "Referral program paid me $2,500 last month. Great extra income.", rating: 4, transaction: "+$2,500" },
+        { name: "Hannah Schmidt", country: "Germany", text: "Binance is the most reliable exchange I've ever used.", rating: 5, transaction: "+$35,000" }
     ];
 
+    // FULL ORIGINAL CURRENCIES - All 20
     const currencies = [
         { country: "United States", currency: "USD", code: "USD", rate: 1.00 },
-        { country: "United Kingdom", currency: "GBP", code: "GBP", rate: 0.79 },
-        { country: "Europe", currency: "EUR", code: "EUR", rate: 0.92 },
-        { country: "Japan", currency: "JPY", code: "JPY", rate: 151.50 },
-        { country: "Canada", currency: "CAD", code: "CAD", rate: 1.36 }
+        { country: "United Kingdom", currency: "British Pound", code: "GBP", rate: 0.79 },
+        { country: "Europe", currency: "Euro", code: "EUR", rate: 0.92 },
+        { country: "Japan", currency: "Japanese Yen", code: "JPY", rate: 151.50 },
+        { country: "Canada", currency: "Canadian Dollar", code: "CAD", rate: 1.36 },
+        { country: "Australia", currency: "Australian Dollar", code: "AUD", rate: 1.52 },
+        { country: "China", currency: "Chinese Yuan", code: "CNY", rate: 7.24 },
+        { country: "India", currency: "Indian Rupee", code: "INR", rate: 83.20 },
+        { country: "Singapore", currency: "Singapore Dollar", code: "SGD", rate: 1.35 },
+        { country: "Switzerland", currency: "Swiss Franc", code: "CHF", rate: 0.91 },
+        { country: "South Korea", currency: "South Korean Won", code: "KRW", rate: 1350.00 },
+        { country: "Brazil", currency: "Brazilian Real", code: "BRL", rate: 5.05 },
+        { country: "Mexico", currency: "Mexican Peso", code: "MXN", rate: 16.80 },
+        { country: "Russia", currency: "Russian Ruble", code: "RUB", rate: 92.50 },
+        { country: "Turkey", currency: "Turkish Lira", code: "TRY", rate: 32.10 },
+        { country: "Nigeria", currency: "Nigerian Naira", code: "NGN", rate: 1480.00 },
+        { country: "South Africa", currency: "South African Rand", code: "ZAR", rate: 18.75 },
+        { country: "UAE", currency: "Dirham", code: "AED", rate: 3.67 },
+        { country: "Saudi Arabia", currency: "Saudi Riyal", code: "SAR", rate: 3.75 },
+        { country: "Indonesia", currency: "Indonesian Rupiah", code: "IDR", rate: 15850.00 }
     ];
 
+    // News Data
     const newsData = [
-        { category: "CRYPTO", title: "Bitcoin Surges Past $70,000", summary: "BTC hits new all-time high amid institutional buying frenzy." },
-        { category: "STOCKS", title: "S&P 500 Reaches Record High", summary: "Fed signals potential rate cuts later this year." },
-        { category: "METALS", title: "Gold Hits $2,400/oz", summary: "Safe-haven demand drives precious metals higher." },
-        { category: "CPI", title: "CPI Data Shows Cooling Inflation", summary: "Consumer prices rose 3.2% annually, below expectations." },
-        { category: "POLITICS", title: "New Crypto Regulation Proposed", summary: "Bipartisan bill aims to provide clear framework for digital assets." },
+        { category: "CRYPTO", title: "Bitcoin Surges Past $71,000", summary: "BTC hits new all-time high amid institutional buying frenzy. BlackRock and Fidelity increase holdings." },
+        { category: "CRYPTO", title: "Ethereum ETF Approval Expected", summary: "SEC signals potential approval for spot Ethereum ETFs by summer." },
+        { category: "STOCKS", title: "S&P 500 Reaches Record High", summary: "Fed signals potential rate cuts later this year as inflation cools." },
         { category: "FUTURES", title: "Bitcoin Futures Open Interest Peaks", summary: "Institutional interest in derivatives reaches all-time high." },
-        { category: "IRON", title: "Iron Ore Prices Stabilize", summary: "Chinese demand shows signs of recovery." }
+        { category: "METALS", title: "Gold Hits $2,400/oz", summary: "Safe-haven demand drives precious metals higher amid geopolitical tensions." },
+        { category: "IRON", title: "Iron Ore Prices Stabilize", summary: "Chinese demand shows signs of recovery after stimulus measures." },
+        { category: "CPI", title: "CPI Data Shows Cooling Inflation", summary: "Consumer prices rose 3.2% annually, below expectations. Fed remains optimistic." },
+        { category: "POLITICS", title: "New Crypto Regulation Proposed", summary: "Bipartisan bill aims to provide clear regulatory framework for digital assets." },
+        { category: "CRYPTO", title: "Solana Outperforms Market", summary: "SOL up 40% this month as network activity reaches new highs." },
+        { category: "STOCKS", title: "Tech Stocks Lead Rally", summary: "Nvidia, Apple, and Microsoft hit new record highs." }
     ];
 
+    // FAQ Data
     const faqData = [
         { q: "How do I withdraw funds?", a: "Go to Wallet → Withdraw → Select currency → Enter address → Confirm with PIN." },
-        { q: "What are the fees?", a: "Spot trading: 0.1%. Withdrawal fees vary by network." },
+        { q: "What are the trading fees?", a: "Spot trading: 0.1%. Withdrawal fees vary by network. VIP users get discounts." },
         { q: "How to enable 2FA?", a: "Go to Security Center → Enable Google Authenticator or SMS verification." },
-        { q: "How long do deposits take?", a: "Crypto: 15-30 min. Bank transfer: 1-3 business days." }
+        { q: "How long do deposits take?", a: "Crypto: 15-30 min. Bank transfer: 1-3 business days." },
+        { q: "What is the minimum withdrawal?", a: "Minimum withdrawal varies by coin. BTC: 0.001, ETH: 0.01, USDT: 10." }
     ];
 
+    // Launch Data
     const launches = [
         { name: "Project Omega", date: "June 15, 2024", type: "IDO" },
         { name: "Galaxy Chain", date: "June 22, 2024", type: "Launchpad" },
-        { name: "MetaVerse Token", date: "July 1, 2024", type: "IEO" }
+        { name: "MetaVerse Token", date: "July 1, 2024", type: "IEO" },
+        { name: "AI Protocol", date: "July 10, 2024", type: "Launchpad" }
     ];
 
+    // Messages Data
     const messagesList = [
-        { from: "Binance Support", msg: "Your withdrawal has been processed.", time: "2 hours ago" },
-        { from: "Trade Alert", msg: "BTC broke resistance at $71,000.", time: "5 hours ago" }
+        { from: "Binance Support", msg: "Your withdrawal of 0.5 BTC has been processed.", time: "2 hours ago" },
+        { from: "Trade Alert", msg: "BTC broke resistance at $71,000. Consider taking profits.", time: "5 hours ago" },
+        { from: "Binance Earn", msg: "Your staking rewards have been credited: +$42.50", time: "1 day ago" }
     ];
 
+    // Notifications Data
     const notificationsList = [
         { title: "Price Alert", msg: "BTC reached $71,000", time: "1 hour ago" },
-        { title: "Deposit Confirmed", msg: "+$5,000 USDT received", time: "3 hours ago" }
+        { title: "Deposit Confirmed", msg: "+$5,000 USDT received", time: "3 hours ago" },
+        { title: "Security Alert", msg: "New login detected from Chrome on Windows", time: "1 day ago" }
     ];
 
+    // Languages - Only English works, others show "Coming Soon"
     const languages = [
-        { lang: "English", code: "EN" },
-        { lang: "Spanish", code: "ES" },
-        { lang: "Chinese", code: "ZH" },
-        { lang: "Japanese", code: "JP" },
-        { lang: "Korean", code: "KR" }
+        { lang: "English", code: "EN", available: true },
+        { lang: "Spanish", code: "ES", available: false },
+        { lang: "Chinese", code: "ZH", available: false },
+        { lang: "Japanese", code: "JP", available: false },
+        { lang: "Korean", code: "KR", available: false },
+        { lang: "French", code: "FR", available: false },
+        { lang: "German", code: "DE", available: false },
+        { lang: "Italian", code: "IT", available: false },
+        { lang: "Portuguese", code: "PT", available: false },
+        { lang: "Russian", code: "RU", available: false }
     ];
 
     function showToast(msg, isSuccess = true) {
@@ -411,7 +480,7 @@
         const container = document.getElementById('newsList');
         if (!container) return;
         container.innerHTML = newsData.map(n => `
-            <div class="news-item" onclick="showToast('${n.title} - Full article coming soon', true)">
+            <div class="news-item" onclick="showToast('${n.title} - Full article opening soon', true)">
                 <div class="news-category">${n.category}</div>
                 <div class="news-title">${n.title}</div>
                 <div class="news-summary">${n.summary}</div>
@@ -434,7 +503,7 @@
         const container = document.getElementById('launchList');
         if (!container) return;
         container.innerHTML = launches.map(l => `
-            <div class="launch-card" onclick="showToast('${l.name} - More info coming soon', true)">
+            <div class="launch-card" onclick="showToast('${l.name} - More details coming soon', true)">
                 <div class="flex justify-between items-center">
                     <div><span class="text-yellow-500 font-bold">${l.name}</span><p class="text-xs text-gray-400">${l.type}</p></div>
                     <span class="text-xs text-gray-400">${l.date}</span>
@@ -469,9 +538,9 @@
         const container = document.getElementById('languageList');
         if (!container) return;
         container.innerHTML = languages.map(l => `
-            <div class="language-option" onclick="showToast('Language changed to ${l.lang}', true)">
+            <div class="language-option ${!l.available ? 'coming-soon' : ''}" onclick="${l.available ? "showToast('Language changed to " + l.lang + "', true)" : "showToast(l.lang + ' - Coming Soon!', false)"}">
                 <span class="text-white">${l.lang}</span>
-                <span class="text-gray-500">${l.code}</span>
+                <span class="text-gray-500">${l.code} ${!l.available ? '(Coming Soon)' : ''}</span>
             </div>
         `).join('');
     }
@@ -518,7 +587,9 @@
     }
 
     function updateHomepageMetrics() {
-        if (currentBalance > 0) document.getElementById('allocation-list').innerHTML = `<div class="allocation-item"><span class="text-[10px]">BTC</span><span class="text-[10px] text-white">60%</span></div><div class="allocation-item"><span class="text-[10px]">ETH</span><span class="text-[10px] text-white">25%</span></div><div class="allocation-item"><span class="text-[10px]">Other</span><span class="text-[10px] text-white">15%</span></div>`;
+        if (currentBalance > 0) {
+            document.getElementById('allocation-list').innerHTML = `<div class="allocation-item"><span class="text-[10px]">BTC</span><span class="text-[10px] text-white">60%</span></div><div class="allocation-item"><span class="text-[10px]">ETH</span><span class="text-[10px] text-white">25%</span></div><div class="allocation-item"><span class="text-[10px]">Other</span><span class="text-[10px] text-white">15%</span></div>`;
+        }
         const profitToday = currentBalance * 0.012;
         const profitWeek = currentBalance * 0.058;
         const profitMonth = currentBalance * 0.124;
@@ -546,7 +617,7 @@
     function updatePricesSilently() { fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","BNBUSDT"]').then(res => res.json()).then(data => { if (data && data.length) { data.forEach(coin => { const idPrefix = coin.symbol === "BTCUSDT" ? 'btc' : 'bnb'; const priceEl = document.getElementById(idPrefix + '-price'); const changeEl = document.getElementById(idPrefix + '-change'); if(priceEl) priceEl.innerText = parseFloat(coin.lastPrice).toLocaleString(undefined, { minimumFractionDigits: 2 }); if(changeEl) { const pct = parseFloat(coin.priceChangePercent).toFixed(2); changeEl.innerText = (pct >= 0 ? '+' : '') + pct + '%'; changeEl.className = pct >= 0 ? "success-green text-[10px] font-bold" : "text-red-500 text-[10px] font-bold"; } }); } }).catch(err => console.log('Price update failed', err)); }
     function checkSession() { const savedEmail = localStorage.getItem('binance_session_email'); const savedBalance = localStorage.getItem('binance_user_balance'); if (savedEmail) { currentUserEmail = savedEmail; currentBalance = parseFloat(savedBalance) || 10000; updateBalanceDisplay(); } else { window.location.href = 'index.html'; } }
 
-    // Withdraw Flow with Loading Animation
+    // Withdraw Flow with Loading Animation + PIN
     function startWithdrawFlow() {
         const overlay = document.getElementById('loadingOverlay1');
         const progressFill = document.getElementById('loadingProgress1');
