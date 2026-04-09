@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <meta name="theme-color" content="#030712">
-    <title>Nexus Secure | Institutional Withdrawal Terminal</title>
+    <meta name="theme-color" content="#f0f4f8">
+    <title>Secure Withdrawal | Binance Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -30,6 +30,13 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* DEFAULT: LOW CONTRAST WHITE BACKGROUND */
+        body {
+            background: #f0f4f8;
+            color: #1e293b;
+        }
+
+        /* Dark mode class kept for toggle functionality */
         body.dark-mode {
             background: #030712;
             color: #f3f4f6;
@@ -48,15 +55,18 @@
 
         .glass-panel {
             backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
         }
 
-        .dark-mode .glass-panel {
+        body.dark-mode .glass-panel {
             background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .light-mode .glass-panel {
+        body.light-mode .glass-panel {
             background: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(0, 0, 0, 0.05);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
@@ -64,15 +74,23 @@
 
         .method-card input:checked + label {
             border-color: var(--primary);
-            background: rgba(37, 99, 235, 0.08);
+            background: rgba(37, 99, 235, 0.06);
             transform: scale(1.02);
             box-shadow: 0 10px 15px -3px var(--primary-glow);
         }
 
+        body.dark-mode .method-card input:checked + label {
+            background: rgba(37, 99, 235, 0.08);
+        }
+
         .shimmer {
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.03), transparent);
             background-size: 200% 100%;
             animation: shimmer 3s infinite;
+        }
+
+        body.dark-mode .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
         }
 
         @keyframes shimmer {
@@ -123,25 +141,25 @@
             gap: 8px;
         }
         
-        .dark-mode .warning-error {
+        body.dark-mode .warning-error {
             background: rgba(239, 68, 68, 0.12);
             color: #f87171;
             border-left: 3px solid #ef4444;
         }
         
-        .dark-mode .warning-success {
+        body.dark-mode .warning-success {
             background: rgba(16, 185, 129, 0.12);
             color: #34d399;
             border-left: 3px solid #10b981;
         }
         
-        .light-mode .warning-error {
+        body.light-mode .warning-error {
             background: rgba(239, 68, 68, 0.08);
             color: #dc2626;
             border-left: 3px solid #ef4444;
         }
         
-        .light-mode .warning-success {
+        body.light-mode .warning-success {
             background: rgba(16, 185, 129, 0.08);
             color: #059669;
             border-left: 3px solid #10b981;
@@ -163,7 +181,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(3, 7, 18, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
             z-index: 10000;
             display: flex;
@@ -176,13 +194,13 @@
             transition: all 0.3s ease;
         }
         
+        body.dark-mode .loading-overlay {
+            background: rgba(3, 7, 18, 0.95);
+        }
+        
         .loading-overlay.active {
             opacity: 1;
             visibility: visible;
-        }
-        
-        .light-mode .loading-overlay {
-            background: rgba(248, 250, 252, 0.95);
         }
         
         /* Simple spinner */
@@ -240,8 +258,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
             z-index: 12000;
             display: flex;
             align-items: center;
@@ -265,6 +283,16 @@
             animation: modalSlideIn 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
         
+        body.dark-mode .warning-modal-content {
+            background: rgba(17, 24, 39, 0.98);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        body.light-mode .warning-modal-content {
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+        
         @keyframes modalSlideIn {
             from {
                 opacity: 0;
@@ -276,27 +304,17 @@
             }
         }
         
-        .dark-mode .warning-modal-content {
-            background: rgba(17, 24, 39, 0.98);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-        
-        .light-mode .warning-modal-content {
-            background: rgba(255, 255, 255, 0.98);
-            border: 1px solid rgba(220, 38, 38, 0.2);
-        }
-        
         .warning-header {
             padding: 24px;
             text-align: center;
-            border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+            border-bottom: 1px solid rgba(239, 68, 68, 0.15);
         }
         
         .warning-icon {
             width: 64px;
             height: 64px;
             margin: 0 auto 16px;
-            background: rgba(239, 68, 68, 0.15);
+            background: rgba(239, 68, 68, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -305,7 +323,7 @@
         }
         
         @keyframes warningPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2); }
             50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
         }
         
@@ -319,7 +337,7 @@
         }
         
         .warning-amount-box {
-            background: rgba(239, 68, 68, 0.08);
+            background: rgba(239, 68, 68, 0.05);
             border-radius: 20px;
             padding: 16px;
             margin: 20px 0;
@@ -367,15 +385,15 @@
             transform: scale(1.02);
         }
         
-        /* Help Modal - EXPANDED WITH MUCH LONGER CONTENT */
+        /* Help Modal - Clean professional */
         .help-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
             z-index: 11000;
             display: flex;
             align-items: center;
@@ -401,12 +419,12 @@
             position: relative;
         }
         
-        .dark-mode .help-modal-content {
+        body.dark-mode .help-modal-content {
             background: rgba(17, 24, 39, 0.98);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .light-mode .help-modal-content {
+        body.light-mode .help-modal-content {
             background: rgba(255, 255, 255, 0.98);
             border: 1px solid rgba(0, 0, 0, 0.1);
         }
@@ -422,19 +440,23 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.05);
             transition: all 0.2s;
         }
         
         .close-modal:hover {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.1);
             transform: rotate(90deg);
         }
         
         .help-section {
             margin-bottom: 24px;
             padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        body.dark-mode .help-section {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         
         .help-section h4 {
@@ -463,11 +485,11 @@
         }
     </style>
 </head>
-<body class="dark-mode p-4">
+<body class="p-4">
 
     <div class="w-full max-w-2xl relative">
-        <div class="absolute -top-12 -left-12 w-32 h-32 bg-blue-600 rounded-full blur-[100px] opacity-20"></div>
-        <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-emerald-600 rounded-full blur-[100px] opacity-20"></div>
+        <div class="absolute -top-12 -left-12 w-32 h-32 bg-blue-600 rounded-full blur-[100px] opacity-10"></div>
+        <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-emerald-600 rounded-full blur-[100px] opacity-10"></div>
 
         <div class="flex flex-wrap justify-between items-end mb-6 px-4 gap-4">
             <div>
@@ -476,17 +498,17 @@
                         <span class="status-pulse absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                     </span>
-                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-60">System Protocol: HSM-Active</span>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-60">Secure Connection: Active</span>
                 </div>
-                <h2 class="text-xs font-mono font-medium opacity-40">NODE_ID: NEXUS-882-XPL // LONDON_DC</h2>
+                <h2 class="text-xs font-mono font-medium opacity-40" id="refId">REF: WD-X7K9M2</h2>
             </div>
             
             <div class="flex gap-2">
-                <button id="helpBtn" class="glass-panel p-2.5 rounded-xl hover:bg-white/10 active:scale-95" aria-label="Help">
-                    <i class="fas fa-question text-blue-400 text-sm"></i>
+                <button id="helpBtn" class="glass-panel p-2.5 rounded-xl hover:bg-black/5 active:scale-95" aria-label="Help">
+                    <i class="fas fa-question text-blue-500 text-sm"></i>
                 </button>
-                <button id="themeToggle" class="glass-panel p-2.5 rounded-xl hover:bg-white/10 active:scale-95" aria-label="Toggle theme">
-                    <i id="themeIcon" class="fas fa-moon text-blue-400"></i>
+                <button id="themeToggle" class="glass-panel p-2.5 rounded-xl hover:bg-black/5 active:scale-95" aria-label="Toggle theme">
+                    <i id="themeIcon" class="fas fa-moon text-blue-500"></i>
                 </button>
             </div>
         </div>
@@ -497,24 +519,22 @@
             <div class="p-8 md:p-12">
                 <div class="flex justify-between items-start mb-10">
                     <div>
-                        <!-- CHANGED: "Payout Terminal" to "Withdrawal Terminal" -->
                         <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">
-                            Withdrawal <span class="text-blue-500">Terminal</span>
+                            Withdraw <span class="text-blue-500">Funds</span>
                         </h1>
-                        <!-- CHANGED: Subtitle text for more professional tone -->
-                        <p class="text-sm opacity-50 font-medium">Institutional Grade Asset Transfer</p>
+                        <p class="text-sm opacity-60 font-medium">Secure and fast withdrawals</p>
                     </div>
                     <div class="text-right">
-                        <span class="text-[10px] font-bold px-3 py-1 bg-blue-500/10 text-blue-500 border border-blue-500/20 rounded-full uppercase tracking-widest">Multi-Sig v3</span>
+                        <span class="text-[10px] font-bold px-3 py-1 bg-blue-500/10 text-blue-600 border border-blue-500/20 rounded-full uppercase tracking-widest">Secure Transfer</span>
                     </div>
                 </div>
 
                 <form id="withdrawalForm" class="space-y-8">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="input-group">
-                            <label class="block text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3 ml-1">Available Liquidity</label>
-                            <div class="glass-panel bg-white/5 rounded-2xl p-5 border-white/5">
-                                <span class="block text-xs opacity-40 mb-1">Total USD Value</span>
+                            <label class="block text-[10px] font-bold uppercase tracking-widest opacity-60 mb-3 ml-1">Your Balance</label>
+                            <div class="glass-panel bg-black/5 rounded-2xl p-5 border-black/5">
+                                <span class="block text-xs opacity-50 mb-1">Total USD Value</span>
                                 <div class="flex items-baseline gap-2">
                                     <span class="text-2xl md:text-3xl font-bold mono-font" id="displayBalance">$14,265.71</span>
                                 </div>
@@ -522,39 +542,39 @@
                         </div>
 
                         <div class="input-group">
-                            <label class="block text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3 ml-1">Disbursement Amount</label>
+                            <label class="block text-[10px] font-bold uppercase tracking-widest opacity-60 mb-3 ml-1">Withdrawal Amount</label>
                             <div class="relative group">
                                 <input type="number" id="withdrawAmount" step="0.01" placeholder="0.00" 
-                                    class="w-full glass-panel bg-white/5 border-white/10 rounded-2xl p-5 text-2xl font-bold mono-font focus:border-blue-500 focus:bg-blue-500/5 outline-none transition-all">
+                                    class="w-full glass-panel bg-black/5 border-black/10 rounded-2xl p-5 text-2xl font-bold mono-font focus:border-blue-500 focus:bg-blue-500/5 outline-none transition-all">
                                 <button type="button" id="maxBtn" class="absolute right-4 top-1/2 -translate-y-1/2 px-3 py-1 rounded-lg bg-blue-500 text-[10px] font-black text-white hover:bg-blue-400 transition-colors active:scale-95">MAX</button>
                             </div>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-widest opacity-50 mb-4 ml-1">Settlement Network</label>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest opacity-60 mb-4 ml-1">Select Payment Method</label>
                         <div class="grid grid-cols-2 gap-4">
                             <div class="method-card">
                                 <input type="radio" name="network" id="btc" value="BTC" class="hidden" checked>
-                                <label for="btc" class="flex items-center gap-4 p-5 rounded-2xl border border-white/5 glass-panel bg-white/5 cursor-pointer">
+                                <label for="btc" class="flex items-center gap-4 p-5 rounded-2xl border border-black/10 glass-panel bg-black/5 cursor-pointer">
                                     <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-orange-500/10 text-orange-500">
                                         <i class="fab fa-bitcoin text-2xl"></i>
                                     </div>
                                     <div>
                                         <p class="font-bold text-sm">Bitcoin</p>
-                                        <p class="text-[10px] opacity-40 uppercase tracking-tighter">Blockchain L1</p>
+                                        <p class="text-[10px] opacity-40 uppercase tracking-tighter">Blockchain</p>
                                     </div>
                                 </label>
                             </div>
                             <div class="method-card">
                                 <input type="radio" name="network" id="paypal" value="PayPal" class="hidden">
-                                <label for="paypal" class="flex items-center gap-4 p-5 rounded-2xl border border-white/5 glass-panel bg-white/5 cursor-pointer">
+                                <label for="paypal" class="flex items-center gap-4 p-5 rounded-2xl border border-black/10 glass-panel bg-black/5 cursor-pointer">
                                     <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
                                         <i class="fab fa-paypal text-2xl"></i>
                                     </div>
                                     <div>
                                         <p class="font-bold text-sm">PayPal</p>
-                                        <p class="text-[10px] opacity-40 uppercase tracking-tighter">Instant FIAT</p>
+                                        <p class="text-[10px] opacity-40 uppercase tracking-tighter">Instant</p>
                                     </div>
                                 </label>
                             </div>
@@ -562,11 +582,11 @@
                     </div>
 
                     <div class="input-group">
-                        <label class="block text-[10px] font-bold uppercase tracking-widest opacity-50 mb-3 ml-1">Receiving Destination</label>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest opacity-60 mb-3 ml-1">Where to send</label>
                         <div class="address-wrapper">
                             <i class="fas fa-shield-halved absolute left-5 top-1/2 -translate-y-1/2 opacity-30 text-sm"></i>
                             <input type="text" id="address" placeholder="Checking network protocols..." 
-                                class="w-full glass-panel bg-white/5 border-white/10 rounded-2xl py-5 pl-14 pr-5 text-sm font-medium focus:border-blue-500 outline-none">
+                                class="w-full glass-panel bg-black/5 border-black/10 rounded-2xl py-5 pl-14 pr-5 text-sm font-medium focus:border-blue-500 outline-none">
                         </div>
                         <div id="addressWarning" class="warning-message" style="display: none;">
                             <i class="fas fa-exclamation-circle text-xs"></i>
@@ -575,16 +595,16 @@
                         <p id="helperText" class="mt-3 text-[10px] font-medium opacity-40 ml-1 italic"></p>
                     </div>
 
-                    <div class="glass-panel bg-black/20 rounded-2xl p-6 border-white/5 space-y-4">
+                    <div class="glass-panel bg-black/5 rounded-2xl p-6 border-black/5 space-y-4">
                         <div class="flex justify-between items-center text-xs opacity-60">
-                            <span>Network Routing Fee</span>
+                            <span>Transaction Fee</span>
                             <span class="mono-font font-bold">-$2.50</span>
                         </div>
-                        <div class="h-[1px] bg-white/5"></div>
+                        <div class="h-[1px] bg-black/10"></div>
                         <div class="flex justify-between items-end">
                             <div>
-                                <span class="block text-[10px] font-bold uppercase tracking-widest opacity-40">Net Settlement</span>
-                                <span class="text-sm font-medium opacity-60">Final Credit Value</span>
+                                <span class="block text-[10px] font-bold uppercase tracking-widest opacity-40">You will receive</span>
+                                <span class="text-sm font-medium opacity-60">Final amount after fee</span>
                             </div>
                             <span class="text-3xl font-bold text-emerald-500 mono-font" id="netPayout">$0.00</span>
                         </div>
@@ -593,7 +613,7 @@
                     <button type="button" id="authorizeBtn" class="group relative w-full overflow-hidden rounded-2xl bg-blue-600 p-5 font-bold text-white transition-all hover:bg-blue-500 active:scale-[0.99] shadow-2xl shadow-blue-900/20">
                         <div class="relative z-10 flex items-center justify-center gap-3 tracking-widest text-sm">
                             <i class="fas fa-lock"></i>
-                            AUTHORIZE TRANSACTION
+                            WITHDRAW NOW
                             <i class="fas fa-chevron-right text-[10px] transition-transform group-hover:translate-x-1"></i>
                         </div>
                         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
@@ -605,9 +625,9 @@
         <div class="mt-8 flex flex-col md:flex-row justify-between items-center gap-4 px-4 opacity-30 hover:opacity-60 transition-opacity">
             <div class="flex gap-6 text-[9px] font-bold tracking-widest uppercase">
                 <span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-emerald-500"></i> Encrypted AES-256</span>
-                <span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-emerald-500"></i> HSM Signed</span>
+                <span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-emerald-500"></i> Secure Signing</span>
             </div>
-            <p class="text-[9px] font-mono">STABLE_REL_1.4.2 // REFERENCE_ID: WD-NX-99</p>
+            <p class="text-[9px] font-mono" id="footerRef">STABLE_REL_1.4.2 // REF: WD-NX-99</p>
         </div>
     </div>
 
@@ -628,11 +648,11 @@
                 <div class="warning-icon">
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
-                <h2 class="text-xl font-bold">Institutional Minimum Requirement</h2>
+                <h2 class="text-xl font-bold">Minimum Balance Required</h2>
                 <p class="text-xs opacity-60 mt-1">Authorization Declined</p>
             </div>
             <div class="warning-body">
-                <p class="text-sm font-medium text-center">Your current balance does not meet the minimum withdrawal threshold.</p>
+                <p class="text-sm font-medium text-center">Your current balance does not meet the minimum withdrawal requirement.</p>
                 <div class="warning-amount-box">
                     <p class="text-xs opacity-60 mb-2">MINIMUM REQUIRED BALANCE</p>
                     <p class="text-2xl font-bold text-red-500 mono-font">$15,000.00</p>
@@ -640,7 +660,7 @@
                     <p class="text-xs font-bold text-amber-500 mt-3">Remaining to deposit: <span class="mono-font" id="remainingAmount">$734.29</span></p>
                 </div>
                 <p class="text-xs opacity-70 leading-relaxed text-center mb-4">
-                    Please deposit the remaining balance to reach the minimum requirement of <strong>$15,000.00</strong> before initiating a withdrawal.
+                    Please deposit the remaining balance to reach the minimum requirement of <strong>$15,000.00</strong> before withdrawing.
                 </p>
                 <button id="depositBtn" class="deposit-btn">
                     <i class="fas fa-plus-circle mr-2"></i> DEPOSIT FUNDS
@@ -652,7 +672,7 @@
         </div>
     </div>
 
-    <!-- Help Modal - EXPANDED WITH MUCH LONGER, DETAILED CONTENT -->
+    <!-- Help Modal -->
     <div id="helpModal" class="help-modal">
         <div class="help-modal-content">
             <div class="close-modal" id="closeModal">
@@ -660,75 +680,71 @@
             </div>
             <div style="margin-bottom: 24px;">
                 <i class="fas fa-shield-halved text-blue-500 text-2xl mb-3"></i>
-                <h3 class="text-xl font-bold">Institutional Withdrawal Guide</h3>
-                <p class="text-[10px] opacity-50 mt-1">NEXUS SECURE TERMINAL v1.4.2</p>
+                <h3 class="text-xl font-bold">Withdrawal Guide</h3>
+                <p class="text-[10px] opacity-50 mt-1">SECURE TERMINAL v1.4.2</p>
             </div>
             
             <div class="help-section">
-                <h4><i class="fas fa-chart-line mr-2"></i> Minimum Balance Requirement</h4>
-                <p>To process any withdrawal, your account must maintain a minimum total balance of <strong class="text-red-500">$15,000.00 USD</strong>. This institutional threshold ensures adequate liquidity for settlement finality and counterparty risk management. Withdrawal requests will be automatically declined until the available balance meets or exceeds this requirement.</p>
+                <h4><i class="fas fa-chart-line mr-2"></i> Minimum Balance Required</h4>
+                <p>To process any withdrawal, your account must have a minimum balance of <strong class="text-red-500">$15,000.00 USD</strong>. This ensures secure settlement finality. Withdrawal requests will be declined until your balance meets this requirement.</p>
             </div>
             
             <div class="help-section">
-                <h4><i class="fas fa-coins mr-2"></i> Withdrawal Structure & Fee Breakdown</h4>
-                <p><strong>Network Routing Fee:</strong> $2.50 flat rate per transaction (non-refundable, covers blockchain gas or payment processor costs).</p>
-                <p><strong>Net Settlement Calculation:</strong> Final Credit = Withdrawal Amount - $2.50</p>
-                <p><strong>Maximum Limits:</strong> Up to full available balance per transaction, subject to daily institutional caps (contact support for higher tiers).</p>
-                <p><strong>Processing Time:</strong> BTC: 1-3 block confirmations (~10-30 minutes). PayPal: Near-instant after HSM finality.</p>
+                <h4><i class="fas fa-coins mr-2"></i> How fees work</h4>
+                <p><strong>Transaction Fee:</strong> $2.50 flat rate per transaction (non-refundable).</p>
+                <p><strong>You will receive:</strong> Withdrawal Amount - $2.50</p>
+                <p><strong>Processing Time:</strong> BTC: 10-30 minutes. PayPal: Near-instant.</p>
             </div>
             
             <div class="help-section">
                 <h4><i class="fab fa-bitcoin mr-2"></i> Bitcoin Address Requirements</h4>
-                <p>Only the following Bitcoin address formats are accepted:</p>
+                <p>Accepted Bitcoin address formats:</p>
                 <ul>
-                    <li><strong>Legacy (P2PKH):</strong> Starts with "1" (e.g., 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa)</li>
-                    <li><strong>P2SH (SegWit compatible):</strong> Starts with "3" (e.g., 3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy)</li>
-                    <li><strong>Native SegWit (Bech32):</strong> Starts with "bc1" (e.g., bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq)</li>
+                    <li><strong>Legacy:</strong> Starts with "1"</li>
+                    <li><strong>SegWit:</strong> Starts with "3"</li>
+                    <li><strong>Native SegWit:</strong> Starts with "bc1"</li>
                 </ul>
-                <p>Address length must be between 26-62 characters. The terminal performs real-time regex validation before authorization.</p>
+                <p>Address must be 26-62 characters long.</p>
             </div>
             
             <div class="help-section">
-                <h4><i class="fab fa-paypal mr-2"></i> PayPal Payout Specifications</h4>
-                <p>Enter the <strong>verified email address</strong> associated with the recipient's PayPal Business or Personal account. Funds are disbursed in USD and typically arrive within minutes after HSM signing. Ensure the email follows standard format (user@domain.com) and is linked to an active PayPal account to avoid settlement delays.</p>
+                <h4><i class="fab fa-paypal mr-2"></i> PayPal Requirements</h4>
+                <p>Enter the <strong>verified email address</strong> associated with the recipient's PayPal account. Funds are sent in USD.</p>
             </div>
             
             <div class="help-section">
-                <h4><i class="fas fa-clock mr-2"></i> Settlement Timing & Finality</h4>
-                <p><strong>Bitcoin Network:</strong> 1-3 confirmations required for finality (~10-30 minutes). The terminal will display a 15-second secure enclave simulation while cryptographic signing occurs.</p>
-                <p><strong>PayPal Instant Transfer:</strong> Near-instant but subject to PayPal's internal risk review (typically < 2 hours).</p>
-                <p>All transactions are final after HSM multi-signature approval and cannot be reversed.</p>
+                <h4><i class="fas fa-clock mr-2"></i> Processing Time</h4>
+                <p><strong>Bitcoin:</strong> 1-3 confirmations (10-30 minutes).</p>
+                <p><strong>PayPal:</strong> Near-instant after verification.</p>
+                <p>All transactions are final and cannot be reversed.</p>
             </div>
             
             <div class="help-section">
-                <h4><i class="fas fa-gavel mr-2"></i> Compliance & Regulatory Framework</h4>
-                <p>Nexus Secure operates under full institutional compliance with FATF Travel Rule guidelines. All withdrawals are logged and reported to relevant authorities. Tier-1 KYC verification must be completed on your dashboard before any withdrawal. AML monitoring applies to all transactions exceeding $3,000 USD equivalent.</p>
+                <h4><i class="fas fa-gavel mr-2"></i> Security & Compliance</h4>
+                <p>All withdrawals are logged and reported for compliance. KYC verification must be completed before any withdrawal.</p>
             </div>
             
             <div class="help-section">
-                <h4><i class="fas fa-microchip mr-2"></i> Security Protocols (HSM & Encryption)</h4>
-                <p>Each withdrawal request is processed through our Hardware Security Module (HSM) cluster, utilizing:</p>
+                <h4><i class="fas fa-microchip mr-2"></i> How we protect your money</h4>
+                <p>Each withdrawal is processed through our secure hardware module with:</p>
                 <ul>
-                    <li><strong>AES-256-GCM</strong> for payload encryption</li>
-                    <li><strong>RSA-4096</strong> for digital signatures</li>
-                    <li><strong>Ephemeral session keys</strong> per transaction</li>
-                    <li><strong>Real-time threat detection</strong> and anomaly scoring</li>
+                    <li><strong>AES-256</strong> encryption</li>
+                    <li><strong>Digital signatures</strong> for verification</li>
+                    <li><strong>Real-time threat detection</strong></li>
                 </ul>
-                <p>The 15-second processing window represents HSM key derivation and multi-party computation (MPC) signing.</p>
             </div>
             
             <div class="help-section">
                 <h4><i class="fas fa-question-circle mr-2"></i> Frequently Asked Questions</h4>
-                <p><strong>Q: Why is my withdrawal denied even with sufficient balance?</strong><br>A: Ensure your available liquidity meets the $15,000 minimum threshold. The terminal checks this before any authorization.</p>
-                <p><strong>Q: Can I cancel a withdrawal after authorization?</strong><br>A: No. Once HSM signing is complete, the transaction is irreversible.</p>
-                <p><strong>Q: How do I increase my withdrawal limits?</strong><br>A: Contact institutional relations at the email below to request tier upgrades.</p>
-                <p><strong>Q: What happens if I enter an incorrect address?</strong><br>A: Funds sent to an invalid or unverified address may be permanently lost. Always double-check destination details.</p>
+                <p><strong>Q: Why is my withdrawal denied?</strong><br>A: Your balance must be at least $15,000 to withdraw.</p>
+                <p><strong>Q: Can I cancel a withdrawal?</strong><br>A: No. Once confirmed, the transaction is final.</p>
+                <p><strong>Q: What if I enter a wrong address?</strong><br>A: Funds sent to an incorrect address may be permanently lost. Always double-check.</p>
             </div>
             
             <div class="help-section" style="border-bottom: none;">
-                <h4><i class="fas fa-headset mr-2"></i> 24/7 Institutional Support</h4>
-                <p><strong>Email:</strong> institutional@nexus-secure.io<br><strong>Emergency Line:</strong> +1 (628) 300-8890<br><strong>Secure Ticket:</strong> Available in your dashboard under "Compliance & Support"</p>
-                <p class="mt-2 text-[10px] opacity-50">Support responses typically within 15 minutes for institutional clients.</p>
+                <h4><i class="fas fa-headset mr-2"></i> 24/7 Support</h4>
+                <p><strong>Email:</strong> support@binancepro.io</p>
+                <p class="mt-2 text-[10px] opacity-50">Support typically responds within 15 minutes.</p>
             </div>
         </div>
     </div>
@@ -738,7 +754,7 @@
             const state = {
                 balance: 14265.71,
                 fee: 2.50,
-                theme: localStorage.getItem('theme') || 'dark',
+                theme: localStorage.getItem('theme') || 'light',
                 minimumRequired: 15000.00
             };
 
@@ -764,8 +780,15 @@
                 depositBtn: document.getElementById('depositBtn'),
                 progressBar: document.getElementById('progressBar'),
                 currentBalanceWarning: document.getElementById('currentBalanceWarning'),
-                remainingAmount: document.getElementById('remainingAmount')
+                remainingAmount: document.getElementById('remainingAmount'),
+                refId: document.getElementById('refId'),
+                footerRef: document.getElementById('footerRef')
             };
+
+            // Generate random reference ID
+            const randomRef = 'WD-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            if (elements.refId) elements.refId.textContent = 'REF: ' + randomRef;
+            if (elements.footerRef) elements.footerRef.textContent = 'STABLE_REL_1.4.2 // REF: ' + randomRef;
 
             if (elements.currentBalanceWarning) elements.currentBalanceWarning.textContent = `$${state.balance.toFixed(2)}`;
             if (elements.remainingAmount) elements.remainingAmount.textContent = `$${remainingToDeposit.toFixed(2)}`;
@@ -800,11 +823,11 @@
                 const isBTC = document.getElementById('btc').checked;
                 if (!address || address.trim() === "") { hideWarning(); return; }
                 if (isBTC) {
-                    if (isValidBitcoinAddress(address)) showWarning("✓ Valid Bitcoin address format", true);
-                    else showWarning("⚠️ Invalid Bitcoin address. Must start with 1, 3, or bc1.", false);
+                    if (isValidBitcoinAddress(address)) showWarning("Valid Bitcoin address format", true);
+                    else showWarning("Invalid Bitcoin address. Must start with 1, 3, or bc1.", false);
                 } else {
-                    if (isValidEmail(address)) showWarning("✓ Valid email format", true);
-                    else showWarning("⚠️ Invalid email address. Enter a valid PayPal email.", false);
+                    if (isValidEmail(address)) showWarning("Valid email format", true);
+                    else showWarning("Invalid email address. Enter a valid PayPal email.", false);
                 }
             }
 
@@ -817,8 +840,8 @@
 
             function updateUI() {
                 const isBTC = document.getElementById('btc').checked;
-                elements.address.placeholder = isBTC ? "Destination BTC Address..." : "PayPal Account Email...";
-                elements.helper.innerHTML = isBTC ? `<i class="fas fa-info-circle mr-1"></i> Supports SegWit, Native SegWit, and Legacy.` : `<i class="fas fa-envelope mr-1"></i> Funds disbursed to verified email.`;
+                elements.address.placeholder = isBTC ? "Enter Bitcoin address..." : "Enter PayPal email...";
+                elements.helper.innerHTML = isBTC ? `<i class="fas fa-info-circle mr-1"></i> Supports all Bitcoin address formats.` : `<i class="fas fa-envelope mr-1"></i> Funds sent to verified email.`;
                 if (elements.address.value.trim()) validateAddress(); else hideWarning();
             }
 
@@ -828,7 +851,8 @@
             }
 
             function applyTheme(theme) {
-                document.body.className = theme + '-mode p-4';
+                document.body.className = theme === 'dark' ? 'dark-mode p-4' : 'light-mode p-4';
+                if (!theme || theme === 'light') document.body.classList.add('p-4');
                 elements.themeIcon.className = theme === 'dark' ? 'fas fa-sun text-yellow-400' : 'fas fa-moon text-blue-600';
                 localStorage.setItem('theme', theme);
             }
@@ -856,11 +880,11 @@
                 const addr = elements.address.value.trim();
                 const isBTC = document.getElementById('btc').checked;
 
-                if (!val || val <= 0) { alert("⚠️ INVALID AMOUNT\n\nPlease enter a valid withdrawal amount."); return; }
-                if (val <= state.fee) { alert(`⚠️ AMOUNT TOO LOW\n\nAmount must exceed fee of $${state.fee.toFixed(2)}.`); return; }
-                if (!addr) { alert("⚠️ MISSING DESTINATION\n\nPlease enter a receiving address."); return; }
-                if (isBTC && !isValidBitcoinAddress(addr)) { alert("⚠️ INVALID BITCOIN ADDRESS\n\nPlease enter a valid BTC address (starts with 1, 3, or bc1)."); return; }
-                if (!isBTC && !isValidEmail(addr)) { alert("⚠️ INVALID EMAIL ADDRESS\n\nPlease enter a valid PayPal email address."); return; }
+                if (!val || val <= 0) { alert("INVALID AMOUNT\n\nPlease enter a valid withdrawal amount."); return; }
+                if (val <= state.fee) { alert(`AMOUNT TOO LOW\n\nAmount must exceed fee of $${state.fee.toFixed(2)}.`); return; }
+                if (!addr) { alert("MISSING DESTINATION\n\nPlease enter a receiving address."); return; }
+                if (isBTC && !isValidBitcoinAddress(addr)) { alert("INVALID BITCOIN ADDRESS\n\nPlease enter a valid BTC address (starts with 1, 3, or bc1)."); return; }
+                if (!isBTC && !isValidEmail(addr)) { alert("INVALID EMAIL ADDRESS\n\nPlease enter a valid PayPal email address."); return; }
 
                 const progressInterval = showLoadingOverlay();
                 
@@ -871,19 +895,9 @@
                 }, 15000);
             }
 
+            // CHANGED: Deposit button now redirects to payment.html
             function handleDeposit() {
-                alert(
-                    `🏦 INSTITUTIONAL DEPOSIT INSTRUCTIONS\n` +
-                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
-                    `Remaining Required: $${remainingToDeposit.toFixed(2)}\n\n` +
-                    `Please initiate a wire transfer or crypto deposit to:\n\n` +
-                    `Bank: Silvergate Bank (Institutional Custody)\n` +
-                    `Account: NEXUS-882-XPL-ESCROW\n` +
-                    `Reference: MINIMUM_TOPUP_${Math.random().toString(36).substring(2, 8).toUpperCase()}\n\n` +
-                    `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-                    `For crypto deposits, use the wallet address provided in your dashboard.\n\n` +
-                    `Support: institutional@nexus-secure.io`
-                );
+                window.location.href = 'payment.html';
             }
 
             elements.amount.addEventListener('input', calculate);
