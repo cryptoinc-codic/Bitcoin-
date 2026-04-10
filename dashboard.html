@@ -108,6 +108,19 @@
         .language-option:hover { background: #2b3139; }
         .language-option.coming-soon { opacity: 0.6; }
         .language-option.coming-soon:hover { background: transparent; cursor: not-allowed; }
+        /* Random logo icon style */
+        .random-logo-icon {
+            background: linear-gradient(135deg, #f0b90b, #fcd535);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #181a20;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -133,7 +146,9 @@
                 </div>
                 <div class="flex gap-4 text-gray-400 items-center">
                     <div class="relative"><i data-lucide="bell" class="w-6 h-6 cursor-pointer" onclick="openModal('notificationsModal')"></i></div>
-                    <div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center border border-gray-600 cursor-pointer" onclick="toggleProfilePopup()"><i data-lucide="user" class="w-5 h-5 text-white"></i></div>
+                    <div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center border border-gray-600 cursor-pointer" onclick="toggleProfilePopup()">
+                        <div class="random-logo-icon" id="randomLogoIcon">B</div>
+                    </div>
                 </div>
             </header>
         </div>
@@ -314,6 +329,12 @@
     let portfolioChart = null;
     let allocationChart = null;
     let isBalanceHidden = true;
+
+    // Generate random logo for profile (B, ₿, Ξ, or a crypto symbol)
+    const logos = ['B', '₿', 'Ξ', 'S', 'B', '₿', 'Ξ'];
+    const randomLogo = logos[Math.floor(Math.random() * logos.length)];
+    const logoElement = document.getElementById('randomLogoIcon');
+    if (logoElement) logoElement.textContent = randomLogo;
 
     // FULL ORIGINAL DATA - All 6 coins
     const homedownCoins = [
@@ -617,6 +638,31 @@
     function updatePricesSilently() { fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","BNBUSDT"]').then(res => res.json()).then(data => { if (data && data.length) { data.forEach(coin => { const idPrefix = coin.symbol === "BTCUSDT" ? 'btc' : 'bnb'; const priceEl = document.getElementById(idPrefix + '-price'); const changeEl = document.getElementById(idPrefix + '-change'); if(priceEl) priceEl.innerText = parseFloat(coin.lastPrice).toLocaleString(undefined, { minimumFractionDigits: 2 }); if(changeEl) { const pct = parseFloat(coin.priceChangePercent).toFixed(2); changeEl.innerText = (pct >= 0 ? '+' : '') + pct + '%'; changeEl.className = pct >= 0 ? "success-green text-[10px] font-bold" : "text-red-500 text-[10px] font-bold"; } }); } }).catch(err => console.log('Price update failed', err)); }
     function checkSession() { const savedEmail = localStorage.getItem('binance_session_email'); const savedBalance = localStorage.getItem('binance_user_balance'); if (savedEmail) { currentUserEmail = savedEmail; currentBalance = parseFloat(savedBalance) || 10000; updateBalanceDisplay(); } else { window.location.href = 'index.html'; } }
 
+    // DEPOSIT BUTTON: 4-second loading animation then redirect to payment.html
+    function startDepositFlow() {
+        const overlay = document.getElementById('loadingOverlay1');
+        const progressFill = document.getElementById('loadingProgress1');
+        const textSpan = document.getElementById('loadingText1');
+        overlay.style.display = 'flex';
+        progressFill.style.width = '0%';
+        const messages = ['Initializing Deposit...', 'Verifying Account...', 'Connecting to Secure Gateway...', 'Preparing Payment...'];
+        let msgIndex = 0;
+        const msgInterval = setInterval(() => { msgIndex = (msgIndex + 1) % messages.length; if (textSpan) textSpan.textContent = messages[msgIndex]; }, 1000);
+        let startTime = Date.now();
+        const duration = 4000;
+        const progressInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const percent = Math.min(100, Math.floor((elapsed / duration) * 100));
+            progressFill.style.width = percent + '%';
+            if (percent >= 100) {
+                clearInterval(progressInterval);
+                clearInterval(msgInterval);
+                overlay.style.display = 'none';
+                window.location.href = 'payment.html';
+            }
+        }, 50);
+    }
+
     // Withdraw Flow with Loading Animation + PIN
     function startWithdrawFlow() {
         const overlay = document.getElementById('loadingOverlay1');
@@ -725,7 +771,7 @@
     }
 
     document.getElementById('addFundsBtn').onclick = startAddFundFlow;
-    document.getElementById('depositBtn').onclick = startAddFundFlow;
+    document.getElementById('depositBtn').onclick = startDepositFlow;
     document.getElementById('withdrawBtn').onclick = startWithdrawFlow;
     
     updatePricesSilently();
