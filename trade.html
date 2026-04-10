@@ -34,22 +34,56 @@
         ::-webkit-scrollbar { display: none; }
         .tradingview-container { margin-bottom: 16px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(252,213,53,0.2); background: #13161d; height: 380px; }
         
-        /* NEW: Quick amount buttons */
         .quick-amount-btn { background: #2b3139; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
         .quick-amount-btn:hover { background: #f0b90b; color: #181a20; transform: scale(1.05); }
         
-        /* NEW: Price flash animation */
         @keyframes priceFlashUp { 0% { color: #0ecb81; text-shadow: 0 0 5px #0ecb81; } 100% { color: white; text-shadow: none; } }
         @keyframes priceFlashDown { 0% { color: #f6465d; text-shadow: 0 0 5px #f6465d; } 100% { color: white; text-shadow: none; } }
         .price-flash-up { animation: priceFlashUp 0.5s ease-out; }
         .price-flash-down { animation: priceFlashDown 0.5s ease-out; }
         
-        /* NEW: Volume bar */
         .volume-bar { height: 4px; background: #2b3139; border-radius: 4px; overflow: hidden; margin-top: 8px; }
         .volume-fill { height: 100%; background: #f0b90b; border-radius: 4px; width: 0%; transition: width 0.5s; }
-        
-        /* NEW: Depth chart container */
         .depth-chart-container { background: #1e2329; border-radius: 12px; padding: 12px; margin-top: 12px; }
+        
+        /* NEW: Pair Selector Styles */
+        .pair-selector {
+            background: #1e2329;
+            border-radius: 12px;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .pair-selector:hover {
+            background: #2b3139;
+            border-color: #f0b90b;
+        }
+        .pair-dropdown {
+            position: absolute;
+            background: #1e2329;
+            border: 1px solid rgba(252,213,53,0.3);
+            border-radius: 12px;
+            z-index: 100;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+        .pair-dropdown.active {
+            display: block;
+        }
+        .pair-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid #2b3139;
+        }
+        .pair-option:hover {
+            background: #2b3139;
+            color: #f0b90b;
+        }
     </style>
 </head>
 <body>
@@ -71,7 +105,34 @@
         </div>
 
         <div class="px-4">
-            <!-- NEW: Real Balance Display -->
+            <!-- NEW: Pair Selector -->
+            <div class="mb-3 relative">
+                <div class="flex justify-between items-center">
+                    <div class="text-gray-400 text-xs">Trading Pair</div>
+                    <div class="pair-selector" id="pairSelectorBtn">
+                        <span id="selectedPairSymbol" class="font-bold text-white">ETH/USDT</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                    </div>
+                </div>
+                <div id="pairDropdown" class="pair-dropdown w-full mt-1">
+                    <div class="pair-option" data-symbol="BTCUSDT" data-display="BTC/USDT">BTC/USDT - Bitcoin</div>
+                    <div class="pair-option" data-symbol="ETHUSDT" data-display="ETH/USDT">ETH/USDT - Ethereum</div>
+                    <div class="pair-option" data-symbol="BNBUSDT" data-display="BNB/USDT">BNB/USDT - Binance Coin</div>
+                    <div class="pair-option" data-symbol="SOLUSDT" data-display="SOL/USDT">SOL/USDT - Solana</div>
+                    <div class="pair-option" data-symbol="XRPUSDT" data-display="XRP/USDT">XRP/USDT - Ripple</div>
+                    <div class="pair-option" data-symbol="ADAUSDT" data-display="ADA/USDT">ADA/USDT - Cardano</div>
+                    <div class="pair-option" data-symbol="DOGEUSDT" data-display="DOGE/USDT">DOGE/USDT - Dogecoin</div>
+                    <div class="pair-option" data-symbol="AVAXUSDT" data-display="AVAX/USDT">AVAX/USDT - Avalanche</div>
+                    <div class="pair-option" data-symbol="DOTUSDT" data-display="DOT/USDT">DOT/USDT - Polkadot</div>
+                    <div class="pair-option" data-symbol="LINKUSDT" data-display="LINK/USDT">LINK/USDT - Chainlink</div>
+                    <div class="pair-option" data-symbol="MATICUSDT" data-display="MATIC/USDT">MATIC/USDT - Polygon</div>
+                    <div class="pair-option" data-symbol="UNIUSDT" data-display="UNI/USDT">UNI/USDT - Uniswap</div>
+                    <div class="pair-option" data-symbol="ATOMUSDT" data-display="ATOM/USDT">ATOM/USDT - Cosmos</div>
+                    <div class="pair-option" data-symbol="LTCUSDT" data-display="LTC/USDT">LTC/USDT - Litecoin</div>
+                    <div class="pair-option" data-symbol="NEARUSDT" data-display="NEAR/USDT">NEAR/USDT - Near Protocol</div>
+                </div>
+            </div>
+
             <div class="mb-3 flex justify-between items-center">
                 <div class="text-gray-400 text-xs">Available Balance</div>
                 <div class="text-white font-bold" id="balance-display">$10,000.00</div>
@@ -81,20 +142,20 @@
                 <div class="flex gap-2">
                     <div class="bg-red-500/10 border border-red-500 rounded-lg px-4 py-2">
                         <div class="text-red-500 text-xs font-bold">SELL</div>
-                        <div class="text-red-500 text-xl font-black" id="sell-price">2082.89</div>
+                        <div class="text-red-500 text-xl font-black" id="sell-price">0.00</div>
                     </div>
                     <div class="bg-green-500/10 border border-green-500 rounded-lg px-4 py-2">
                         <div class="text-green-500 text-xs font-bold">BUY</div>
-                        <div class="text-green-500 text-xl font-black" id="buy-price">2084.29</div>
+                        <div class="text-green-500 text-xl font-black" id="buy-price">0.00</div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div class="text-white font-bold text-lg">ETH/USDT</div>
+                    <div class="text-white font-bold text-lg" id="trade-symbol">ETH/USDT</div>
                     <div class="text-yellow-500 text-xs">Perpetual</div>
                 </div>
             </div>
             
-            <div class="text-gray-400 text-xs mb-3">Ethereum vs US Dollar</div>
+            <div class="text-gray-400 text-xs mb-3" id="trade-subtitle">Ethereum vs US Dollar</div>
             
             <!-- TradingView Real-Time Chart -->
             <div class="tradingview-container" id="tradingview-widget"></div>
@@ -102,23 +163,23 @@
             <div class="grid grid-cols-2 gap-3 mb-4">
                 <div class="bg-[#1e2329] p-3 rounded-lg">
                     <div class="text-gray-400 text-xs">24h Change</div>
-                    <div class="text-green-500 font-bold" id="trade-24h-change">+2.34%</div>
+                    <div class="text-green-500 font-bold" id="trade-24h-change">+0.00%</div>
                 </div>
                 <div class="bg-[#1e2329] p-3 rounded-lg">
                     <div class="text-gray-400 text-xs">24h Volume</div>
-                    <div class="text-white font-bold" id="trade-24h-volume">$1.2B</div>
+                    <div class="text-white font-bold" id="trade-24h-volume">$0</div>
                 </div>
                 <div class="bg-[#1e2329] p-3 rounded-lg">
                     <div class="text-gray-400 text-xs">24h High</div>
-                    <div class="text-white font-bold" id="trade-24h-high">$2,134</div>
+                    <div class="text-white font-bold" id="trade-24h-high">$0</div>
                 </div>
                 <div class="bg-[#1e2329] p-3 rounded-lg">
                     <div class="text-gray-400 text-xs">24h Low</div>
-                    <div class="text-white font-bold" id="trade-24h-low">$2,078</div>
+                    <div class="text-white font-bold" id="trade-24h-low">$0</div>
                 </div>
             </div>
             
-            <!-- NEW: Volume Indicator Bar -->
+            <!-- Volume Indicator Bar -->
             <div class="mb-4">
                 <div class="flex justify-between text-xs text-gray-400 mb-1">
                     <span>24h Volume</span>
@@ -130,7 +191,7 @@
             </div>
             
             <div class="bg-[#1e2329] p-4 rounded-xl mb-4">
-                <div class="text-3xl font-bold text-white" id="trade-current-price">$2,084.29</div>
+                <div class="text-3xl font-bold text-white" id="trade-current-price">$0.00</div>
                 <div class="text-sm text-green-500" id="trade-price-change">+0.00%</div>
             </div>
             
@@ -144,7 +205,6 @@
                 <div class="mb-3">
                     <label class="text-gray-400 text-sm">Amount (USDT)</label>
                     <input type="number" id="trade-amount" placeholder="0.00" class="w-full bg-[#2b3139] rounded-lg p-3 text-white mt-1 border border-gray-700">
-                    <!-- NEW: Quick amount buttons -->
                     <div class="flex gap-2 mt-2">
                         <span class="quick-amount-btn" onclick="setQuickAmount(25)">25%</span>
                         <span class="quick-amount-btn" onclick="setQuickAmount(50)">50%</span>
@@ -168,7 +228,7 @@
                     <label class="text-gray-400 text-sm">Total</label>
                     <div class="text-white font-bold mt-1 text-xl" id="trade-total">0.00 USDT</div>
                 </div>
-                <button id="trade-action-btn" class="w-full py-3 rounded-xl font-bold text-white bg-green-500" onclick="placeTrade()">Buy ETH</button>
+                <button id="trade-action-btn" class="w-full py-3 rounded-xl font-bold text-white bg-green-500" onclick="placeTrade()">Buy</button>
             </div>
             
             <div class="mt-4">
@@ -185,14 +245,15 @@
                 </div>
             </div>
             
-            <!-- NEW: Order Book Depth Chart -->
+            <!-- Real Order Book Depth Chart -->
             <div class="depth-chart-container">
-                <h3 class="text-white font-bold mb-2">Order Book Depth</h3>
+                <h3 class="text-white font-bold mb-2">Order Book Depth (Real Binance Data)</h3>
                 <canvas id="depthChart" height="120" width="100%"></canvas>
                 <div class="flex justify-between text-xs text-gray-400 mt-2">
-                    <span>Sell Pressure</span>
-                    <span>Buy Pressure</span>
+                    <span>Sell Pressure (Asks)</span>
+                    <span>Buy Pressure (Bids)</span>
                 </div>
+                <div class="text-[10px] text-gray-500 text-center mt-2" id="depth-status">Connected to Binance WebSocket - Live Data</div>
             </div>
             
             <div class="mt-4">
@@ -205,7 +266,6 @@
                 <div id="open-orders-list" class="text-gray-400 text-sm">No open orders</div>
             </div>
             
-            <!-- NEW: SL/TP History -->
             <div class="mt-4">
                 <h3 class="text-white font-bold mb-2">Stop-Loss / Take-Profit History</h3>
                 <div id="sl-tp-history" class="text-gray-400 text-sm">No SL/TP triggered yet</div>
@@ -255,7 +315,7 @@
 <script>
     let currentUserEmail = null;
     let currentBalance = 10000;
-    let btcPrice = 2084.29;
+    let currentPrice = 0;
     let currentTradeTab = 'buy';
     let openOrders = [];
     let priceAlerts = [];
@@ -263,11 +323,36 @@
     let dcaInterval = null;
     let depthChart = null;
     let sltpHistory = [];
-    
-    // NEW: Track positions with SL/TP
     let activePositions = [];
+    let currentPair = "ETHUSDT";
+    let currentPairDisplay = "ETH/USDT";
+    let currentPairName = "Ethereum";
+    
+    // WebSocket connection
+    let ws = null;
+    let orderBookBids = [];
+    let orderBookAsks = [];
     
     const API_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/sheet1";
+    
+    // Popular trading pairs
+    const pairNames = {
+        "BTCUSDT": "Bitcoin",
+        "ETHUSDT": "Ethereum",
+        "BNBUSDT": "Binance Coin",
+        "SOLUSDT": "Solana",
+        "XRPUSDT": "Ripple",
+        "ADAUSDT": "Cardano",
+        "DOGEUSDT": "Dogecoin",
+        "AVAXUSDT": "Avalanche",
+        "DOTUSDT": "Polkadot",
+        "LINKUSDT": "Chainlink",
+        "MATICUSDT": "Polygon",
+        "UNIUSDT": "Uniswap",
+        "ATOMUSDT": "Cosmos",
+        "LTCUSDT": "Litecoin",
+        "NEARUSDT": "Near Protocol"
+    };
 
     function showToast(msg, isSuccess = true) {
         const toast = document.getElementById('toast-message');
@@ -279,14 +364,12 @@
 
     function formatBalance(amount) { return amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
-    // NEW: Quick amount buttons
     function setQuickAmount(percent) {
         const amount = (currentBalance * percent / 100).toFixed(2);
         document.getElementById('trade-amount').value = amount;
         updateTradeTotal();
     }
 
-    // NEW: Flash price animation
     function flashPrice(oldPrice, newPrice) {
         const priceElement = document.getElementById('trade-current-price');
         if (newPrice > oldPrice) {
@@ -298,43 +381,83 @@
         }
     }
 
-    // Initialize TradingView Widget
-    function initTradingView() {
-        if (typeof TradingView === 'undefined') {
-            setTimeout(initTradingView, 500);
-            return;
+    // Update TradingView chart symbol
+    function updateTradingViewSymbol() {
+        const container = document.getElementById('tradingview-widget');
+        if (container && typeof TradingView !== 'undefined') {
+            container.innerHTML = '';
+            new TradingView.widget({
+                "width": "100%",
+                "height": 380,
+                "symbol": `BINANCE:${currentPair}`,
+                "interval": "15",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#1e2329",
+                "enable_publishing": false,
+                "allow_symbol_change": true,
+                "container_id": "tradingview-widget",
+                "studies": ["MASimple@tv-basicstudies", "RSI@tv-basicstudies", "MACD@tv-basicstudies"]
+            });
         }
-        new TradingView.widget({
-            "width": "100%",
-            "height": 380,
-            "symbol": "BINANCE:ETHUSDT",
-            "interval": "15",
-            "timezone": "Etc/UTC",
-            "theme": "dark",
-            "style": "1",
-            "locale": "en",
-            "toolbar_bg": "#1e2329",
-            "enable_publishing": false,
-            "allow_symbol_change": true,
-            "container_id": "tradingview-widget",
-            "studies": ["MASimple@tv-basicstudies", "RSI@tv-basicstudies", "MACD@tv-basicstudies"]
-        });
     }
 
-    // NEW: Update order book depth chart
-    function updateDepthChart() {
-        const bids = [], asks = [];
-        for (let i = 0; i < 15; i++) { 
-            bids.push({ price: btcPrice * (0.995 - i * 0.0005), amount: Math.random() * 3 + 0.5 }); 
-        }
-        for (let i = 0; i < 15; i++) { 
-            asks.push({ price: btcPrice * (1.005 + i * 0.0005), amount: Math.random() * 3 + 0.5 }); 
+    // Connect to Binance WebSocket for real order book
+    function connectWebSocket() {
+        if (ws) {
+            ws.close();
         }
         
-        const bidPrices = bids.map(b => b.price);
-        const bidAmounts = bids.map(b => b.amount);
-        const askPrices = asks.map(a => a.price);
-        const askAmounts = asks.map(a => a.amount);
+        const streamUrl = `wss://stream.binance.com:9443/ws/${currentPair.toLowerCase()}@depth20@100ms`;
+        ws = new WebSocket(streamUrl);
+        
+        ws.onopen = function() {
+            document.getElementById('depth-status').innerHTML = '✅ Connected to Binance - Live Order Book Data';
+            document.getElementById('depth-status').style.color = '#0ecb81';
+        };
+        
+        ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data.bids && data.asks) {
+                orderBookBids = data.bids.slice(0, 15).map(bid => ({ price: parseFloat(bid[0]), amount: parseFloat(bid[1]) }));
+                orderBookAsks = data.asks.slice(0, 15).map(ask => ({ price: parseFloat(ask[0]), amount: parseFloat(ask[1]) }));
+                updateOrderBookDisplay();
+                updateDepthChartReal();
+            }
+        };
+        
+        ws.onerror = function(error) {
+            document.getElementById('depth-status').innerHTML = '⚠️ WebSocket error - Using fallback data';
+            document.getElementById('depth-status').style.color = '#f6465d';
+        };
+        
+        ws.onclose = function() {
+            setTimeout(connectWebSocket, 5000);
+        };
+    }
+    
+    function updateOrderBookDisplay() {
+        const bidsDiv = document.getElementById('order-book-bids');
+        const asksDiv = document.getElementById('order-book-asks');
+        if (bidsDiv && orderBookBids.length) {
+            bidsDiv.innerHTML = orderBookBids.slice(0, 10).map(b => `<div class="order-book-row"><span class="bid">$${b.price.toFixed(2)}</span><span>${b.amount.toFixed(4)}</span></div>`).join('');
+        }
+        if (asksDiv && orderBookAsks.length) {
+            asksDiv.innerHTML = orderBookAsks.slice(0, 10).map(a => `<div class="order-book-row"><span class="ask">$${a.price.toFixed(2)}</span><span>${a.amount.toFixed(4)}</span></div>`).join('');
+        }
+    }
+    
+    function updateDepthChartReal() {
+        if (!orderBookBids.length && !orderBookAsks.length) return;
+        
+        const bidPrices = orderBookBids.map(b => b.price);
+        const bidAmounts = orderBookBids.map(b => b.amount);
+        const askPrices = orderBookAsks.map(a => a.price);
+        const askAmounts = orderBookAsks.map(a => a.amount);
+        
+        const maxAmount = Math.max(...[...bidAmounts, ...askAmounts], 0.1);
         
         if (depthChart) depthChart.destroy();
         const ctx = document.getElementById('depthChart').getContext('2d');
@@ -343,27 +466,59 @@
             data: {
                 labels: [...bidPrices.map(p => p.toFixed(0)), ...askPrices.map(p => p.toFixed(0))],
                 datasets: [
-                    { label: 'Bids (Buy)', data: [...bidAmounts, ...Array(askAmounts.length).fill(0)], backgroundColor: '#0ecb81', borderRadius: 4 },
-                    { label: 'Asks (Sell)', data: [...Array(bidAmounts.length).fill(0), ...askAmounts], backgroundColor: '#f6465d', borderRadius: 4 }
+                    { label: 'Bids (Buy Orders)', data: [...bidAmounts.map(a => (a / maxAmount) * 100), ...Array(askAmounts.length).fill(0)], backgroundColor: '#0ecb81', borderRadius: 4, barPercentage: 0.9 },
+                    { label: 'Asks (Sell Orders)', data: [...Array(bidAmounts.length).fill(0), ...askAmounts.map(a => (a / maxAmount) * 100)], backgroundColor: '#f6465d', borderRadius: 4, barPercentage: 0.9 }
                 ]
             },
-            options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top', labels: { color: '#848e9c' } } }, scales: { y: { grid: { color: '#2b3139' }, ticks: { color: '#848e9c' } }, x: { ticks: { color: '#848e9c', maxRotation: 45, minRotation: 45 } } } }
+            options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top', labels: { color: '#848e9c', font: { size: 10 } } }, tooltip: { callbacks: { label: function(context) { return `${context.dataset.label}: ${context.raw.toFixed(2)}% depth`; } } } }, scales: { y: { grid: { color: '#2b3139' }, ticks: { color: '#848e9c', callback: function(value) { return value + '%'; } }, title: { display: true, text: 'Market Depth (%)', color: '#848e9c', font: { size: 10 } } }, x: { ticks: { color: '#848e9c', maxRotation: 45, minRotation: 45, font: { size: 9 } }, title: { display: true, text: 'Price (USD)', color: '#848e9c', font: { size: 10 } } } } }
         });
     }
 
-    // NEW: Check SL/TP for active positions
+    function updateBuySellPrices() {
+        const oldPrice = currentPrice;
+        document.getElementById('sell-price').innerText = currentPrice.toFixed(2);
+        document.getElementById('buy-price').innerText = currentPrice.toFixed(2);
+        document.getElementById('trade-current-price').innerText = `$${currentPrice.toFixed(2)}`;
+        flashPrice(oldPrice, currentPrice);
+    }
+
+    // Fetch 24hr ticker data from Binance REST API
+    async function fetch24hrTicker() {
+        try {
+            const res = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${currentPair}`);
+            const data = await res.json();
+            if (data) {
+                currentPrice = parseFloat(data.lastPrice);
+                document.getElementById('trade-24h-change').innerHTML = (parseFloat(data.priceChangePercent) >= 0 ? '+' : '') + parseFloat(data.priceChangePercent).toFixed(2) + '%';
+                document.getElementById('trade-24h-change').className = parseFloat(data.priceChangePercent) >= 0 ? 'text-green-500 font-bold' : 'text-red-500 font-bold';
+                document.getElementById('trade-24h-volume').innerHTML = '$' + (parseFloat(data.quoteVolume) / 1000000000).toFixed(2) + 'B';
+                document.getElementById('trade-24h-high').innerHTML = '$' + parseFloat(data.highPrice).toFixed(2);
+                document.getElementById('trade-24h-low').innerHTML = '$' + parseFloat(data.lowPrice).toFixed(2);
+                const volumePercent = Math.min(100, (parseFloat(data.quoteVolume) / 10000000000) * 100);
+                document.getElementById('volume-fill').style.width = volumePercent + '%';
+                document.getElementById('volume-percent').innerText = volumePercent.toFixed(0) + '%';
+                
+                const change = ((currentPrice - 2000) / 2000 * 100).toFixed(2);
+                document.getElementById('trade-price-change').innerText = `${change >= 0 ? '+' : ''}${change}%`;
+                document.getElementById('trade-price-change').className = `text-sm ${change >= 0 ? 'text-green-500' : 'text-red-500'}`;
+                
+                updateBuySellPrices();
+            }
+        } catch (err) { console.error('Error fetching ticker:', err); }
+    }
+
     function checkSLTP() {
         for (let i = 0; i < activePositions.length; i++) {
             const pos = activePositions[i];
-            if (pos.stopLoss && btcPrice <= pos.stopLoss) {
-                showToast(`🔴 STOP LOSS TRIGGERED! Closed ${pos.amount} ETH at $${pos.stopLoss}`, false);
-                sltpHistory.unshift({ type: 'STOP LOSS', amount: pos.amount, price: pos.stopLoss, time: new Date().toLocaleTimeString() });
+            if (pos.stopLoss && currentPrice <= pos.stopLoss) {
+                showToast(`🔴 STOP LOSS TRIGGERED! Closed ${pos.amount} at $${pos.stopLoss}`, false);
+                sltpHistory.unshift({ type: 'STOP LOSS', amount: pos.amount, price: pos.stopLoss, time: new Date().toLocaleTimeString(), pair: currentPairDisplay });
                 activePositions.splice(i, 1);
                 renderSLTPHistory();
                 i--;
-            } else if (pos.takeProfit && btcPrice >= pos.takeProfit) {
-                showToast(`🟢 TAKE PROFIT TRIGGERED! Closed ${pos.amount} ETH at $${pos.takeProfit}`, true);
-                sltpHistory.unshift({ type: 'TAKE PROFIT', amount: pos.amount, price: pos.takeProfit, time: new Date().toLocaleTimeString() });
+            } else if (pos.takeProfit && currentPrice >= pos.takeProfit) {
+                showToast(`🟢 TAKE PROFIT TRIGGERED! Closed ${pos.amount} at $${pos.takeProfit}`, true);
+                sltpHistory.unshift({ type: 'TAKE PROFIT', amount: pos.amount, price: pos.takeProfit, time: new Date().toLocaleTimeString(), pair: currentPairDisplay });
                 activePositions.splice(i, 1);
                 renderSLTPHistory();
                 i--;
@@ -375,37 +530,12 @@
         const container = document.getElementById('sl-tp-history');
         if (!container) return;
         if (sltpHistory.length === 0) { container.innerHTML = '<div class="text-gray-400 text-sm">No SL/TP triggered yet</div>'; return; }
-        container.innerHTML = sltpHistory.slice(0, 10).map(h => `<div class="trade-row"><span class="${h.type === 'STOP LOSS' ? 'text-red-500' : 'text-green-500'}">${h.type}</span><span>${h.amount} ETH</span><span>$${h.price}</span><span class="text-gray-500">${h.time}</span></div>`).join('');
-    }
-
-    function updateBuySellPrices() {
-        const oldPrice = btcPrice;
-        const lastCandle = { close: btcPrice };
-        const sellPrice = btcPrice * 0.999;
-        const buyPrice = btcPrice;
-        document.getElementById('sell-price').innerText = sellPrice.toFixed(2);
-        document.getElementById('buy-price').innerText = buyPrice.toFixed(2);
-        document.getElementById('trade-current-price').innerText = `$${buyPrice.toFixed(2)}`;
-        flashPrice(oldPrice, buyPrice);
-        const change = ((buyPrice - 2084.29) / 2084.29 * 100).toFixed(2);
-        document.getElementById('trade-price-change').innerText = `${change >= 0 ? '+' : ''}${change}%`;
-        document.getElementById('trade-price-change').className = `text-sm ${change >= 0 ? 'text-green-500' : 'text-red-500'}`;
-        updateDepthChart();
-        checkSLTP();
-    }
-
-    function startLivePriceUpdates() {
-        setInterval(() => {
-            const changePercent = (Math.random() - 0.5) * 0.004;
-            const newPrice = btcPrice * (1 + changePercent);
-            btcPrice = newPrice;
-            updateBuySellPrices();
-        }, 3000);
+        container.innerHTML = sltpHistory.slice(0, 10).map(h => `<div class="trade-row"><span class="${h.type === 'STOP LOSS' ? 'text-red-500' : 'text-green-500'}">${h.type}</span><span>${h.amount} ${currentPairDisplay.split('/')[0]}</span><span>$${h.price}</span><span class="text-gray-500">${h.time}</span></div>`).join('');
     }
 
     function placeTrade() {
         const amount = parseFloat(document.getElementById('trade-amount').value);
-        const price = parseFloat(document.getElementById('trade-price').value) || btcPrice;
+        const price = parseFloat(document.getElementById('trade-price').value) || currentPrice;
         const stopLoss = parseFloat(document.getElementById('stop-loss')?.value) || null;
         const takeProfit = parseFloat(document.getElementById('take-profit')?.value) || null;
         
@@ -417,18 +547,18 @@
             currentBalance -= total;
             localStorage.setItem('binance_user_balance', currentBalance);
             document.getElementById('balance-display').innerText = `$${formatBalance(currentBalance)}`;
-            showToast(`✅ BOUGHT ${amount.toFixed(4)} ETH at $${price.toFixed(2)} for $${total.toFixed(2)}`, true);
+            showToast(`✅ BOUGHT ${amount.toFixed(4)} ${currentPairDisplay.split('/')[0]} at $${price.toFixed(2)} for $${total.toFixed(2)}`, true);
             if (stopLoss || takeProfit) {
-                activePositions.push({ amount: amount, entryPrice: price, stopLoss: stopLoss, takeProfit: takeProfit });
+                activePositions.push({ amount: amount, entryPrice: price, stopLoss: stopLoss, takeProfit: takeProfit, pair: currentPairDisplay });
                 showToast(`📊 SL/TP set: SL: $${stopLoss || 'N/A'}, TP: $${takeProfit || 'N/A'}`, true);
             }
         } else if (currentTradeTab === 'sell') {
-            showToast(`✅ SOLD ${amount.toFixed(4)} ETH at $${price.toFixed(2)} for $${total.toFixed(2)}`, true);
+            showToast(`✅ SOLD ${amount.toFixed(4)} ${currentPairDisplay.split('/')[0]} at $${price.toFixed(2)} for $${total.toFixed(2)}`, true);
         } else if (currentTradeTab === 'limit') {
-            const newOrder = { id: Date.now(), side: 'limit', amount: amount, price: price, total: total, stopLoss: stopLoss, takeProfit: takeProfit, timestamp: new Date().toLocaleString() };
+            const newOrder = { id: Date.now(), side: 'limit', amount: amount, price: price, total: total, stopLoss: stopLoss, takeProfit: takeProfit, timestamp: new Date().toLocaleString(), pair: currentPairDisplay };
             openOrders.unshift(newOrder);
             renderOpenOrders();
-            showToast(`📊 LIMIT ORDER placed: ${amount.toFixed(4)} ETH at $${price.toFixed(2)}`, true);
+            showToast(`📊 LIMIT ORDER placed: ${amount.toFixed(4)} ${currentPairDisplay.split('/')[0]} at $${price.toFixed(2)}`, true);
         }
         
         const tradesContainer = document.getElementById('recent-trades-list');
@@ -436,7 +566,7 @@
             const sideText = currentTradeTab === 'buy' ? 'BUY' : (currentTradeTab === 'sell' ? 'SELL' : 'LIMIT');
             const sideClass = currentTradeTab === 'buy' ? 'text-green-500' : (currentTradeTab === 'sell' ? 'text-red-500' : 'text-yellow-500');
             const arrow = currentTradeTab === 'buy' ? '▲' : (currentTradeTab === 'sell' ? '▼' : '●');
-            const newTradeHtml = `<div class="trade-row"><span class="${sideClass}">${arrow} ${sideText}</span><span>${amount.toFixed(4)} ETH</span><span>$${price.toFixed(2)}</span><span class="text-gray-500">${new Date().toLocaleTimeString()}</span></div>`;
+            const newTradeHtml = `<div class="trade-row"><span class="${sideClass}">${arrow} ${sideText}</span><span>${amount.toFixed(4)} ${currentPairDisplay.split('/')[0]}</span><span>$${price.toFixed(2)}</span><span class="text-gray-500">${new Date().toLocaleTimeString()}</span></div>`;
             tradesContainer.innerHTML = newTradeHtml + tradesContainer.innerHTML;
             if (tradesContainer.children.length > 15) tradesContainer.removeChild(tradesContainer.lastChild);
         }
@@ -448,7 +578,7 @@
 
     function updateTradeTotal() {
         const amount = parseFloat(document.getElementById('trade-amount').value) || 0;
-        const price = parseFloat(document.getElementById('trade-price').value) || btcPrice;
+        const price = parseFloat(document.getElementById('trade-price').value) || currentPrice;
         document.getElementById('trade-total').innerText = (amount * price).toFixed(2) + ' USDT';
     }
 
@@ -464,8 +594,8 @@
             actionBtn.className = 'w-full py-3 rounded-xl font-bold text-white bg-blue-500';
         } else {
             priceInput.disabled = true;
-            priceInput.value = btcPrice;
-            actionBtn.innerText = tab === 'buy' ? 'Buy ETH' : 'Sell ETH';
+            priceInput.value = currentPrice;
+            actionBtn.innerText = tab === 'buy' ? `Buy ${currentPairDisplay.split('/')[0]}` : `Sell ${currentPairDisplay.split('/')[0]}`;
             actionBtn.className = `w-full py-3 rounded-xl font-bold text-white ${tab === 'buy' ? 'bg-green-500' : 'bg-red-500'}`;
         }
     }
@@ -474,28 +604,16 @@
         const container = document.getElementById('open-orders-list');
         if (!container) return;
         if (openOrders.length === 0) { container.innerHTML = '<div class="text-gray-400 text-sm">No open orders</div>'; return; }
-        container.innerHTML = openOrders.map(order => `<div class="bg-[#2b3139] p-3 rounded-lg mb-2"><div class="flex justify-between text-sm"><span class="text-yellow-500 font-bold">LIMIT</span><span class="text-white">${order.amount} ETH</span><span class="text-gray-400">$${order.price}</span><button onclick="cancelOrder(${order.id})" class="text-red-500 text-xs">Cancel</button></div>${order.stopLoss ? `<div class="text-xs text-gray-400 mt-1">SL: $${order.stopLoss}</div>` : ''}${order.takeProfit ? `<div class="text-xs text-gray-400">TP: $${order.takeProfit}</div>` : ''}</div>`).join('');
+        container.innerHTML = openOrders.map(order => `<div class="bg-[#2b3139] p-3 rounded-lg mb-2"><div class="flex justify-between text-sm"><span class="text-yellow-500 font-bold">LIMIT</span><span class="text-white">${order.amount} ${order.pair.split('/')[0]}</span><span class="text-gray-400">$${order.price}</span><button onclick="cancelOrder(${order.id})" class="text-red-500 text-xs">Cancel</button></div>${order.stopLoss ? `<div class="text-xs text-gray-400 mt-1">SL: $${order.stopLoss}</div>` : ''}${order.takeProfit ? `<div class="text-xs text-gray-400">TP: $${order.takeProfit}</div>` : ''}</div>`).join('');
     }
 
     function cancelOrder(id) { openOrders = openOrders.filter(o => o.id !== id); renderOpenOrders(); showToast('Order cancelled', true); }
 
-    function renderOrderBook() {
-        const bidsDiv = document.getElementById('order-book-bids');
-        const asksDiv = document.getElementById('order-book-asks');
-        if (!bidsDiv) return;
-        const bids = [], asks = [];
-        for (let i = 0; i < 10; i++) { bids.push({ price: btcPrice * (0.995 - i * 0.0005), amount: (Math.random() * 2).toFixed(4) }); }
-        for (let i = 0; i < 10; i++) { asks.push({ price: btcPrice * (1.005 + i * 0.0005), amount: (Math.random() * 2).toFixed(4) }); }
-        bidsDiv.innerHTML = bids.map(b => `<div class="order-book-row"><span class="bid">$${b.price.toFixed(2)}</span><span>${b.amount}</span></div>`).join('');
-        asksDiv.innerHTML = asks.map(a => `<div class="order-book-row"><span class="ask">$${a.price.toFixed(2)}</span><span>${a.amount}</span></div>`).join('');
-        updateDepthChart();
-    }
-
     function setPriceAlert() {
         const price = parseFloat(document.getElementById('alert-price')?.value);
         if (!price || price <= 0) { showToast('Please enter a valid price', false); return; }
-        priceAlerts.push({ price, triggered: false });
-        showToast(`Alert set for $${price}`, true);
+        priceAlerts.push({ price, triggered: false, pair: currentPairDisplay });
+        showToast(`Alert set for $${price} on ${currentPairDisplay}`, true);
         document.getElementById('alert-price').value = '';
         renderActiveAlerts();
     }
@@ -503,16 +621,16 @@
     function renderActiveAlerts() {
         const container = document.getElementById('active-alerts');
         if (!container) return;
-        container.innerHTML = priceAlerts.map((a, i) => `<div class="text-sm text-gray-400">$${a.price} <button onclick="removeAlert(${i})" class="text-red-500 ml-2">✕</button></div>`).join('');
+        container.innerHTML = priceAlerts.map((a, i) => `<div class="text-sm text-gray-400">${a.pair} - $${a.price} <button onclick="removeAlert(${i})" class="text-red-500 ml-2">✕</button></div>`).join('');
     }
 
     function removeAlert(index) { priceAlerts.splice(index, 1); renderActiveAlerts(); }
 
     function checkPriceAlerts() {
         priceAlerts.forEach(alert => {
-            if (!alert.triggered && Math.abs(btcPrice - alert.price) / alert.price < 0.01) {
+            if (!alert.triggered && Math.abs(currentPrice - alert.price) / alert.price < 0.01 && alert.pair === currentPairDisplay) {
                 alert.triggered = true;
-                showToast(`⚠️ Price Alert: ETH reached $${btcPrice.toFixed(2)}`, true);
+                showToast(`⚠️ Price Alert: ${currentPairDisplay} reached $${currentPrice.toFixed(2)}`, true);
             }
         });
     }
@@ -530,11 +648,11 @@
                 currentBalance -= amount; 
                 localStorage.setItem('binance_user_balance', currentBalance);
                 document.getElementById('balance-display').innerText = `$${formatBalance(currentBalance)}`;
-                showToast(`DCA: Bought $${amount} worth of ETH`, true); 
+                showToast(`DCA: Bought $${amount} worth of ${currentPairDisplay.split('/')[0]}`, true); 
             }
         }, intervalMs);
-        showToast(`DCA started: $${amount} ${interval}`, true);
-        document.getElementById('dca-status').innerText = `Active: $${amount} ${interval}`;
+        showToast(`DCA started: $${amount} ${interval} on ${currentPairDisplay}`, true);
+        document.getElementById('dca-status').innerText = `Active: $${amount} ${interval} on ${currentPairDisplay}`;
     }
 
     function toggleProfilePopup() {
@@ -583,38 +701,88 @@
         }
     }
 
-    async function updateLiveTicker() {
-        try {
-            const res = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=ETHUSDT');
-            const data = await res.json();
-            if (data) {
-                document.getElementById('trade-24h-change').innerHTML = (parseFloat(data.priceChangePercent) >= 0 ? '+' : '') + parseFloat(data.priceChangePercent).toFixed(2) + '%';
-                document.getElementById('trade-24h-volume').innerHTML = '$' + (parseFloat(data.quoteVolume) / 1000000000).toFixed(1) + 'B';
-                document.getElementById('trade-24h-high').innerHTML = '$' + parseFloat(data.highPrice).toFixed(2);
-                document.getElementById('trade-24h-low').innerHTML = '$' + parseFloat(data.lowPrice).toFixed(2);
-                const volumePercent = Math.min(100, (parseFloat(data.quoteVolume) / 5000000000) * 100);
-                document.getElementById('volume-fill').style.width = volumePercent + '%';
-                document.getElementById('volume-percent').innerText = volumePercent.toFixed(0) + '%';
-                btcPrice = parseFloat(data.lastPrice);
-                updateBuySellPrices();
-            }
-        } catch (err) { }
+    // Change trading pair
+    function changePair(symbol, display, name) {
+        currentPair = symbol;
+        currentPairDisplay = display;
+        currentPairName = name;
+        
+        document.getElementById('selectedPairSymbol').innerText = display;
+        document.getElementById('trade-symbol').innerText = display;
+        document.getElementById('trade-subtitle').innerHTML = `${name} vs US Dollar`;
+        
+        // Update TradingView chart
+        updateTradingViewSymbol();
+        
+        // Reconnect WebSocket for new pair
+        connectWebSocket();
+        
+        // Fetch new 24hr data
+        fetch24hrTicker();
+        
+        // Update trade button text
+        const actionBtn = document.getElementById('trade-action-btn');
+        if (currentTradeTab === 'buy') actionBtn.innerText = `Buy ${display.split('/')[0]}`;
+        else if (currentTradeTab === 'sell') actionBtn.innerText = `Sell ${display.split('/')[0]}`;
+        
+        document.getElementById('pairDropdown').classList.remove('active');
+        showToast(`Switched to ${display}`, true);
+    }
+
+    // Pair selector event listeners
+    function initPairSelector() {
+        const selectorBtn = document.getElementById('pairSelectorBtn');
+        const dropdown = document.getElementById('pairDropdown');
+        
+        selectorBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('active');
+        });
+        
+        document.querySelectorAll('.pair-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                const symbol = option.getAttribute('data-symbol');
+                const display = option.getAttribute('data-display');
+                const name = pairNames[symbol] || display.split('/')[0];
+                changePair(symbol, display, name);
+            });
+        });
+        
+        document.addEventListener('click', () => {
+            dropdown.classList.remove('active');
+        });
+    }
+
+    // Start price update interval
+    function startPriceUpdates() {
+        setInterval(() => {
+            fetch24hrTicker();
+            checkPriceAlerts();
+            checkSLTP();
+        }, 5000);
     }
 
     window.addEventListener('load', () => {
         checkSession();
         lucide.createIcons();
-        renderOrderBook();
-        startLivePriceUpdates();
-        setInterval(updateLiveTicker, 5000);
-        setInterval(checkPriceAlerts, 5000);
-        updateLiveTicker();
+        initTradingView();
+        initPairSelector();
+        connectWebSocket();
+        fetch24hrTicker();
+        startPriceUpdates();
         document.getElementById('trade-amount').addEventListener('input', updateTradeTotal);
         document.getElementById('trade-price').addEventListener('input', updateTradeTotal);
-        initTradingView();
     });
 
-    window.addEventListener('resize', () => { updateDepthChart(); });
+    function initTradingView() {
+        if (typeof TradingView === 'undefined') {
+            setTimeout(initTradingView, 500);
+            return;
+        }
+        updateTradingViewSymbol();
+    }
+
+    window.addEventListener('resize', () => { if (depthChart) depthChart.update(); });
 </script>
 </body>
 </html>
