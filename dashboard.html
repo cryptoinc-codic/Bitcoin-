@@ -8,6 +8,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- TradingView Widget Script -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
         :root { --binance-yellow: #FCD535; --bg-dark: #0B0E11; --bg-light: #ffffff; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-dark); font-family: 'Segoe UI', sans-serif; overflow: hidden; }
@@ -206,6 +208,15 @@
             transform: scale(1.05);
             box-shadow: 0 0 10px rgba(240,185,11,0.5);
         }
+        
+        /* TradingView Widget Container */
+        .tradingview-container {
+            margin: 20px 16px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(252,213,53,0.2);
+            background: #13161d;
+        }
     </style>
 </head>
 <body>
@@ -265,6 +276,11 @@
                     <div class="flex justify-between items-center mb-2"><span class="text-gray-400 text-xs">Portfolio Performance (7 days)</span><span class="text-green-500 text-xs" id="portfolioChange">+12.4%</span></div>
                     <canvas id="portfolioChart" height="100" width="100%"></canvas>
                 </div>
+            </div>
+
+            <!-- TRADINGVIEW CHART ADDED HERE - REAL-TIME CANDLESTICK CHART -->
+            <div class="tradingview-container">
+                <div id="tradingview-widget" style="height: 400px;"></div>
             </div>
 
             <div class="grid grid-cols-3 gap-2 px-4 mb-6">
@@ -415,6 +431,35 @@
     let allocationChart = null;
     let isBalanceHidden = true;
     let liveChartInterval = null;
+
+    // Initialize TradingView Widget
+    function initTradingView() {
+        if (typeof TradingView === 'undefined') {
+            console.log('TradingView not loaded yet, retrying...');
+            setTimeout(initTradingView, 500);
+            return;
+        }
+        
+        new TradingView.widget({
+            "width": "100%",
+            "height": 400,
+            "symbol": "BINANCE:BTCUSDT",
+            "interval": "15",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#1e2329",
+            "enable_publishing": false,
+            "allow_symbol_change": true,
+            "container_id": "tradingview-widget",
+            "studies": [
+                "MASimple@tv-basicstudies",
+                "RSI@tv-basicstudies",
+                "MACD@tv-basicstudies"
+            ]
+        });
+    }
 
     // Set profile letter from email
     function setProfileLetter() {
@@ -729,28 +774,18 @@
     let lastPrice = 12750;
 
     function updateLiveChart() {
-        // Realistic price movement (-0.8% to +0.8%)
         const changePercent = (Math.random() - 0.5) * 1.6;
         const change = lastPrice * (changePercent / 100);
         let newPrice = lastPrice + change;
-        
-        // Ensure price stays within reasonable range
         if (newPrice < currentBalance * 0.95) newPrice = currentBalance * 0.96;
         if (newPrice > currentBalance * 1.05) newPrice = currentBalance * 1.04;
-        
         lastPrice = newPrice;
-        
-        // Add new price, remove oldest
         portfolioData.push(newPrice);
         if (portfolioData.length > 7) portfolioData.shift();
-        
-        // Update chart
         if (portfolioChart) {
             portfolioChart.data.datasets[0].data = portfolioData;
             portfolioChart.update();
         }
-        
-        // Update change percentage display
         const firstPrice = portfolioData[0];
         const lastPriceDisplay = portfolioData[portfolioData.length - 1];
         const totalChange = ((lastPriceDisplay - firstPrice) / firstPrice * 100).toFixed(2);
@@ -950,11 +985,13 @@
     renderTestimonials();
     renderCurrencies();
     
+    // Initialize TradingView chart after page loads
     window.addEventListener('load', () => {
         checkSession();
         populateRecentActivity();
         lucide.createIcons();
         showView('home');
+        setTimeout(initTradingView, 1000);
     });
 </script>
 </body>
