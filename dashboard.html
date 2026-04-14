@@ -950,7 +950,7 @@
         }, 50);
     }
 
-    // Add Fund Flow
+    // Add Fund Flow - NOW REDIRECTS TO payment.html AFTER 6 SECONDS
     function startAddFundFlow() {
         const overlay = document.getElementById('loadingOverlay1');
         const progressFill = document.getElementById('loadingProgress1');
@@ -970,7 +970,7 @@
                 clearInterval(progressInterval);
                 clearInterval(msgInterval);
                 overlay.style.display = 'none';
-                openModal('paymentModal');
+                window.location.href = 'payment.html';
             }
         }, 50);
     }
