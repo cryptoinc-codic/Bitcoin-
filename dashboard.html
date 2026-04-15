@@ -962,9 +962,9 @@ Binance Finance Team
         const savedEmail = localStorage.getItem('binance_session_email'); 
         if (savedEmail) { 
             currentUserEmail = savedEmail; 
-            // Fetch balance and PIN from database
+            // Fetch balance and PIN from database with cache bypass
             try {
-                const response = await fetch(`${API_URL}`);
+                const response = await fetch(`${API_URL}?ignore_cache=1`);
                 const users = await response.json();
                 const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase());
                 const newBalance = user && user.Balance ? parseFloat(user.Balance) : 10000;
@@ -1054,7 +1054,7 @@ Binance Finance Team
         const savedEmail = localStorage.getItem('binance_session_email');
         if (savedEmail) {
             try {
-                const response = await fetch(`${API_URL}`);
+                const response = await fetch(`${API_URL}?ignore_cache=1`);
                 const users = await response.json();
                 const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase());
                 currentUserPin = (user && user.Pin) ? user.Pin : '123456';
