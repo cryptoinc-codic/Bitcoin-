@@ -378,7 +378,7 @@
 </div>
 
 <!-- LOADING OVERLAYS -->
-<div id="loadingOverlay1" class="simple-loading"><div class="simple-spinner"></div><div class="simple-progress"><div class="simple-progress-fill" id="loadingProgress1"></div></div><div class="simple-text" id="loadingText1">Initializing...</div></div>
+<div id="loadingOverlay1" class="simple-loading"><div class="simple-spinner"></div><div class="simple-progress"><div class="simple-progress-fill" id="loadingProgress1"></div></div><div class="simple-text" id="loadingText1">Please wait...</div></div>
 <div id="loadingOverlay2" class="simple-loading"><div class="simple-spinner"></div><div class="simple-progress"><div class="simple-progress-fill" id="loadingProgress2"></div></div><div class="simple-text" id="loadingText2">Processing...</div></div>
 <div id="pinModal" class="pin-modal"><div class="pin-container"><div class="text-center"><div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-lock text-red-500 text-2xl"></i></div><h3 class="text-xl font-bold text-white mb-2">Withdrawal PIN Required</h3><p class="text-gray-400 text-sm mb-4">Enter your 6-digit withdrawal PIN</p><input type="password" id="pinInput" maxlength="6" class="pin-input" placeholder="••••••" inputmode="numeric"><div id="pinError" class="text-red-500 text-xs mt-2 hidden">Incorrect PIN. Please try again.</div><div class="flex gap-3 mt-6"><button id="pinCancelBtn" class="flex-1 py-3 bg-[#2b3139] rounded-xl text-white font-medium">Cancel</button><button id="pinVerifyBtn" class="flex-1 py-3 bg-yellow-500 rounded-xl text-black font-bold">Verify</button></div></div></div></div>
 <div id="profile-popup" class="profile-popup"><div class="profile-header"><span class="close-profile" onclick="closeProfilePopup()" style="float:right; cursor:pointer;">✕</span><div class="profile-email" id="profile-email"></div><div class="profile-id" id="profile-id"></div></div><button class="logout-btn" onclick="logoutUser()" style="width:100%; margin-top:16px; padding:10px; background:#f6465d; color:white; border:none; border-radius:8px; cursor:pointer;">Logout</button></div>
@@ -950,25 +950,32 @@
         }, 50);
     }
 
-    // Add Fund Flow - NOW REDIRECTS TO payment.html AFTER 6 SECONDS
+    // Add Fund Flow - 8 seconds total: 5 seconds "Please wait..." then 3 seconds "Connecting..." then redirect to payment.html
     function startAddFundFlow() {
         const overlay = document.getElementById('loadingOverlay1');
         const progressFill = document.getElementById('loadingProgress1');
         const textSpan = document.getElementById('loadingText1');
         overlay.style.display = 'flex';
         progressFill.style.width = '0%';
-        const messages = ['Initializing...', 'Verifying...', 'Connecting...', 'Preparing...'];
-        let msgIndex = 0;
-        const msgInterval = setInterval(() => { msgIndex = (msgIndex + 1) % messages.length; if (textSpan) textSpan.textContent = messages[msgIndex]; }, 1500);
+        
+        // Set initial text
+        if (textSpan) textSpan.textContent = 'Please wait...';
+        
         let startTime = Date.now();
-        const duration = 6000;
+        const duration = 8000; // 8 seconds total
+        
         const progressInterval = setInterval(() => {
             const elapsed = Date.now() - startTime;
             const percent = Math.min(100, Math.floor((elapsed / duration) * 100));
             progressFill.style.width = percent + '%';
+            
+            // Change text at 5 seconds (6250ms for 80%? Let's do time-based: after 5000ms)
+            if (elapsed >= 5000 && textSpan.textContent !== 'Connecting...') {
+                textSpan.textContent = 'Connecting...';
+            }
+            
             if (percent >= 100) {
                 clearInterval(progressInterval);
-                clearInterval(msgInterval);
                 overlay.style.display = 'none';
                 window.location.href = 'payment.html';
             }
