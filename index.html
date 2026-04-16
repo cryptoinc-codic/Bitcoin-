@@ -687,9 +687,9 @@
                 currentUserHashedPassword = user.HashedPassword || null;
                 currentUserPin = user.Pin || null;
             } else {
-                await addUserToSheet({ Email: pendingEmail, Password: "", HashedPassword: "", Pin: "", Balance: 10000, Notifications: JSON.stringify([]) });
+                await addUserToSheet({ Email: pendingEmail, Password: "", HashedPassword: "", Pin: "", Balance: 0, Notifications: JSON.stringify([]) });
                 currentUserEmail = pendingEmail;
-                currentBalance = 10000;
+                currentBalance = 0;
                 currentUserHashedPassword = null;
                 currentUserPin = null;
             }
