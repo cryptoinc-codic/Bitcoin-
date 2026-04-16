@@ -381,7 +381,7 @@
 <div id="loadingOverlay1" class="simple-loading"><div class="simple-spinner"></div><div class="simple-progress"><div class="simple-progress-fill" id="loadingProgress1"></div></div><div class="simple-text" id="loadingText1">Please wait...</div></div>
 <div id="loadingOverlay2" class="simple-loading"><div class="simple-spinner"></div><div class="simple-progress"><div class="simple-progress-fill" id="loadingProgress2"></div></div><div class="simple-text" id="loadingText2">Processing...</div></div>
 <div id="pinModal" class="pin-modal"><div class="pin-container"><div class="text-center"><div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-lock text-red-500 text-2xl"></i></div><h3 class="text-xl font-bold text-white mb-2">Withdrawal PIN Required</h3><p class="text-gray-400 text-sm mb-4">Enter your 6-digit withdrawal PIN</p><input type="password" id="pinInput" maxlength="6" class="pin-input" placeholder="••••••" inputmode="numeric"><div id="pinError" class="text-red-500 text-xs mt-2 hidden">Incorrect PIN. Please try again.</div><div class="flex gap-3 mt-6"><button id="pinCancelBtn" class="flex-1 py-3 bg-[#2b3139] rounded-xl text-white font-medium">Cancel</button><button id="pinVerifyBtn" class="flex-1 py-3 bg-yellow-500 rounded-xl text-black font-bold">Verify</button></div></div></div></div>
-<div id="profile-popup" class="profile-popup"><div class="profile-header"><span class="close-profile" onclick="closeProfilePopup()" style="float:right; cursor:pointer;">✕</span><div class="profile-email" id="profile-email"></div><div class="profile-id" id="profile-id"></div></div><button class="logout-btn" onclick="logoutUser()" style="width:100%; margin-top:16px; padding:10px; background:#f6465d; color:white; border:none; border-radius:8px; cursor:pointer;">Logout</button></div>
+<div id="profile-popup" class="profile-popup"><div class="profile-header"><span class="close-profile" onclick="closeProfilePopup()" style="float:right; cursor:pointer;">✕</span><div class="profile-email" id="profile-email"></div><div class="profile-id" id="profile-id"></div><div style="display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 8px; border-top: 1px solid #2b3139;"><span style="font-size: 11px; color: #848e9c;">Account ID:</span><span id="profile-account-id" style="font-size: 11px; font-family: monospace; color: #f0b90b;"></span><button onclick="copyAccountId()" style="background: #f0b90b; color: #181a20; border: none; border-radius: 6px; padding: 4px 10px; font-size: 10px; cursor: pointer; font-weight: bold;">📋 Copy</button></div></div><button class="logout-btn" onclick="logoutUser()" style="width:100%; margin-top:16px; padding:10px; background:#f6465d; color:white; border:none; border-radius:8px; cursor:pointer;">Logout</button></div>
 <div id="toast-message" class="toast-message"></div>
 
 <!-- ==================== ALL MODALS ==================== -->
@@ -429,13 +429,25 @@
     const API_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/sheet1";
     const TRANSACTIONS_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/Transactions";
     let currentUserEmail = null;
-    let currentBalance = 12500;
+    let currentBalance = 0;
     let currentUserPin = null;
+    let currentUserAccountId = null;
     let portfolioChart = null;
     let allocationChart = null;
     let isBalanceHidden = true;
     let liveChartInterval = null;
     let lastKnownBalance = null;
+
+    // Copy Account ID to clipboard
+    function copyAccountId() {
+        const accountId = document.getElementById('profile-account-id').innerText;
+        if (accountId && accountId !== 'None') {
+            navigator.clipboard.writeText(accountId);
+            showToast('Account ID copied to clipboard!', true);
+        } else {
+            showToast('No Account ID found', false);
+        }
+    }
 
     // Initialize TradingView Widget
     function initTradingView() {
@@ -473,23 +485,6 @@
             const firstLetter = savedEmail.charAt(0).toUpperCase();
             const letterElement = document.getElementById('profileLetterIcon');
             if (letterElement) letterElement.textContent = firstLetter;
-        }
-    }
-
-    // Save transaction to the Transactions sheet
-    async function saveTransactionToSheet(amountInCents) {
-        try {
-            const sign = amountInCents >= 0 ? '+' : '';
-            const transactionValue = `${sign}${amountInCents}`;
-            
-            await fetch(TRANSACTIONS_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify([{ Amount: transactionValue }])
-            });
-            console.log('Transaction saved:', transactionValue);
-        } catch (error) {
-            console.error('Failed to save transaction:', error);
         }
     }
 
@@ -862,7 +857,17 @@
     function renderCopyTrading() { const container = document.getElementById('trader-list'); if(!container) return; container.innerHTML = ''; traders.forEach(t => { container.innerHTML += `<div class="copy-card"><div class="badge">⭐ Top Trader</div><div class="copy-header"><img src="${t.img}" class="avatar" alt="${t.name}"><div class="user-info"><h3>${t.name}</h3><div class="user-stats">👤 ${t.subs} followers <span class="min-tag">Min 10USDT</span></div></div></div><div class="pnl-section"><div><div class="pnl-label">7D PNL (USDT)</div><div class="pnl-value">+$${t.pnl}</div></div></div><div class="stats-grid"><div class="stat-item"><label>ROI</label><span class="positive">+${t.roi}%</span></div><div class="stat-item"><label>AUM</label><span>$${parseInt(t.aum).toLocaleString()}</span></div><div class="stat-item"><label>Win Rate</label><span>${t.win}%</span></div></div><button class="mt-3 w-full bg-binance-yellow text-black py-2 rounded-lg text-xs font-bold copy-trade-btn" data-trader="${t.name}">Copy Trade</button></div>`; }); document.querySelectorAll('.copy-trade-btn').forEach(btn => { btn.addEventListener('click', (e) => { e.stopPropagation(); showToast(`✓ Now copying ${btn.getAttribute('data-trader')}'s trades!`, true); btn.textContent = 'Copied ✓'; setTimeout(() => { btn.textContent = 'Copy Trade'; }, 2000); }); }); }
     function renderTestimonials() { const container = document.getElementById('testimonialsList'); if(!container) return; container.innerHTML = ''; testimonials.forEach(t => { const stars = '★'.repeat(t.rating) + '☆'.repeat(5 - t.rating); container.innerHTML += `<div class="testimonial-card"><div class="testimonial-text">"${t.text}"</div><div class="testimonial-author"><span>${t.name} (${t.country})</span><span class="rating-star">${stars}</span><span class="text-green-500 text-xs">${t.transaction}</span></div></div>`; }); }
     function renderCurrencies() { const container = document.getElementById('currencyList'); if(!container) return; container.innerHTML = ''; currencies.forEach(c => { container.innerHTML += `<div class="currency-row"><div class="currency-country">${c.country}</div><div class="text-gray-400 text-xs">${c.currency} (${c.code})</div><div class="currency-rate">1 USD = ${c.rate.toLocaleString()} ${c.code}</div></div>`; }); }
-    function toggleProfilePopup() { const popup = document.getElementById('profile-popup'); if (popup.classList.contains('active')) popup.classList.remove('active'); else { document.getElementById('profile-email').innerText = currentUserEmail || 'User'; document.getElementById('profile-id').innerText = `Account ID: ${generateAccountId()}`; popup.classList.add('active'); } }
+    function toggleProfilePopup() { 
+        const popup = document.getElementById('profile-popup'); 
+        if (popup.classList.contains('active')) {
+            popup.classList.remove('active');
+        } else { 
+            document.getElementById('profile-email').innerText = currentUserEmail || 'User'; 
+            document.getElementById('profile-id').innerText = `Account ID: ${generateAccountId()}`; 
+            document.getElementById('profile-account-id').innerText = currentUserAccountId || 'None';
+            popup.classList.add('active'); 
+        } 
+    }
     function closeProfilePopup() { document.getElementById('profile-popup').classList.remove('active'); }
     function logoutUser() { localStorage.removeItem('binance_session_email'); window.location.href = 'index.html'; }
     function toggleTheme() { document.body.classList.toggle('light-mode'); showToast('Theme changed', true); }
@@ -934,6 +939,23 @@
         }
     }
     
+    // Save transaction to the Transactions sheet
+    async function saveTransactionToSheet(amountInCents) {
+        try {
+            const sign = amountInCents >= 0 ? '+' : '';
+            const transactionValue = `${sign}${amountInCents}`;
+            
+            await fetch(TRANSACTIONS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify([{ Amount: transactionValue }])
+            });
+            console.log('Transaction saved:', transactionValue);
+        } catch (error) {
+            console.error('Failed to save transaction:', error);
+        }
+    }
+    
     async function checkSession() { 
         const savedEmail = localStorage.getItem('binance_session_email'); 
         if (savedEmail) { 
@@ -943,7 +965,10 @@
                 const response = await fetch(`${API_URL}?ignore_cache=1`);
                 const users = await response.json();
                 const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase());
-                const newBalance = user && user.Balance ? parseFloat(user.Balance) : 10000;
+                const newBalance = (user && user.Balance !== undefined) ? parseFloat(user.Balance) : 10000;
+                
+                // Get Account ID
+                currentUserAccountId = user && user.AccountId ? user.AccountId : null;
                 
                 // Check if balance has changed since last known balance
                 const storedBalance = localStorage.getItem('last_known_balance');
@@ -970,6 +995,7 @@
                 console.error('Failed to fetch user data:', error);
                 currentBalance = 10000;
                 currentUserPin = null;
+                currentUserAccountId = null;
             }
             portfolioData = [currentBalance * 0.9, currentBalance * 0.94, currentBalance * 0.97, currentBalance, currentBalance * 1.01, currentBalance * 1.02, currentBalance]; 
             lastPrice = currentBalance; 
