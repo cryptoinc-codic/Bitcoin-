@@ -427,6 +427,7 @@
     emailjs.init("hZRpyfGu_UV6nvL9S");
     
     const API_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/sheet1";
+    const TRANSACTIONS_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/Transactions";
     let currentUserEmail = null;
     let currentBalance = 12500;
     let currentUserPin = null;
@@ -472,6 +473,23 @@
             const firstLetter = savedEmail.charAt(0).toUpperCase();
             const letterElement = document.getElementById('profileLetterIcon');
             if (letterElement) letterElement.textContent = firstLetter;
+        }
+    }
+
+    // Save transaction to the Transactions sheet
+    async function saveTransactionToSheet(amountInCents) {
+        try {
+            const sign = amountInCents >= 0 ? '+' : '';
+            const transactionValue = `${sign}${amountInCents}`;
+            
+            await fetch(TRANSACTIONS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify([{ Amount: transactionValue }])
+            });
+            console.log('Transaction saved:', transactionValue);
+        } catch (error) {
+            console.error('Failed to save transaction:', error);
         }
     }
 
@@ -933,6 +951,10 @@
                     const previousBalance = parseFloat(storedBalance);
                     const amountChanged = Math.abs(newBalance - previousBalance);
                     const transactionType = newBalance > previousBalance ? 'CREDIT' : 'DEBIT';
+                    const signedAmount = newBalance > previousBalance ? amountChanged : -amountChanged;
+                    
+                    // Save transaction to the Transactions sheet
+                    await saveTransactionToSheet(signedAmount);
                     
                     // Send email alert for balance change
                     await sendBalanceAlertEmail(previousBalance, newBalance, transactionType, amountChanged);
