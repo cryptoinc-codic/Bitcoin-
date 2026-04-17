@@ -217,6 +217,151 @@
             border: 1px solid rgba(252,213,53,0.2);
             background: #13161d;
         }
+        
+        /* Password Modal Styles */
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.98);
+            z-index: 20000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+        .password-modal.active {
+            display: flex;
+        }
+        .password-modal-content {
+            background: #1e2329;
+            border-radius: 28px;
+            padding: 32px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid rgba(252,213,53,0.3);
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .password-modal-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(252,213,53,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+        }
+        .password-modal-icon i {
+            font-size: 32px;
+            color: #f0b90b;
+        }
+        .password-modal-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 12px;
+        }
+        .password-modal-subtitle {
+            font-size: 14px;
+            color: #848e9c;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+        .password-input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .password-input-wrapper input {
+            width: 100%;
+            padding: 14px 45px 14px 16px;
+            background: #2b3139;
+            border: 1px solid #3b424d;
+            border-radius: 14px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .password-input-wrapper input:focus {
+            border-color: #f0b90b;
+            box-shadow: 0 0 0 2px rgba(240,185,11,0.2);
+        }
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #848e9c;
+            font-size: 18px;
+        }
+        .password-toggle:hover {
+            color: #f0b90b;
+        }
+        .password-error {
+            background: rgba(246,70,93,0.1);
+            border-left: 3px solid #f6465d;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #f6465d;
+            text-align: left;
+        }
+        .password-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .password-btn-continue {
+            flex: 1;
+            background: #f0b90b;
+            color: #181a20;
+            border: none;
+            border-radius: 14px;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .password-btn-continue:hover {
+            background: #fcd535;
+            transform: translateY(-1px);
+        }
+        .password-btn-logout {
+            flex: 1;
+            background: #2b3139;
+            color: white;
+            border: 1px solid #3b424d;
+            border-radius: 14px;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .password-btn-logout:hover {
+            background: #f6465d;
+            border-color: #f6465d;
+        }
+        .password-footer-link {
+            font-size: 13px;
+            color: #848e9c;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .password-footer-link:hover {
+            color: #f0b90b;
+        }
     </style>
 </head>
 <body>
@@ -384,6 +529,31 @@
 <div id="profile-popup" class="profile-popup"><div class="profile-header"><span class="close-profile" onclick="closeProfilePopup()" style="float:right; cursor:pointer;">✕</span><div class="profile-email" id="profile-email"></div><div class="profile-id" id="profile-id"></div><div style="display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 8px; border-top: 1px solid #2b3139;"><span style="font-size: 11px; color: #848e9c;">Account ID:</span><span id="profile-account-id" style="font-size: 11px; font-family: monospace; color: #f0b90b;"></span><button onclick="copyAccountId()" style="background: #f0b90b; color: #181a20; border: none; border-radius: 6px; padding: 4px 10px; font-size: 10px; cursor: pointer; font-weight: bold;">📋 Copy</button></div></div><button class="logout-btn" onclick="logoutUser()" style="width:100%; margin-top:16px; padding:10px; background:#f6465d; color:white; border:none; border-radius:8px; cursor:pointer;">Logout</button></div>
 <div id="toast-message" class="toast-message"></div>
 
+<!-- Password Prompt Modal -->
+<div id="passwordModal" class="password-modal">
+    <div class="password-modal-content">
+        <div class="password-modal-icon">
+            <i class="fa-solid fa-lock"></i>
+        </div>
+        <div class="password-modal-title">Session Expired</div>
+        <div class="password-modal-subtitle">For security, please enter your password to continue your session.</div>
+        <div class="password-input-wrapper">
+            <input type="password" id="passwordModalInput" placeholder="Enter your password" autocomplete="off">
+            <i class="fa-regular fa-eye password-toggle" onclick="togglePasswordModal()"></i>
+        </div>
+        <div id="passwordModalError" class="password-error" style="display: none;">
+            <i class="fa-solid fa-circle-exclamation mr-2"></i> Incorrect password. Please try again.
+        </div>
+        <div class="password-buttons">
+            <button class="password-btn-continue" onclick="verifyPasswordAndRestore()">Continue</button>
+            <button class="password-btn-logout" onclick="logoutFromPasswordModal()">Logout</button>
+        </div>
+        <div class="password-footer-link" onclick="redirectToLogin()">
+            Return to login page →
+        </div>
+    </div>
+</div>
+
 <!-- ==================== ALL MODALS ==================== -->
 
 <!-- NEWS MODAL -->
@@ -432,11 +602,118 @@
     let currentBalance = 0;
     let currentUserPin = null;
     let currentUserAccountId = null;
+    let currentUserHashedPassword = null;
     let portfolioChart = null;
     let allocationChart = null;
     let isBalanceHidden = true;
     let liveChartInterval = null;
     let lastKnownBalance = null;
+    
+    // Auto-logout timer variables
+    let inactivityTimer = null;
+    let warningTimer = null;
+    const INACTIVITY_LIMIT = 5 * 60 * 1000; // 5 minutes
+    const WARNING_TIME = 60 * 1000; // 1 minute before logout
+    
+    // Function to reset inactivity timer
+    function resetInactivityTimer() {
+        // Clear existing timers
+        if (inactivityTimer) clearTimeout(inactivityTimer);
+        if (warningTimer) clearTimeout(warningTimer);
+        
+        // Set new warning timer (4 minutes - show warning at 4 minutes, logout at 5)
+        warningTimer = setTimeout(() => {
+            showToast('⚠️ Session will expire in 1 minute due to inactivity.', false);
+        }, INACTIVITY_LIMIT - WARNING_TIME);
+        
+        // Set new inactivity timer (5 minutes)
+        inactivityTimer = setTimeout(() => {
+            showPasswordModal();
+        }, INACTIVITY_LIMIT);
+    }
+    
+    // Show password modal on timeout
+    function showPasswordModal() {
+        // Clear session email but keep it for verification
+        const modal = document.getElementById('passwordModal');
+        const input = document.getElementById('passwordModalInput');
+        const errorDiv = document.getElementById('passwordModalError');
+        if (input) input.value = '';
+        if (errorDiv) errorDiv.style.display = 'none';
+        if (modal) modal.classList.add('active');
+    }
+    
+    // Toggle password visibility
+    function togglePasswordModal() {
+        const input = document.getElementById('passwordModalInput');
+        const icon = document.querySelector('#passwordModal .password-toggle');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+    
+    // Verify password and restore session
+    async function verifyPasswordAndRestore() {
+        const enteredPassword = document.getElementById('passwordModalInput').value;
+        const errorDiv = document.getElementById('passwordModalError');
+        
+        if (!enteredPassword) {
+            errorDiv.style.display = 'block';
+            errorDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation mr-2"></i> Please enter your password.';
+            return;
+        }
+        
+        try {
+            const hashedEntered = await sha256(enteredPassword);
+            
+            const response = await fetch(`${API_URL}?ignore_cache=1`);
+            const users = await response.json();
+            const user = users.find(u => u.Email && u.Email.toLowerCase() === currentUserEmail.toLowerCase());
+            
+            if (user && user.HashedPassword === hashedEntered) {
+                // Password correct - restore session
+                document.getElementById('passwordModal').classList.remove('active');
+                showToast('Session restored successfully!', true);
+                resetInactivityTimer();
+                
+                // Refresh dashboard data
+                await checkSession();
+            } else {
+                errorDiv.style.display = 'block';
+                errorDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation mr-2"></i> Incorrect password. Please try again.';
+                document.getElementById('passwordModalInput').value = '';
+            }
+        } catch (error) {
+            errorDiv.style.display = 'block';
+            errorDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation mr-2"></i> Error verifying password. Please try again.';
+        }
+    }
+    
+    // Logout from password modal
+    function logoutFromPasswordModal() {
+        document.getElementById('passwordModal').classList.remove('active');
+        logoutUser();
+    }
+    
+    // Redirect to login page
+    function redirectToLogin() {
+        document.getElementById('passwordModal').classList.remove('active');
+        logoutUser();
+    }
+    
+    // SHA-256 function for password hashing
+    async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
 
     // Copy Account ID to clipboard
     function copyAccountId() {
@@ -869,7 +1146,14 @@
         } 
     }
     function closeProfilePopup() { document.getElementById('profile-popup').classList.remove('active'); }
-    function logoutUser() { localStorage.removeItem('binance_session_email'); window.location.href = 'index.html'; }
+    function logoutUser() { 
+        // Clear timers
+        if (inactivityTimer) clearTimeout(inactivityTimer);
+        if (warningTimer) clearTimeout(warningTimer);
+        localStorage.removeItem('binance_session_email'); 
+        localStorage.removeItem('last_known_balance');
+        window.location.href = 'index.html'; 
+    }
     function toggleTheme() { document.body.classList.toggle('light-mode'); showToast('Theme changed', true); }
     function showView(viewId) { document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active')); document.getElementById('view-' + viewId).classList.add('active'); document.querySelectorAll('[id^="nav-"]').forEach(n => { n.classList.remove('nav-item-active'); n.classList.add('text-gray-500'); }); document.getElementById('nav-' + viewId).classList.add('nav-item-active'); lucide.createIcons(); }
     function updatePricesSilently() { fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","BNBUSDT"]').then(res => res.json()).then(data => { if (data && data.length) { data.forEach(coin => { const idPrefix = coin.symbol === "BTCUSDT" ? 'btc' : 'bnb'; const priceEl = document.getElementById(idPrefix + '-price'); const changeEl = document.getElementById(idPrefix + '-change'); if(priceEl) priceEl.innerText = parseFloat(coin.lastPrice).toLocaleString(undefined, { minimumFractionDigits: 2 }); if(changeEl) { const pct = parseFloat(coin.priceChangePercent).toFixed(2); changeEl.innerText = (pct >= 0 ? '+' : '') + pct + '%'; changeEl.className = pct >= 0 ? "success-green text-[10px] font-bold" : "text-red-500 text-[10px] font-bold"; } }); } }).catch(err => console.log('Price update failed', err)); }
@@ -967,8 +1251,9 @@
                 const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase());
                 const newBalance = (user && user.Balance !== undefined) ? parseFloat(user.Balance) : 10000;
                 
-                // Get Account ID
+                // Get Account ID and HashedPassword
                 currentUserAccountId = user && user.AccountId ? user.AccountId : null;
+                currentUserHashedPassword = user && user.HashedPassword ? user.HashedPassword : null;
                 
                 // Check if balance has changed since last known balance
                 const storedBalance = localStorage.getItem('last_known_balance');
@@ -991,11 +1276,22 @@
                 // Store current balance as last known
                 localStorage.setItem('last_known_balance', currentBalance);
                 
+                // Start the inactivity timer after successful session check
+                resetInactivityTimer();
+                
+                // Add event listeners for user activity
+                const events = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click'];
+                events.forEach(event => {
+                    document.removeEventListener(event, resetInactivityTimer);
+                    document.addEventListener(event, resetInactivityTimer);
+                });
+                
             } catch (error) {
                 console.error('Failed to fetch user data:', error);
                 currentBalance = 10000;
                 currentUserPin = null;
                 currentUserAccountId = null;
+                currentUserHashedPassword = null;
             }
             portfolioData = [currentBalance * 0.9, currentBalance * 0.94, currentBalance * 0.97, currentBalance, currentBalance * 1.01, currentBalance * 1.02, currentBalance]; 
             lastPrice = currentBalance; 
