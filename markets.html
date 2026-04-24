@@ -15,6 +15,13 @@
         .filter-pill.active { background-color: #f0b90b; color: #1e2329; }
         .price-up-bg { background-color: #2ebd85; }
         .price-down-bg { background-color: #f6465d; }
+        .change-pill {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 85px;
+            display: inline-block;
+        }
         .price-flash-up { animation: flashUp 0.5s ease-out; }
         .price-flash-down { animation: flashDown 0.5s ease-out; }
         @keyframes flashUp { 0% { color: #2ebd85; } 100% { color: #ebecf0; } }
@@ -235,7 +242,7 @@
                         <div class="text-[9px] text-gray-500">${volumeDisplay}</div>
                     </div>
                     <div class="flex items-center justify-end w-[35%] gap-2">
-                        <div class="${colorClass} change-pill text-white text-xs font-bold px-3 py-1.5 rounded-md min-w-[70px] text-center">${changeSymbol}${asset.change}%</div>
+                        <div class="${colorClass} change-pill text-white text-xs font-bold px-2 py-1 rounded-md text-center" style="min-width: 65px; max-width: 85px;">${changeSymbol}${asset.change}%</div>
                         <div class="hidden md:block">${generateSparkline(asset.isPositive)}</div>
                     </div>
                 </div>
@@ -390,8 +397,6 @@
     }
     
     async function loadAllMarketData() {
-        const loadingIndicator = document.getElementById('loading-indicator');
-        
         const [spotResult, usdmResult, coinmResult] = await Promise.all([
             fetchSpotData(),
             fetchUsdmData(),
