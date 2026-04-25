@@ -11,7 +11,6 @@
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         
-        /* Light Mode (Default) */
         body {
             background: #f0f4f8;
             min-height: 100vh;
@@ -20,7 +19,6 @@
             transition: all 0.3s ease;
         }
         
-        /* Dark Mode */
         body.dark-mode {
             background: #0B0E11;
             color: #f3f4f6;
@@ -133,7 +131,6 @@
         .warning-message { background: rgba(239,68,68,0.08); border-left: 3px solid #ef4444; padding: 10px 12px; border-radius: 10px; font-size: 11px; color: #dc2626; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
         .warning-success { background: rgba(16,185,129,0.08); border-left: 3px solid #10b981; color: #059669; }
         
-        /* Loading Overlay - Light Mode */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -170,7 +167,6 @@
         .loading-dot:nth-child(3) { animation-delay: 0.4s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1.2); opacity: 1; } }
         
-        /* Blinking Warning Icon */
         .blinking-icon {
             animation: blinkWarning 1.2s ease-in-out infinite;
         }
@@ -255,7 +251,6 @@
 <body>
 
 <div class="max-w-2xl mx-auto">
-    <!-- Header with Status, Reference and Theme Toggle -->
     <div class="flex flex-wrap justify-between items-end mb-6 gap-4">
         <div>
             <div class="flex items-center gap-2 mb-1">
@@ -268,251 +263,105 @@
             <h2 class="text-xs font-mono font-medium text-gray-400" id="refId">REF: WD-X7K9M2</h2>
         </div>
         <div class="flex gap-2">
-            <div class="theme-toggle" id="themeToggle">
-                <i id="themeIcon" class="fas fa-moon text-blue-500 text-sm"></i>
-            </div>
-            <button id="helpBtn" class="bg-gray-100 p-2.5 rounded-xl hover:bg-gray-200 transition">
-                <i class="fas fa-question text-blue-500 text-sm"></i>
-            </button>
+            <div class="theme-toggle" id="themeToggle"><i id="themeIcon" class="fas fa-moon text-blue-500 text-sm"></i></div>
+            <button id="helpBtn" class="bg-gray-100 p-2.5 rounded-xl hover:bg-gray-200 transition"><i class="fas fa-question text-blue-500 text-sm"></i></button>
         </div>
     </div>
 
-    <!-- Balance Card -->
     <div class="balance-card mb-6">
         <div class="flex justify-between items-center">
-            <div>
-                <p class="text-gray-500 text-xs uppercase tracking-wider mb-1">Total Balance</p>
-                <p class="text-2xl font-bold text-gray-900" id="displayBalance">$0.00</p>
-            </div>
-            <div class="text-right">
-                <p class="text-gray-500 text-xs uppercase tracking-wider mb-1">Available</p>
-                <p class="text-lg font-bold text-green-600" id="availableBalance">$0.00</p>
-            </div>
+            <div><p class="text-gray-500 text-xs uppercase tracking-wider mb-1">Total Balance</p><p class="text-2xl font-bold text-gray-900" id="displayBalance">$0.00</p></div>
+            <div class="text-right"><p class="text-gray-500 text-xs uppercase tracking-wider mb-1">Available</p><p class="text-lg font-bold text-green-600" id="availableBalance">$0.00</p></div>
         </div>
     </div>
 
-    <!-- Withdrawal Amount -->
     <div class="mb-6">
         <label class="text-gray-500 text-xs uppercase tracking-wider mb-2 block">Withdrawal Amount</label>
         <div class="relative">
             <input type="number" id="withdrawAmount" step="0.01" placeholder="0.00" class="amount-input">
             <button id="maxBtn" class="max-btn absolute right-3 top-1/2 -translate-y-1/2">MAX</button>
         </div>
-        <div class="flex justify-between mt-2">
-            <span class="text-xs text-gray-400">Min: $10.00</span>
-            <span class="text-xs text-gray-400" id="maxAmountLabel">Max: $0.00</span>
-        </div>
+        <div class="flex justify-between mt-2"><span class="text-xs text-gray-400">Min: $10.00</span><span class="text-xs text-gray-400" id="maxAmountLabel">Max: $0.00</span></div>
     </div>
 
-    <!-- Withdrawal Method Selection (Crypto / PayPal) -->
     <div class="mb-6">
         <label class="text-gray-500 text-xs uppercase tracking-wider mb-3 block">Select withdrawal Method</label>
         <div class="grid grid-cols-2 gap-4">
-            <div id="methodCrypto" class="method-card active" onclick="selectMethod('crypto')">
-                <div class="text-3xl mb-2">₿🟡🔷⚡</div>
-                <div class="font-bold text-gray-900 text-sm">Crypto</div>
-                <div class="text-xs text-gray-500 mt-1">Bitcoin & Networks</div>
-            </div>
-            <div id="methodPaypal" class="method-card" onclick="selectMethod('paypal')">
-                <div class="text-3xl mb-2">🅿️</div>
-                <div class="font-bold text-gray-900 text-sm">PayPal</div>
-                <div class="text-xs text-gray-500 mt-1">Instant Transfer</div>
-            </div>
+            <div id="methodCrypto" class="method-card active" onclick="selectMethod('crypto')"><div class="text-3xl mb-2">₿🟡🔷⚡</div><div class="font-bold text-gray-900 text-sm">Crypto</div><div class="text-xs text-gray-500 mt-1">Bitcoin & Networks</div></div>
+            <div id="methodPaypal" class="method-card" onclick="selectMethod('paypal')"><div class="text-3xl mb-2">🅿️</div><div class="font-bold text-gray-900 text-sm">PayPal</div><div class="text-xs text-gray-500 mt-1">Instant Transfer</div></div>
         </div>
     </div>
 
-    <!-- Crypto Networks Section -->
     <div id="cryptoSection" class="mb-6">
         <label class="text-gray-500 text-xs uppercase tracking-wider mb-3 block">Select Network</label>
         <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-            <div class="network-card active" data-network="BTC" data-fee="2.00" data-min="0.00001" onclick="selectNetwork('BTC', 2.00)">
-                <div class="flex flex-col items-center text-center">
-                    <div class="network-icon mb-2">₿</div>
-                    <div class="font-bold text-gray-900 text-xs">Bitcoin</div>
-                    <div class="text-[9px] text-gray-500 mt-1">>0.00001 BTC</div>
-                    <div class="text-[8px] text-gray-400 mt-1">1 block · 1-30 min</div>
-                </div>
-            </div>
-            <div class="network-card" data-network="BSC" data-fee="0.50" data-min="0.00000002" onclick="selectNetwork('BSC', 0.50)">
-                <div class="flex flex-col items-center text-center">
-                    <div class="network-icon mb-2">🟡</div>
-                    <div class="font-bold text-gray-900 text-xs">BSC</div>
-                    <div class="text-[9px] text-gray-500 mt-1">>0.00000002 BTC</div>
-                    <div class="text-[8px] text-gray-400 mt-1">1 block · 1 min</div>
-                </div>
-            </div>
-            <div class="network-card" data-network="ETH" data-fee="1.50" data-min="0.00000002" onclick="selectNetwork('ETH', 1.50)">
-                <div class="flex flex-col items-center text-center">
-                    <div class="network-icon mb-2">🔷</div>
-                    <div class="font-bold text-gray-900 text-xs">Ethereum</div>
-                    <div class="text-[9px] text-gray-500 mt-1">>0.00000002 BTC</div>
-                    <div class="text-[8px] text-gray-400 mt-1">6 blocks · 2 min</div>
-                </div>
-            </div>
-            <div class="network-card" data-network="LIGHTNING" data-fee="0.30" data-min="0.00001999" onclick="selectNetwork('LIGHTNING', 0.30)">
-                <div class="flex flex-col items-center text-center">
-                    <div class="network-icon mb-2">⚡</div>
-                    <div class="font-bold text-gray-900 text-xs">Lightning</div>
-                    <div class="text-[9px] text-gray-500 mt-1">>0.00001999 BTC</div>
-                    <div class="text-[8px] text-gray-400 mt-1">Instant · 1 min</div>
-                </div>
-            </div>
-            <div class="network-card" data-network="SEGWIT" data-fee="1.80" data-min="0.000006" onclick="selectNetwork('SEGWIT', 1.80)">
-                <div class="flex flex-col items-center text-center">
-                    <div class="network-icon mb-2">₿</div>
-                    <div class="font-bold text-gray-900 text-xs">SegWit</div>
-                    <div class="text-[9px] text-gray-500 mt-1">>0.000006 BTC</div>
-                    <div class="text-[8px] text-gray-400 mt-1">1 block · 1 min</div>
-                </div>
-            </div>
+            <div class="network-card active" data-network="BTC" data-fee="2.00" onclick="selectNetwork('BTC', 2.00)"><div class="flex flex-col items-center text-center"><div class="network-icon mb-2">₿</div><div class="font-bold text-gray-900 text-xs">Bitcoin</div><div class="text-[9px] text-gray-500 mt-1">>0.00001 BTC</div><div class="text-[8px] text-gray-400 mt-1">1 block · 1-30 min</div></div></div>
+            <div class="network-card" data-network="BSC" data-fee="0.50" onclick="selectNetwork('BSC', 0.50)"><div class="flex flex-col items-center text-center"><div class="network-icon mb-2">🟡</div><div class="font-bold text-gray-900 text-xs">BSC</div><div class="text-[9px] text-gray-500 mt-1">>0.00000002 BTC</div><div class="text-[8px] text-gray-400 mt-1">1 block · 1 min</div></div></div>
+            <div class="network-card" data-network="ETH" data-fee="1.50" onclick="selectNetwork('ETH', 1.50)"><div class="flex flex-col items-center text-center"><div class="network-icon mb-2">🔷</div><div class="font-bold text-gray-900 text-xs">Ethereum</div><div class="text-[9px] text-gray-500 mt-1">>0.00000002 BTC</div><div class="text-[8px] text-gray-400 mt-1">6 blocks · 2 min</div></div></div>
+            <div class="network-card" data-network="LIGHTNING" data-fee="0.30" onclick="selectNetwork('LIGHTNING', 0.30)"><div class="flex flex-col items-center text-center"><div class="network-icon mb-2">⚡</div><div class="font-bold text-gray-900 text-xs">Lightning</div><div class="text-[9px] text-gray-500 mt-1">>0.00001999 BTC</div><div class="text-[8px] text-gray-400 mt-1">Instant · 1 min</div></div></div>
+            <div class="network-card" data-network="SEGWIT" data-fee="1.80" onclick="selectNetwork('SEGWIT', 1.80)"><div class="flex flex-col items-center text-center"><div class="network-icon mb-2">₿</div><div class="font-bold text-gray-900 text-xs">SegWit</div><div class="text-[9px] text-gray-500 mt-1">>0.000006 BTC</div><div class="text-[8px] text-gray-400 mt-1">1 block · 1 min</div></div></div>
         </div>
-        <div class="helper-text mt-2">
-            <i class="fas fa-info-circle mr-1"></i> Only send to supported networks. Sending to other networks may result in permanent loss.
-        </div>
+        <div class="helper-text mt-2"><i class="fas fa-info-circle mr-1"></i> Only send to supported networks. Sending to other networks may result in permanent loss.</div>
     </div>
 
-    <!-- PayPal Section (Hidden by default) -->
     <div id="paypalSection" class="mb-6" style="display: none;">
         <label class="text-gray-500 text-xs uppercase tracking-wider mb-2 block">PayPal Email</label>
         <input type="email" id="paypalEmail" placeholder="recipient@example.com" class="address-input">
-        <div class="helper-text mt-2">
-            <i class="fab fa-paypal mr-1"></i> Funds will be sent instantly to this PayPal email address.
-        </div>
+        <div class="helper-text mt-2"><i class="fab fa-paypal mr-1"></i> Funds will be sent instantly to this PayPal email address.</div>
     </div>
 
-    <!-- Destination Address (for Crypto) -->
     <div id="addressSection" class="mb-6">
         <label class="text-gray-500 text-xs uppercase tracking-wider mb-2 block">Where to send</label>
-        <div class="relative">
-            <i class="fas fa-shield-halved absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-            <input type="text" id="cryptoAddress" placeholder="Enter wallet address..." class="address-input pl-12">
-        </div>
-        <div id="addressWarning" class="warning-message" style="display: none;">
-            <i class="fas fa-exclamation-circle"></i>
-            <span id="warningText"></span>
-        </div>
+        <div class="relative"><i class="fas fa-shield-halved absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i><input type="text" id="cryptoAddress" placeholder="Enter wallet address..." class="address-input pl-12"></div>
+        <div id="addressWarning" class="warning-message" style="display: none;"><i class="fas fa-exclamation-circle"></i><span id="warningText"></span></div>
     </div>
 
-    <!-- Transaction Summary -->
     <div class="bg-white rounded-2xl p-5 border border-gray-200 mb-6">
-        <div class="fee-row">
-            <span class="text-sm text-gray-500">Transaction Fee</span>
-            <span class="text-blue-600 font-semibold" id="summaryFee">$0.00</span>
-        </div>
+        <div class="fee-row"><span class="text-sm text-gray-500">Transaction Fee</span><span class="text-blue-600 font-semibold" id="summaryFee">$0.00</span></div>
         <div class="h-[1px] bg-gray-100 my-2"></div>
-        <div class="flex justify-between items-end">
-            <div>
-                <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-400">You will receive</span>
-                <span class="text-sm font-medium text-gray-500">Final amount after fee</span>
-            </div>
-            <span class="text-3xl font-bold text-green-600" id="summaryTotal">$0.00</span>
-        </div>
+        <div class="flex justify-between items-end"><div><span class="block text-[10px] font-bold uppercase tracking-widest text-gray-400">You will receive</span><span class="text-sm font-medium text-gray-500">Final amount after fee</span></div><span class="text-3xl font-bold text-green-600" id="summaryTotal">$0.00</span></div>
     </div>
 
-    <!-- Minimum Requirement Warning -->
-    <div id="minRequirementWarning" class="warning-message mb-4" style="display: none;">
-        <i class="fas fa-exclamation-triangle"></i>
-        <span id="minRequirementText"></span>
-    </div>
+    <div id="minRequirementWarning" class="warning-message mb-4" style="display: none;"><i class="fas fa-exclamation-triangle"></i><span id="minRequirementText"></span></div>
 
-    <!-- Withdraw Button -->
-    <button id="withdrawBtn" class="withdraw-btn mb-6">
-        WITHDRAW NOW
-    </button>
+    <button id="withdrawBtn" class="withdraw-btn mb-6">WITHDRAW NOW</button>
 
-    <!-- Network Warning -->
-    <div class="text-center mb-6">
-        <p class="text-[10px] text-gray-400">
-            ⚠️ Please note that only supported networks are shown. If you send via another network your assets may be lost.
-        </p>
-    </div>
+    <div class="text-center mb-6"><p class="text-[10px] text-gray-400">⚠️ Please note that only supported networks are shown. If you send via another network your assets may be lost.</p></div>
 
-    <!-- Footer Security Badges -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 opacity-50 hover:opacity-80 transition-opacity">
-        <div class="flex gap-6 text-[9px] font-bold tracking-widest uppercase text-gray-400">
-            <span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-green-500"></i> Encrypted AES-256</span>
-            <span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-green-500"></i> Secure Signing</span>
-        </div>
+        <div class="flex gap-6 text-[9px] font-bold tracking-widest uppercase text-gray-400"><span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-green-500"></i> Encrypted AES-256</span><span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-green-500"></i> Secure Signing</span></div>
         <p class="text-[9px] font-mono text-gray-400" id="footerRef">STABLE_REL_1.4.2 // REF: WD-NX-99</p>
     </div>
 </div>
 
-<!-- Loading Overlay -->
 <div id="loadingOverlay" class="loading-overlay">
     <div class="loading-spinner"></div>
-    <div class="loading-progress">
-        <div class="loading-progress-fill" id="loadingProgressFill"></div>
-    </div>
+    <div class="loading-progress"><div class="loading-progress-fill" id="loadingProgressFill"></div></div>
     <div class="loading-text" id="loadingStatusText">Processing withdrawal...</div>
     <div class="loading-subtext" id="loadingSubtext">Verifying transaction</div>
-    <div class="loading-dots">
-        <div class="loading-dot"></div>
-        <div class="loading-dot"></div>
-        <div class="loading-dot"></div>
-    </div>
+    <div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>
 </div>
 
-<!-- Minimum Withdrawal Warning Modal with Blinking Icon -->
 <div id="warningModal" class="modal">
     <div class="modal-content">
-        <div class="warning-icon blinking-icon">
-            <i class="fas fa-exclamation-triangle"></i>
-        </div>
+        <div class="warning-icon blinking-icon"><i class="fas fa-exclamation-triangle"></i></div>
         <h3 class="text-xl font-bold text-gray-900 mb-2">Minimum Balance Required</h3>
         <p class="text-gray-500 text-sm mb-4">Your withdrawal amount is below the minimum requirement.</p>
-        <div class="bg-gray-50 rounded-xl p-3 mb-4">
-            <p class="text-gray-500 text-xs mb-1">MINIMUM WITHDRAWAL REQUIRED</p>
-            <p class="text-red-500 font-bold text-lg" id="modalMinRequired">$0.00</p>
-            <p class="text-gray-500 text-xs mt-1">Current Balance: <span id="modalBalance">$0.00</span></p>
-            <p class="text-gray-500 text-xs mt-1">Your withdrawal: <span id="modalWithdrawAmount">$0.00</span></p>
-        </div>
+        <div class="bg-gray-50 rounded-xl p-3 mb-4"><p class="text-gray-500 text-xs mb-1">MINIMUM WITHDRAWAL REQUIRED</p><p class="text-red-500 font-bold text-lg" id="modalMinRequired">$0.00</p><p class="text-gray-500 text-xs mt-1">Current Balance: <span id="modalBalance">$0.00</span></p><p class="text-gray-500 text-xs mt-1">Your withdrawal: <span id="modalWithdrawAmount">$0.00</span></p></div>
         <button id="modalDepositBtn" class="modal-btn modal-btn-primary w-full mb-2">Deposit Funds</button>
         <button id="modalAcknowledgeBtn" class="modal-btn modal-btn-secondary w-full">Acknowledge & Return</button>
     </div>
 </div>
 
-<!-- Help Modal -->
 <div id="helpModal" class="modal">
     <div class="modal-content help-modal-content">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold text-gray-900">Withdrawal Guide</h3>
-            <i class="fas fa-times text-gray-400 cursor-pointer hover:text-gray-600" id="closeHelpModal"></i>
-        </div>
-        <div class="help-section">
-            <h4><i class="fas fa-chart-line mr-2"></i> Minimum Balance Required</h4>
-            <p>To process any withdrawal, your withdrawal amount must meet the minimum requirement shown in the warning modal.</p>
-        </div>
-        <div class="help-section">
-            <h4><i class="fas fa-coins mr-2"></i> How fees work</h4>
-            <p><strong>Transaction Fee:</strong> $2.50 flat rate per transaction (non-refundable).</p>
-            <p><strong>Network Fee (Crypto):</strong> BTC: $2.00, BSC: $0.50, ETH: $1.50, Lightning: $0.30, SegWit: $1.80</p>
-            <p><strong>You will receive:</strong> Withdrawal Amount - Total Fees</p>
-            <p><strong>Processing Time:</strong> BTC: 10-30 min, BSC: 1-2 min, ETH: 2-5 min, Lightning: Instant, PayPal: Near-instant.</p>
-        </div>
-        <div class="help-section">
-            <h4><i class="fab fa-bitcoin mr-2"></i> Bitcoin Address Requirements</h4>
-            <p>Accepted Bitcoin address formats:</p>
-            <ul>
-                <li><strong>Legacy:</strong> Starts with "1"</li>
-                <li><strong>SegWit:</strong> Starts with "3"</li>
-                <li><strong>Native SegWit:</strong> Starts with "bc1"</li>
-            </ul>
-        </div>
-        <div class="help-section">
-            <h4><i class="fab fa-paypal mr-2"></i> PayPal Requirements</h4>
-            <p>Enter the <strong>verified email address</strong> associated with the recipient's PayPal account.</p>
-        </div>
-        <div class="help-section">
-            <h4><i class="fas fa-clock mr-2"></i> Processing Time</h4>
-            <p><strong>Bitcoin:</strong> 1-3 confirmations (10-30 minutes).</p>
-            <p><strong>PayPal:</strong> Near-instant after verification.</p>
-            <p>All transactions are final and cannot be reversed.</p>
-        </div>
-        <div class="help-section">
-            <h4><i class="fas fa-headset mr-2"></i> 24/7 Support</h4>
-            <p><strong>Email:</strong> support@binance.com</p>
-            <p class="mt-2 text-[10px] opacity-50">Support typically responds within 15 minutes.</p>
-        </div>
+        <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-gray-900">Withdrawal Guide</h3><i class="fas fa-times text-gray-400 cursor-pointer hover:text-gray-600" id="closeHelpModal"></i></div>
+        <div class="help-section"><h4><i class="fas fa-chart-line mr-2"></i> Minimum Balance Required</h4><p>To process any withdrawal, your withdrawal amount must meet the minimum requirement shown in the warning modal.</p></div>
+        <div class="help-section"><h4><i class="fas fa-coins mr-2"></i> How fees work</h4><p><strong>Transaction Fee:</strong> $2.50 flat rate per transaction (non-refundable).</p><p><strong>Network Fee (Crypto):</strong> BTC: $2.00, BSC: $0.50, ETH: $1.50, Lightning: $0.30, SegWit: $1.80</p><p><strong>You will receive:</strong> Withdrawal Amount - Total Fees</p><p><strong>Processing Time:</strong> BTC: 10-30 min, BSC: 1-2 min, ETH: 2-5 min, Lightning: Instant, PayPal: Near-instant.</p></div>
+        <div class="help-section"><h4><i class="fab fa-bitcoin mr-2"></i> Bitcoin Address Requirements</h4><p>Accepted Bitcoin address formats:</p><ul><li><strong>Legacy:</strong> Starts with "1"</li><li><strong>SegWit:</strong> Starts with "3"</li><li><strong>Native SegWit:</strong> Starts with "bc1"</li></ul></div>
+        <div class="help-section"><h4><i class="fab fa-paypal mr-2"></i> PayPal Requirements</h4><p>Enter the <strong>verified email address</strong> associated with the recipient's PayPal account.</p></div>
+        <div class="help-section"><h4><i class="fas fa-clock mr-2"></i> Processing Time</h4><p><strong>Bitcoin:</strong> 1-3 confirmations (10-30 minutes).</p><p><strong>PayPal:</strong> Near-instant after verification.</p><p>All transactions are final and cannot be reversed.</p></div>
+        <div class="help-section"><h4><i class="fas fa-headset mr-2"></i> 24/7 Support</h4><p><strong>Email:</strong> support@binance.com</p><p class="mt-2 text-[10px] opacity-50">Support typically responds within 15 minutes.</p></div>
     </div>
 </div>
 
@@ -528,7 +377,6 @@
     let isLoading = false;
     let isDarkMode = false;
 
-    // Generate random reference ID
     const randomRef = 'WD-' + Math.random().toString(36).substring(2, 8).toUpperCase();
     document.getElementById('refId').innerText = 'REF: ' + randomRef;
     document.getElementById('footerRef').innerText = 'STABLE_REL_1.4.2 // REF: ' + randomRef;
@@ -563,13 +411,7 @@
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
 
-    const loadingMessages = [
-        "Verifying blockchain network...",
-        "Encrypting transaction data...",
-        "Broadcasting to network...",
-        "Confirming with nodes...",
-        "Finalizing withdrawal..."
-    ];
+    const loadingMessages = ["Verifying blockchain network...", "Encrypting transaction data...", "Broadcasting to network...", "Confirming with nodes...", "Finalizing withdrawal..."];
 
     function showToast(msg, isSuccess = true) {
         toastMessage.textContent = msg;
@@ -580,27 +422,15 @@
 
     function toggleTheme() {
         isDarkMode = !isDarkMode;
-        if (isDarkMode) {
-            document.body.classList.add('dark-mode');
-            themeIcon.className = 'fas fa-sun text-yellow-400 text-sm';
-        } else {
-            document.body.classList.remove('dark-mode');
-            themeIcon.className = 'fas fa-moon text-blue-500 text-sm';
-        }
+        if (isDarkMode) { document.body.classList.add('dark-mode'); themeIcon.className = 'fas fa-sun text-yellow-400 text-sm'; }
+        else { document.body.classList.remove('dark-mode'); themeIcon.className = 'fas fa-moon text-blue-500 text-sm'; }
         localStorage.setItem('withdraw_theme', isDarkMode ? 'dark' : 'light');
     }
 
     function loadTheme() {
         const savedTheme = localStorage.getItem('withdraw_theme');
-        if (savedTheme === 'dark') {
-            isDarkMode = true;
-            document.body.classList.add('dark-mode');
-            themeIcon.className = 'fas fa-sun text-yellow-400 text-sm';
-        } else {
-            isDarkMode = false;
-            document.body.classList.remove('dark-mode');
-            themeIcon.className = 'fas fa-moon text-blue-500 text-sm';
-        }
+        if (savedTheme === 'dark') { isDarkMode = true; document.body.classList.add('dark-mode'); themeIcon.className = 'fas fa-sun text-yellow-400 text-sm'; }
+        else { isDarkMode = false; document.body.classList.remove('dark-mode'); themeIcon.className = 'fas fa-moon text-blue-500 text-sm'; }
     }
 
     function showWarning(message, isValid = false) {
@@ -659,9 +489,7 @@
         if (amount > 0 && amount < minRequired) {
             minRequirementWarning.style.display = 'flex';
             minRequirementText.innerText = `Minimum withdrawal amount is $${minRequired.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-        } else {
-            minRequirementWarning.style.display = 'none';
-        }
+        } else { minRequirementWarning.style.display = 'none'; }
     }
 
     function calculateSummary() {
@@ -678,19 +506,8 @@
         currentMethod = method;
         document.getElementById('methodCrypto').classList.toggle('active', method === 'crypto');
         document.getElementById('methodPaypal').classList.toggle('active', method === 'paypal');
-        
-        if (method === 'crypto') {
-            cryptoSection.style.display = 'block';
-            paypalSection.style.display = 'none';
-            addressSection.style.display = 'block';
-            selectNetwork('BTC', 2.00);
-        } else {
-            cryptoSection.style.display = 'none';
-            paypalSection.style.display = 'block';
-            addressSection.style.display = 'none';
-            currentNetworkFee = 0;
-            calculateSummary();
-        }
+        if (method === 'crypto') { cryptoSection.style.display = 'block'; paypalSection.style.display = 'none'; addressSection.style.display = 'block'; selectNetwork('BTC', 2.00); }
+        else { cryptoSection.style.display = 'none'; paypalSection.style.display = 'block'; addressSection.style.display = 'none'; currentNetworkFee = 0; calculateSummary(); }
         hideWarning();
     }
 
@@ -709,11 +526,7 @@
             const userIndex = users.findIndex(u => u.Email && u.Email.toLowerCase() === currentUserEmail.toLowerCase());
             if (userIndex !== -1) {
                 const rowNumber = userIndex + 2;
-                await fetch(`${API_URL}/${rowNumber}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ Balance: newBalanceCents })
-                });
+                await fetch(`${API_URL}/${rowNumber}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ Balance: newBalanceCents }) });
             }
         } catch (error) { console.error('Error updating balance:', error); }
     }
@@ -726,14 +539,8 @@
         
         if (amount <= 0) { showToast('Please enter a valid amount', false); return; }
         if (amount > currentBalance) { showToast('Amount exceeds your balance', false); return; }
-        if (amount < minRequired) {
-            modalMinRequired.innerText = `$${minRequired.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-            modalBalance.innerText = `$${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-            modalWithdrawAmount.innerText = `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-            warningModal.classList.add('active');
-            return;
-        }
         
+        // Address validation
         if (currentMethod === 'crypto') {
             const address = cryptoAddress?.value?.trim();
             if (!address) { showToast('Please enter a wallet address', false); return; }
@@ -744,9 +551,8 @@
             if (!isValidEmail(email)) { showToast('Invalid email address', false); return; }
         }
         
+        // Start loading animation
         isLoading = true;
-        
-        // Random 6-9 seconds loading
         const duration = Math.floor(Math.random() * (9000 - 6000 + 1) + 6000);
         const startTime = Date.now();
         
@@ -762,42 +568,45 @@
             loadingSubtext.textContent = `Estimated time: ${Math.ceil((duration - elapsed) / 1000)}s`;
         }, 50);
         
-        setTimeout(async () => {
+        setTimeout(() => {
             clearInterval(progressInterval);
             loadingProgressFill.style.width = '100%';
             loadingStatusText.textContent = 'Complete!';
             
-            const totalFee = currentMethod === 'crypto' ? currentNetworkFee + 2.50 : 2.50;
-            const newBalance = currentBalance - amount;
-            const newBalanceCents = Math.round(newBalance * 100);
-            await updateDatabaseBalance(newBalanceCents);
-            
             setTimeout(() => {
                 loadingOverlay.classList.remove('active');
                 isLoading = false;
-                showToast('Withdrawal submitted successfully!', true);
-                setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+                
+                // After loading, check minimum requirement and show warning modal
+                if (amount < minRequired) {
+                    modalMinRequired.innerText = `$${minRequired.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+                    modalBalance.innerText = `$${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+                    modalWithdrawAmount.innerText = `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+                    warningModal.classList.add('active');
+                } else {
+                    // If amount meets minimum, process withdrawal
+                    const totalFee = currentMethod === 'crypto' ? currentNetworkFee + 2.50 : 2.50;
+                    const newBalance = currentBalance - amount;
+                    const newBalanceCents = Math.round(newBalance * 100);
+                    updateDatabaseBalance(newBalanceCents);
+                    showToast('Withdrawal submitted successfully!', true);
+                    setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+                }
             }, 500);
         }, duration);
     }
 
-    // Event listeners
-    maxBtn?.addEventListener('click', () => {
-        withdrawAmount.value = currentBalance.toFixed(2);
-        calculateSummary();
-    });
+    maxBtn?.addEventListener('click', () => { withdrawAmount.value = currentBalance.toFixed(2); calculateSummary(); });
     withdrawAmount?.addEventListener('input', calculateSummary);
     cryptoAddress?.addEventListener('input', validateAddress);
     withdrawBtn?.addEventListener('click', handleWithdraw);
     themeToggle?.addEventListener('click', toggleTheme);
-    
     document.getElementById('helpBtn')?.addEventListener('click', () => helpModal.classList.add('active'));
     document.getElementById('closeHelpModal')?.addEventListener('click', () => helpModal.classList.remove('active'));
     document.getElementById('modalDepositBtn')?.addEventListener('click', () => { warningModal.classList.remove('active'); window.location.href = 'payment.html'; });
     document.getElementById('modalAcknowledgeBtn')?.addEventListener('click', () => warningModal.classList.remove('active'));
     helpModal?.addEventListener('click', (e) => { if (e.target === helpModal) helpModal.classList.remove('active'); });
 
-    // Initialize
     loadTheme();
     selectMethod('crypto');
     selectNetwork('BTC', 2.00);
