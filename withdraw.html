@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <meta name="theme-color" content="#0B0E11">
     <title>Withdraw | Binance Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -11,51 +10,90 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap');
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: #0B0E11; min-height: 100vh; padding: 20px; }
+        
+        /* Light Mode (Default) */
+        body {
+            background: #f0f4f8;
+            min-height: 100vh;
+            padding: 20px;
+            color: #1e293b;
+            transition: all 0.3s ease;
+        }
+        
+        /* Dark Mode */
+        body.dark-mode {
+            background: #0B0E11;
+            color: #f3f4f6;
+        }
+        
+        body.dark-mode .glass-card,
+        body.dark-mode .network-card,
+        body.dark-mode .method-card,
+        body.dark-mode .balance-card,
+        body.dark-mode .address-input,
+        body.dark-mode .amount-input {
+            background: #1E2329;
+            border-color: #2B3139;
+            color: white;
+        }
+        
+        body.dark-mode .text-gray-400 { color: #9ca3af; }
+        body.dark-mode .text-gray-500 { color: #6b7280; }
+        body.dark-mode .helper-text { color: #6b7280; }
         
         .network-card {
-            background: #1E2329;
-            border: 1px solid #2B3139;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
             border-radius: 16px;
             padding: 14px;
             cursor: pointer;
             transition: all 0.2s ease;
             position: relative;
         }
-        .network-card:hover { border-color: #FCD535; transform: translateY(-2px); background: #2A2F38; }
-        .network-card.active { border: 2px solid #FCD535; background: linear-gradient(135deg, #1E2329 0%, #2A2F38 100%); }
-        .network-card.active::before { content: '✓'; position: absolute; top: 10px; right: 12px; color: #FCD535; font-weight: bold; font-size: 12px; }
-        .network-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; background: #2B3139; }
+        body.dark-mode .network-card { background: #1E2329; border-color: #2B3139; }
+        .network-card:hover { border-color: #3b82f6; transform: translateY(-2px); background: #f8fafc; }
+        body.dark-mode .network-card:hover { background: #2A2F38; border-color: #FCD535; }
+        .network-card.active { border: 2px solid #3b82f6; background: #eff6ff; }
+        body.dark-mode .network-card.active { border: 2px solid #FCD535; background: linear-gradient(135deg, #1E2329 0%, #2A2F38 100%); }
+        .network-card.active::before { content: '✓'; position: absolute; top: 10px; right: 12px; color: #3b82f6; font-weight: bold; font-size: 12px; }
+        body.dark-mode .network-card.active::before { color: #FCD535; }
+        .network-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; background: #f1f5f9; }
+        body.dark-mode .network-icon { background: #2B3139; }
         
         .method-card {
-            background: #1E2329;
-            border: 2px solid #2B3139;
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
             border-radius: 20px;
             padding: 20px;
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: center;
         }
-        .method-card:hover { border-color: #FCD535; transform: translateY(-3px); background: #2A2F38; }
-        .method-card.active { border: 2px solid #FCD535; background: linear-gradient(135deg, #1E2329 0%, #2A2F38 100%); box-shadow: 0 4px 15px rgba(252,213,53,0.15); }
+        body.dark-mode .method-card { background: #1E2329; border-color: #2B3139; }
+        .method-card:hover { border-color: #3b82f6; transform: translateY(-3px); background: #f8fafc; }
+        body.dark-mode .method-card:hover { border-color: #FCD535; background: #2A2F38; }
+        .method-card.active { border: 2px solid #3b82f6; background: #eff6ff; }
+        body.dark-mode .method-card.active { border: 2px solid #FCD535; background: linear-gradient(135deg, #1E2329 0%, #2A2F38 100%); }
         
         .amount-input, .address-input {
-            background: #1E2329;
-            border: 1px solid #2B3139;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
             border-radius: 16px;
             padding: 16px;
             width: 100%;
-            color: white;
             font-size: 20px;
             font-weight: 600;
             outline: none;
             transition: all 0.2s;
+            color: #1e293b;
         }
-        .amount-input:focus, .address-input:focus { border-color: #FCD535; box-shadow: 0 0 0 2px rgba(252,213,53,0.1); }
+        body.dark-mode .amount-input, body.dark-mode .address-input { background: #1E2329; border-color: #2B3139; color: white; }
+        .amount-input:focus, .address-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.1); }
+        body.dark-mode .amount-input:focus, body.dark-mode .address-input:focus { border-color: #FCD535; }
         
         .withdraw-btn {
-            background: linear-gradient(135deg, #FCD535, #F0B90B);
-            color: #181A20;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
             font-weight: 800;
             padding: 16px;
             border-radius: 16px;
@@ -66,11 +104,14 @@
             font-size: 14px;
             letter-spacing: 1px;
         }
-        .withdraw-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(252,213,53,0.3); }
+        body.dark-mode .withdraw-btn { background: linear-gradient(135deg, #FCD535, #F0B90B); color: #181A20; }
+        .withdraw-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59,130,246,0.3); }
+        body.dark-mode .withdraw-btn:hover { box-shadow: 0 8px 20px rgba(252,213,53,0.3); }
         .withdraw-btn:active { transform: translateY(0); }
+        
         .max-btn {
-            background: #2B3139;
-            color: #FCD535;
+            background: #e2e8f0;
+            color: #3b82f6;
             border: none;
             border-radius: 10px;
             padding: 6px 14px;
@@ -79,23 +120,27 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .max-btn:hover { background: #FCD535; color: #181A20; }
+        body.dark-mode .max-btn { background: #2B3139; color: #FCD535; }
+        .max-btn:hover { background: #3b82f6; color: white; }
+        body.dark-mode .max-btn:hover { background: #FCD535; color: #181A20; }
         
-        .balance-card { background: linear-gradient(135deg, #1E2329 0%, #13161D 100%); border-radius: 24px; padding: 20px; border: 1px solid #2B3139; }
+        .balance-card { background: #ffffff; border-radius: 24px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        body.dark-mode .balance-card { background: linear-gradient(135deg, #1E2329 0%, #13161D 100%); border-color: #2B3139; }
         
         .status-pulse { animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
         @keyframes pulse-ring { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .5; transform: scale(1.1); } }
         
-        .warning-message { background: rgba(246,70,93,0.1); border-left: 3px solid #F6465D; padding: 10px 12px; border-radius: 10px; font-size: 11px; color: #F6465D; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
-        .warning-success { background: rgba(14,203,129,0.1); border-left: 3px solid #0ECB81; color: #0ECB81; }
+        .warning-message { background: rgba(239,68,68,0.08); border-left: 3px solid #ef4444; padding: 10px 12px; border-radius: 10px; font-size: 11px; color: #dc2626; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
+        .warning-success { background: rgba(16,185,129,0.08); border-left: 3px solid #10b981; color: #059669; }
         
+        /* Loading Overlay - Light Mode */
         .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.96);
+            background: rgba(255, 255, 255, 0.96);
             backdrop-filter: blur(12px);
             z-index: 20000;
             display: none;
@@ -105,19 +150,34 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+        body.dark-mode .loading-overlay { background: rgba(0, 0, 0, 0.96); }
         .loading-overlay.active { display: flex; opacity: 1; }
-        .loading-spinner { width: 70px; height: 70px; border: 3px solid rgba(252,213,53,0.2); border-top: 3px solid #FCD535; border-radius: 50%; animation: spin 1s linear infinite; }
+        .loading-spinner { width: 70px; height: 70px; border: 3px solid rgba(59,130,246,0.2); border-top: 3px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; }
+        body.dark-mode .loading-spinner { border: 3px solid rgba(252,213,53,0.2); border-top: 3px solid #FCD535; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .loading-progress { width: 220px; height: 4px; background: #2B3139; border-radius: 4px; margin-top: 30px; overflow: hidden; }
-        .loading-progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #FCD535, #F0B90B); border-radius: 4px; transition: width 0.05s linear; }
-        .loading-text { font-size: 13px; font-weight: 600; color: #FCD535; margin-top: 20px; letter-spacing: 1px; }
-        .loading-subtext { font-size: 11px; color: #848E9C; margin-top: 8px; }
+        .loading-progress { width: 220px; height: 4px; background: #e2e8f0; border-radius: 4px; margin-top: 30px; overflow: hidden; }
+        body.dark-mode .loading-progress { background: #2B3139; }
+        .loading-progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); border-radius: 4px; transition: width 0.05s linear; }
+        body.dark-mode .loading-progress-fill { background: linear-gradient(90deg, #FCD535, #F0B90B); }
+        .loading-text { font-size: 13px; font-weight: 600; color: #3b82f6; margin-top: 20px; letter-spacing: 1px; }
+        body.dark-mode .loading-text { color: #FCD535; }
+        .loading-subtext { font-size: 11px; color: #6b7280; margin-top: 8px; }
         .loading-dots { display: flex; gap: 8px; margin-top: 16px; }
-        .loading-dot { width: 6px; height: 6px; background: #FCD535; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out; }
+        .loading-dot { width: 6px; height: 6px; background: #3b82f6; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out; }
+        body.dark-mode .loading-dot { background: #FCD535; }
         .loading-dot:nth-child(1) { animation-delay: 0s; }
         .loading-dot:nth-child(2) { animation-delay: 0.2s; }
         .loading-dot:nth-child(3) { animation-delay: 0.4s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1.2); opacity: 1; } }
+        
+        /* Blinking Warning Icon */
+        .blinking-icon {
+            animation: blinkWarning 1.2s ease-in-out infinite;
+        }
+        @keyframes blinkWarning {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.08); }
+        }
         
         .modal {
             display: none;
@@ -126,18 +186,21 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 15000;
             justify-content: center;
             align-items: center;
         }
         .modal.active { display: flex; }
-        .modal-content { background: #1E2329; border-radius: 24px; padding: 28px; width: 90%; max-width: 380px; border: 1px solid rgba(252,213,53,0.3); text-align: center; }
-        .warning-icon { width: 64px; height: 64px; background: rgba(246,70,93,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
-        .warning-icon i { font-size: 32px; color: #F6465D; }
+        .modal-content { background: #ffffff; border-radius: 24px; padding: 28px; width: 90%; max-width: 380px; border: 1px solid #e2e8f0; text-align: center; }
+        body.dark-mode .modal-content { background: #1E2329; border-color: rgba(252,213,53,0.3); }
+        .warning-icon { width: 64px; height: 64px; background: rgba(239,68,68,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+        .warning-icon i { font-size: 32px; color: #ef4444; }
         .modal-btn { padding: 12px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; border: none; transition: all 0.2s; }
-        .modal-btn-primary { background: #FCD535; color: #181A20; }
-        .modal-btn-secondary { background: #2B3139; color: white; }
+        .modal-btn-primary { background: #3b82f6; color: white; }
+        body.dark-mode .modal-btn-primary { background: #FCD535; color: #181A20; }
+        .modal-btn-secondary { background: #f1f5f9; color: #1e293b; }
+        body.dark-mode .modal-btn-secondary { background: #2B3139; color: white; }
         .modal-btn-primary:hover, .modal-btn-secondary:hover { transform: scale(1.02); }
         
         .toast-message {
@@ -145,7 +208,7 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: #0ECB81;
+            background: #10b981;
             color: white;
             padding: 12px 20px;
             border-radius: 40px;
@@ -157,17 +220,30 @@
             pointer-events: none;
             white-space: nowrap;
         }
-        .toast-message.error { background: #F6465D; }
+        .toast-message.error { background: #ef4444; }
         
-        .fee-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #2B3139; }
-        .helper-text { font-size: 11px; color: #848E9C; margin-top: 6px; }
+        .fee-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0; }
+        body.dark-mode .fee-row { border-bottom-color: #2B3139; }
+        .helper-text { font-size: 11px; color: #6b7280; margin-top: 6px; }
         
         .help-modal-content { max-width: 550px; width: 100%; max-height: 85vh; overflow-y: auto; text-align: left; }
-        .help-section { margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .help-section h4 { font-size: 13px; font-weight: 800; letter-spacing: 1px; margin-bottom: 10px; color: #FCD535; text-transform: uppercase; }
+        .help-section { margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; }
+        body.dark-mode .help-section { border-bottom-color: rgba(255,255,255,0.05); }
+        .help-section h4 { font-size: 13px; font-weight: 800; letter-spacing: 1px; margin-bottom: 10px; color: #3b82f6; text-transform: uppercase; }
+        body.dark-mode .help-section h4 { color: #FCD535; }
         .help-section p { font-size: 12px; line-height: 1.6; opacity: 0.8; }
         .help-section ul { margin-top: 8px; padding-left: 20px; }
         .help-section li { font-size: 12px; opacity: 0.7; margin-bottom: 6px; }
+        
+        .theme-toggle {
+            cursor: pointer;
+            background: #f1f5f9;
+            padding: 8px;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+        body.dark-mode .theme-toggle { background: #1E2329; }
+        .theme-toggle:hover { transform: scale(1.05); }
         
         @media (max-width: 640px) {
             .network-card { padding: 10px; }
@@ -179,21 +255,24 @@
 <body>
 
 <div class="max-w-2xl mx-auto">
-    <!-- Header with Status and Reference -->
+    <!-- Header with Status, Reference and Theme Toggle -->
     <div class="flex flex-wrap justify-between items-end mb-6 gap-4">
         <div>
             <div class="flex items-center gap-2 mb-1">
                 <span class="relative flex h-2 w-2">
-                    <span class="status-pulse absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    <span class="status-pulse absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                 </span>
-                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Secure Connection: Active</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">Secure Connection: Active</span>
             </div>
-            <h2 class="text-xs font-mono font-medium text-gray-500" id="refId">REF: WD-X7K9M2</h2>
+            <h2 class="text-xs font-mono font-medium text-gray-400" id="refId">REF: WD-X7K9M2</h2>
         </div>
         <div class="flex gap-2">
-            <button id="helpBtn" class="bg-[#1E2329] p-2.5 rounded-xl hover:bg-[#2B3139] transition">
-                <i class="fas fa-question text-yellow-500 text-sm"></i>
+            <div class="theme-toggle" id="themeToggle">
+                <i id="themeIcon" class="fas fa-moon text-blue-500 text-sm"></i>
+            </div>
+            <button id="helpBtn" class="bg-gray-100 p-2.5 rounded-xl hover:bg-gray-200 transition">
+                <i class="fas fa-question text-blue-500 text-sm"></i>
             </button>
         </div>
     </div>
@@ -202,88 +281,88 @@
     <div class="balance-card mb-6">
         <div class="flex justify-between items-center">
             <div>
-                <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Total Balance</p>
-                <p class="text-2xl font-bold text-white" id="displayBalance">$0.00</p>
+                <p class="text-gray-500 text-xs uppercase tracking-wider mb-1">Total Balance</p>
+                <p class="text-2xl font-bold text-gray-900" id="displayBalance">$0.00</p>
             </div>
             <div class="text-right">
-                <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">Available</p>
-                <p class="text-lg font-bold text-green-500" id="availableBalance">$0.00</p>
+                <p class="text-gray-500 text-xs uppercase tracking-wider mb-1">Available</p>
+                <p class="text-lg font-bold text-green-600" id="availableBalance">$0.00</p>
             </div>
         </div>
     </div>
 
     <!-- Withdrawal Amount -->
     <div class="mb-6">
-        <label class="text-gray-400 text-xs uppercase tracking-wider mb-2 block">Withdrawal Amount</label>
+        <label class="text-gray-500 text-xs uppercase tracking-wider mb-2 block">Withdrawal Amount</label>
         <div class="relative">
             <input type="number" id="withdrawAmount" step="0.01" placeholder="0.00" class="amount-input">
             <button id="maxBtn" class="max-btn absolute right-3 top-1/2 -translate-y-1/2">MAX</button>
         </div>
         <div class="flex justify-between mt-2">
-            <span class="text-xs text-gray-500">Min: $10.00</span>
-            <span class="text-xs text-gray-500" id="maxAmountLabel">Max: $0.00</span>
+            <span class="text-xs text-gray-400">Min: $10.00</span>
+            <span class="text-xs text-gray-400" id="maxAmountLabel">Max: $0.00</span>
         </div>
     </div>
 
     <!-- Withdrawal Method Selection (Crypto / PayPal) -->
     <div class="mb-6">
-        <label class="text-gray-400 text-xs uppercase tracking-wider mb-3 block">Select withdrawal Method</label>
+        <label class="text-gray-500 text-xs uppercase tracking-wider mb-3 block">Select withdrawal Method</label>
         <div class="grid grid-cols-2 gap-4">
             <div id="methodCrypto" class="method-card active" onclick="selectMethod('crypto')">
                 <div class="text-3xl mb-2">₿🟡🔷⚡</div>
-                <div class="font-bold text-white text-sm">Crypto</div>
-                <div class="text-xs text-gray-400 mt-1">Bitcoin & Networks</div>
+                <div class="font-bold text-gray-900 text-sm">Crypto</div>
+                <div class="text-xs text-gray-500 mt-1">Bitcoin & Networks</div>
             </div>
             <div id="methodPaypal" class="method-card" onclick="selectMethod('paypal')">
                 <div class="text-3xl mb-2">🅿️</div>
-                <div class="font-bold text-white text-sm">PayPal</div>
-                <div class="text-xs text-gray-400 mt-1">Instant Transfer</div>
+                <div class="font-bold text-gray-900 text-sm">PayPal</div>
+                <div class="text-xs text-gray-500 mt-1">Instant Transfer</div>
             </div>
         </div>
     </div>
 
-    <!-- Crypto Networks Section (Hidden by default, shows when Crypto selected) -->
-    <div id="cryptoSection" class="mb-6" style="display: block;">
-        <label class="text-gray-400 text-xs uppercase tracking-wider mb-3 block">Select Network</label>
+    <!-- Crypto Networks Section -->
+    <div id="cryptoSection" class="mb-6">
+        <label class="text-gray-500 text-xs uppercase tracking-wider mb-3 block">Select Network</label>
         <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
             <div class="network-card active" data-network="BTC" data-fee="2.00" data-min="0.00001" onclick="selectNetwork('BTC', 2.00)">
                 <div class="flex flex-col items-center text-center">
                     <div class="network-icon mb-2">₿</div>
-                    <div class="font-bold text-white text-xs">Bitcoin</div>
+                    <div class="font-bold text-gray-900 text-xs">Bitcoin</div>
                     <div class="text-[9px] text-gray-500 mt-1">>0.00001 BTC</div>
-                    <div class="text-[8px] text-gray-600 mt-1">1 block · 1-30 min</div>
+                    <div class="text-[8px] text-gray-400 mt-1">1 block · 1-30 min</div>
                 </div>
             </div>
             <div class="network-card" data-network="BSC" data-fee="0.50" data-min="0.00000002" onclick="selectNetwork('BSC', 0.50)">
                 <div class="flex flex-col items-center text-center">
                     <div class="network-icon mb-2">🟡</div>
-                    <div class="font-bold text-white text-xs">BSC</div>
+                    <div class="font-bold text-gray-900 text-xs">BSC</div>
                     <div class="text-[9px] text-gray-500 mt-1">>0.00000002 BTC</div>
-                    <div class="text-[8px] text-gray-600 mt-1">1 block · 1 min</div>
+                    <div class="text-[8px] text-gray-400 mt-1">1 block · 1 min</div>
                 </div>
             </div>
             <div class="network-card" data-network="ETH" data-fee="1.50" data-min="0.00000002" onclick="selectNetwork('ETH', 1.50)">
                 <div class="flex flex-col items-center text-center">
                     <div class="network-icon mb-2">🔷</div>
-                    <div class="font-bold text-white text-xs">Ethereum</div>
+                    <div class="font-bold text-gray-900 text-xs">Ethereum</div>
                     <div class="text-[9px] text-gray-500 mt-1">>0.00000002 BTC</div>
-                    <div class="text-[8px] text-gray-600 mt-1">6 blocks · 2 min</div>
+                    <div class="text-[8px] text-gray-400 mt-1">6 blocks · 2 min</div>
                 </div>
             </div>
             <div class="network-card" data-network="LIGHTNING" data-fee="0.30" data-min="0.00001999" onclick="selectNetwork('LIGHTNING', 0.30)">
                 <div class="flex flex-col items-center text-center">
                     <div class="network-icon mb-2">⚡</div>
-                    <div class="font-bold text-white text-xs">Lightning</div>
+                    <div class="font-bold text-gray-900 text-xs">Lightning</div>
                     <div class="text-[9px] text-gray-500 mt-1">>0.00001999 BTC</div>
-                    <div class="text-[8px] text-gray-600 mt-1">Instant · 1 min</div>
+                    <div class="text-[8px] text-gray-400 mt-1">Instant · 1 min</div>
                 </div>
             </div>
             <div class="network-card" data-network="SEGWIT" data-fee="1.80" data-min="0.000006" onclick="selectNetwork('SEGWIT', 1.80)">
                 <div class="flex flex-col items-center text-center">
                     <div class="network-icon mb-2">₿</div>
-                    <div class="font-bold text-white text-xs">SegWit</div>
+                    <div class="font-bold text-gray-900 text-xs">SegWit</div>
                     <div class="text-[9px] text-gray-500 mt-1">>0.000006 BTC</div>
-                    <div class="text-[8px] text-gray-600 mt-1">1 block · 1 min</div>
+                    <div class="text-[8px] text-gray-400 mt-1">1 block · 1 min</div>
                 </div>
             </div>
         </div>
@@ -294,7 +373,7 @@
 
     <!-- PayPal Section (Hidden by default) -->
     <div id="paypalSection" class="mb-6" style="display: none;">
-        <label class="text-gray-400 text-xs uppercase tracking-wider mb-2 block">PayPal Email</label>
+        <label class="text-gray-500 text-xs uppercase tracking-wider mb-2 block">PayPal Email</label>
         <input type="email" id="paypalEmail" placeholder="recipient@example.com" class="address-input">
         <div class="helper-text mt-2">
             <i class="fab fa-paypal mr-1"></i> Funds will be sent instantly to this PayPal email address.
@@ -303,9 +382,9 @@
 
     <!-- Destination Address (for Crypto) -->
     <div id="addressSection" class="mb-6">
-        <label class="text-gray-400 text-xs uppercase tracking-wider mb-2 block">Where to send</label>
+        <label class="text-gray-500 text-xs uppercase tracking-wider mb-2 block">Where to send</label>
         <div class="relative">
-            <i class="fas fa-shield-halved absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+            <i class="fas fa-shield-halved absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
             <input type="text" id="cryptoAddress" placeholder="Enter wallet address..." class="address-input pl-12">
         </div>
         <div id="addressWarning" class="warning-message" style="display: none;">
@@ -315,18 +394,18 @@
     </div>
 
     <!-- Transaction Summary -->
-    <div class="bg-[#1E2329] rounded-2xl p-5 border border-[#2B3139] mb-6">
+    <div class="bg-white rounded-2xl p-5 border border-gray-200 mb-6">
         <div class="fee-row">
-            <span class="text-sm text-gray-400">Transaction Fee</span>
-            <span class="text-yellow-500" id="summaryFee">$0.00</span>
+            <span class="text-sm text-gray-500">Transaction Fee</span>
+            <span class="text-blue-600 font-semibold" id="summaryFee">$0.00</span>
         </div>
-        <div class="h-[1px] bg-[#2B3139] my-2"></div>
+        <div class="h-[1px] bg-gray-100 my-2"></div>
         <div class="flex justify-between items-end">
             <div>
-                <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-500">You will receive</span>
-                <span class="text-sm font-medium text-gray-400">Final amount after fee</span>
+                <span class="block text-[10px] font-bold uppercase tracking-widest text-gray-400">You will receive</span>
+                <span class="text-sm font-medium text-gray-500">Final amount after fee</span>
             </div>
-            <span class="text-3xl font-bold text-emerald-500" id="summaryTotal">$0.00</span>
+            <span class="text-3xl font-bold text-green-600" id="summaryTotal">$0.00</span>
         </div>
     </div>
 
@@ -343,18 +422,18 @@
 
     <!-- Network Warning -->
     <div class="text-center mb-6">
-        <p class="text-[10px] text-gray-500">
+        <p class="text-[10px] text-gray-400">
             ⚠️ Please note that only supported networks are shown. If you send via another network your assets may be lost.
         </p>
     </div>
 
     <!-- Footer Security Badges -->
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 opacity-50 hover:opacity-80 transition-opacity">
-        <div class="flex gap-6 text-[9px] font-bold tracking-widest uppercase text-gray-500">
-            <span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-emerald-500"></i> Encrypted AES-256</span>
-            <span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-emerald-500"></i> Secure Signing</span>
+        <div class="flex gap-6 text-[9px] font-bold tracking-widest uppercase text-gray-400">
+            <span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-green-500"></i> Encrypted AES-256</span>
+            <span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-green-500"></i> Secure Signing</span>
         </div>
-        <p class="text-[9px] font-mono text-gray-500" id="footerRef">STABLE_REL_1.4.2 // REF: WD-NX-99</p>
+        <p class="text-[9px] font-mono text-gray-400" id="footerRef">STABLE_REL_1.4.2 // REF: WD-NX-99</p>
     </div>
 </div>
 
@@ -373,16 +452,16 @@
     </div>
 </div>
 
-<!-- Minimum Withdrawal Warning Modal -->
+<!-- Minimum Withdrawal Warning Modal with Blinking Icon -->
 <div id="warningModal" class="modal">
     <div class="modal-content">
-        <div class="warning-icon">
+        <div class="warning-icon blinking-icon">
             <i class="fas fa-exclamation-triangle"></i>
         </div>
-        <h3 class="text-xl font-bold text-white mb-2">Minimum Balance Required</h3>
-        <p class="text-gray-400 text-sm mb-4">Your withdrawal amount is below the minimum requirement.</p>
-        <div class="bg-[#2B3139] rounded-xl p-3 mb-4">
-            <p class="text-gray-400 text-xs mb-1">MINIMUM WITHDRAWAL REQUIRED</p>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Minimum Balance Required</h3>
+        <p class="text-gray-500 text-sm mb-4">Your withdrawal amount is below the minimum requirement.</p>
+        <div class="bg-gray-50 rounded-xl p-3 mb-4">
+            <p class="text-gray-500 text-xs mb-1">MINIMUM WITHDRAWAL REQUIRED</p>
             <p class="text-red-500 font-bold text-lg" id="modalMinRequired">$0.00</p>
             <p class="text-gray-500 text-xs mt-1">Current Balance: <span id="modalBalance">$0.00</span></p>
             <p class="text-gray-500 text-xs mt-1">Your withdrawal: <span id="modalWithdrawAmount">$0.00</span></p>
@@ -396,12 +475,12 @@
 <div id="helpModal" class="modal">
     <div class="modal-content help-modal-content">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold text-white">Withdrawal Guide</h3>
-            <i class="fas fa-times text-gray-400 cursor-pointer hover:text-white" id="closeHelpModal"></i>
+            <h3 class="text-xl font-bold text-gray-900">Withdrawal Guide</h3>
+            <i class="fas fa-times text-gray-400 cursor-pointer hover:text-gray-600" id="closeHelpModal"></i>
         </div>
         <div class="help-section">
             <h4><i class="fas fa-chart-line mr-2"></i> Minimum Balance Required</h4>
-            <p>To process any withdrawal, your account must have a minimum balance of <strong class="text-red-500">$15,000.00 USD</strong>. Withdrawal requests will be declined until your balance meets this requirement.</p>
+            <p>To process any withdrawal, your withdrawal amount must meet the minimum requirement shown in the warning modal.</p>
         </div>
         <div class="help-section">
             <h4><i class="fas fa-coins mr-2"></i> How fees work</h4>
@@ -447,6 +526,7 @@
     let currentNetwork = 'BTC';
     let currentNetworkFee = 2.00;
     let isLoading = false;
+    let isDarkMode = false;
 
     // Generate random reference ID
     const randomRef = 'WD-' + Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -480,6 +560,8 @@
     const modalMinRequired = document.getElementById('modalMinRequired');
     const modalBalance = document.getElementById('modalBalance');
     const modalWithdrawAmount = document.getElementById('modalWithdrawAmount');
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
 
     const loadingMessages = [
         "Verifying blockchain network...",
@@ -494,6 +576,31 @@
         toastMessage.className = `toast-message ${isSuccess ? '' : 'error'}`;
         toastMessage.style.opacity = '1';
         setTimeout(() => { toastMessage.style.opacity = '0'; }, 3000);
+    }
+
+    function toggleTheme() {
+        isDarkMode = !isDarkMode;
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            themeIcon.className = 'fas fa-sun text-yellow-400 text-sm';
+        } else {
+            document.body.classList.remove('dark-mode');
+            themeIcon.className = 'fas fa-moon text-blue-500 text-sm';
+        }
+        localStorage.setItem('withdraw_theme', isDarkMode ? 'dark' : 'light');
+    }
+
+    function loadTheme() {
+        const savedTheme = localStorage.getItem('withdraw_theme');
+        if (savedTheme === 'dark') {
+            isDarkMode = true;
+            document.body.classList.add('dark-mode');
+            themeIcon.className = 'fas fa-sun text-yellow-400 text-sm';
+        } else {
+            isDarkMode = false;
+            document.body.classList.remove('dark-mode');
+            themeIcon.className = 'fas fa-moon text-blue-500 text-sm';
+        }
     }
 
     function showWarning(message, isValid = false) {
@@ -551,7 +658,7 @@
         const amount = parseFloat(withdrawAmount?.value) || 0;
         if (amount > 0 && amount < minRequired) {
             minRequirementWarning.style.display = 'flex';
-            minRequirementText.innerText = `Minimum withdrawal amount is $${minRequired.toLocaleString(undefined, { minimumFractionDigits: 2 })} (Balance + $130)`;
+            minRequirementText.innerText = `Minimum withdrawal amount is $${minRequired.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
         } else {
             minRequirementWarning.style.display = 'none';
         }
@@ -580,7 +687,7 @@
         } else {
             cryptoSection.style.display = 'none';
             paypalSection.style.display = 'block';
-            addressSection.style.display = 'block';
+            addressSection.style.display = 'none';
             currentNetworkFee = 0;
             calculateSummary();
         }
@@ -639,24 +746,26 @@
         
         isLoading = true;
         
+        // Random 6-9 seconds loading
         const duration = Math.floor(Math.random() * (9000 - 6000 + 1) + 6000);
         const startTime = Date.now();
-        let progress = 0;
         
         loadingOverlay.classList.add('active');
+        loadingProgressFill.style.width = '0%';
         
         const progressInterval = setInterval(() => {
             const elapsed = Date.now() - startTime;
-            progress = Math.min(100, (elapsed / duration) * 100);
+            const progress = Math.min(100, (elapsed / duration) * 100);
             loadingProgressFill.style.width = `${progress}%`;
             const messageIndex = Math.min(loadingMessages.length - 1, Math.floor(progress / (100 / loadingMessages.length)));
             loadingStatusText.textContent = loadingMessages[messageIndex];
             loadingSubtext.textContent = `Estimated time: ${Math.ceil((duration - elapsed) / 1000)}s`;
-        }, 100);
+        }, 50);
         
         setTimeout(async () => {
             clearInterval(progressInterval);
             loadingProgressFill.style.width = '100%';
+            loadingStatusText.textContent = 'Complete!';
             
             const totalFee = currentMethod === 'crypto' ? currentNetworkFee + 2.50 : 2.50;
             const newBalance = currentBalance - amount;
@@ -680,6 +789,7 @@
     withdrawAmount?.addEventListener('input', calculateSummary);
     cryptoAddress?.addEventListener('input', validateAddress);
     withdrawBtn?.addEventListener('click', handleWithdraw);
+    themeToggle?.addEventListener('click', toggleTheme);
     
     document.getElementById('helpBtn')?.addEventListener('click', () => helpModal.classList.add('active'));
     document.getElementById('closeHelpModal')?.addEventListener('click', () => helpModal.classList.remove('active'));
@@ -688,6 +798,7 @@
     helpModal?.addEventListener('click', (e) => { if (e.target === helpModal) helpModal.classList.remove('active'); });
 
     // Initialize
+    loadTheme();
     selectMethod('crypto');
     selectNetwork('BTC', 2.00);
     fetchUserBalance();
